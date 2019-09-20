@@ -19,7 +19,8 @@ API_BO =	{
                     "content-type": "application/json",
                     "charset": "UTF-8"
                 },
-                "url": "https://alpha-apis.worksmobile.com/API_ID/message/sendMessage/v2"
+                "url": "https://alpha-apis.worksmobile.com/kr1xbFflHaxsx/message/sendMessage/v2",
+                "push_url": "https://alpha-apis.worksmobile.com/r/kr1xbFflHaxsx/message/v1/bot/107796/message/push"
             }
 					
 OPEN_API= {
@@ -30,6 +31,5 @@ OPEN_API= {
       "botNames": ["calender bot"],
       "token":"AAAA+UqCOwVLOdscB1a6o7FfTGl+VDzbXCcs35KtxoL+zsB/iqp4Egfa/4LOnh9t8+Omb1ddnTRyNG8J+sYoEYlIBmle9iKzgVQ2vWvczn5a7Wt5aTAc6YnhdJTKt4PjIvDLAueat8VF1CKm4yK1qHpLGp5q47WFqBZqcTJ9Z6u4Xm7GmBo/SeSG6Q9c/6DbqE73M4hxlkdNjjduJEk2Gh8+Fedu0XnY26W9p5+CzzHieE4HdsGFR9uZ16xodc9OoBRSJCkA6bki0E45zfOdkjvE1tAhzYbghgD1vU0nDQwKBM28QhHd70uEbYI6hhYp9I9m3PJzA13ZJ3Xl4q1F1mygfaI="
     }
-}
     
 
