@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import io
 import logging
-import socket
 from calender.externals.data import *
 import tornado.gen
 from tornado.httpclient import AsyncHTTPClient
@@ -28,7 +27,6 @@ def send_message(req, headers):
 	headers["Authorization"] = "Bearer " + OPEN_API["token"]
 
 	url = API_BO["url"]
-	#url = API_BO["push_url"]
 	client = AsyncHTTPClient()
 	LOGGER.info("send message . url:%s body:%s headers:%s", url, str(req), str(headers))
 	response = yield client.fetch(url, headers=headers, method='POST', body=json.dumps(req))

@@ -5,9 +5,13 @@ internal hello
 """
 import logging
 import tornado.web
-from calender.externals.sendMessage import send_message, push_message 
+from calender.externals.sendMessage import send_message, push_message
+from common import globalData
+from externals.richmenu import *
+from calender.constants import API_BO
 from calender.externals.data import *
 from calender.constants import *
+
 LOGGER = logging.getLogger("calender")
 
 """
@@ -49,7 +53,7 @@ def check_para(body):
         #error_code, error_message = yield first_page(body["source"].get("accountId",None), body["source"].get("roomId",None))
         #if not error_code:
         #    return error_code, error_message
-        error_code, error_message = yield sign(body["source"].get("accountId",None), body["source"].get("roomId",None))
+        error_code, error_message = yield sign(body["source"].get("accountId",None))
         #error_code, error_message = yield sign_in(body["source"].get("accountId",None), body["source"].get("roomId",None))
         #error_code, error_message = yield direct_sign_in(body["source"].get("accountId",None), body["source"].get("roomId",None))
         return error_code, error_message
@@ -216,55 +220,16 @@ def first_page(account_id, room_id):
     return True, None
 
 @tornado.gen.coroutine
-def sign(account_id, room_id):
+def sign(account_id):
+    if account_id is None:
+        LOGGER.error("account_id is None.")
+        return False
+    rich_menu_id = globalData.get_value(API_BO["rich_menu"]["name"], None)
+    if rich_menu_id is None:
+        LOGGER.error("get rich_menu_id failed.")
+        return False, "get rich_menu_id failed."
 
-    LOGGER.info("begin deal sign")
-    size = make_size(2500, 1686)
-    bound1 = make_bound(0, 0, 1250, 843)
-
-    cn_text1 = i18n_display_text("zh_CN", "上班打卡")
-    en_text1 = i18n_display_text("en_US", "Get work records")
-    kr_text1 = i18n_display_text("ko_KR", "출근 기록 가져오기")
-    display_text1 = [cn_text1, en_text1, kr_text1]
-    action1 = make_postback_action("sign_in", "sign_in","sign_in")
-
-    bound2 = make_bound(0, 843, 1250, 1686)
-    cn_text2 = i18n_display_text("zh_CN", "下班打卡")
-    en_text2 = i18n_display_text("en_US", "Get off-duty records")
-    kr_text2 = i18n_display_text("ko_KR", "퇴근 기록 가져오기")
-    display_text2 = [cn_text2, en_text2, kr_text2]
-
-    action2 = make_postback_action("sign_out", "sign_out", "sign_out")
-
-    bound3 = make_bound(1250, 0, 2500, 1686)
-    cn_text3 = i18n_display_text("zh_CN", "回到首页")
-    en_text3 = i18n_display_text("en_US", "Back to the front page")
-    kr_text3 = i18n_display_text("ko_KR", "홈페이지로 돌아오다")
-    display_text3 = [cn_text3, en_text3, kr_text3]
-
-    action3 = make_postback_action("to_firt", "to_firt","to_firt")
-
-    rich_menu = make_rich_menu("https://static.worksmobile.net/static/wm/botprofile/Bot_Dice_640.png",
-                   size,
-                   [make_area(bound1, action1),make_area(bound2, action2),make_area(bound3, action3)])
-    request = {}
-    if account_id is not None:
-         request["accountId"] = account_id
-    if room_id is not None:
-         request["roomId"] = room_id
-    request["BotNo"] = OPEN_API["botNo"]
-    request["content"] = rich_menu
-    headers = {
-        "Content-Type": "application/json",
-        "charset": "UTF-8"
-    }
-
-    error_code = yield push_message(request, headers)
-    if error_code:
-        LOGGER.error("yield send_message step2 failed. room_id:%d account_id:%ld", room_id, account_id)
-        return False, "send message failed."
-
-    return True, None
+    return set_user_specific_rich_menu(rich_menu_id, account_id)
 
 @tornado.gen.coroutine
 def sign_in(account_id, room_id):

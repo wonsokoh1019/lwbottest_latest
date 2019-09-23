@@ -30,10 +30,11 @@ def make_postback_action(data, display_text, label=None, i18n_labels=None, i18n_
 def i18n_text(language, text):
 	return {"language":language, "text":text}
   				
-def make_message_action(label, text, post_back, i18n_labels=None, i18n_texts=None):
+def make_message_action(label, post_back, text=None, i18n_labels=None, i18n_texts=None):
 
-	action = {"type":"message", "label":label, "text":text, "postback":post_back}
-
+	action = {"type":"message", "label":label, "postback":post_back}
+	if text is not None:
+		action["text"] = text
 	if i18n_labels is not None:
 		action["i18nLabels"] = i18n_labels
 	if i18n_texts is not None:
@@ -136,8 +137,8 @@ def make_bound(x,y,w,h):
 def make_area(bound, action):
 	return {"bounds":bound, "action":action}
 
-def make_rich_menu(resource_path, size, areas):
-	return {"image": {"resourcePath":resource_path}, "richMenu": {"size": size, "areas": areas}}
+def make_add_rich_menu(name, size, areas):
+	return {"name": name, "size": size, "areas": areas}
 """
 button
 """
@@ -149,8 +150,6 @@ def make_button(text, actions, content_texts=None):
 	if content_texts is not None:
 		return {"type":"button_template", "contentText":text, "i18nContentTexts":content_texts, "actions":actions}
 	return {"type":"button_template", "contentText":text, "actions":actions}
-		
-
 
 		
 
