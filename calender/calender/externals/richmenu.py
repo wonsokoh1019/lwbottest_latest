@@ -5,6 +5,7 @@ from calender.externals.data import *
 from calender.constants import API_BO, OPEN_API
 import tornado.gen
 import requests
+LOGGER = logging.getLogger("calender")
 
 def make_add_rich_menu_body(rich_menu_name):
     size = make_size(2500, 1686)
@@ -41,14 +42,15 @@ def make_add_rich_menu_body(rich_menu_name):
     headers["Authorization"] = "Bearer " + OPEN_API["token"]
 
     url = API_BO["rich_menu"]["url"]
-    LOGGER.info("push message . url:%s body:%s headers:%s", url, str(req), str(headers))
+    LOGGER.info("push message . url:%s body:%s headers:%s", url)
 
     response = requests.post(url, data=json.dumps(rich_menu), headers=headers)
     if response.status_code != 200:
         LOGGER.info("push message failed. url:%s text:%s body:%s", url, response.text, response.content)
         return None
     LOGGER.info("push message success. url:%s txt:%s body:%s", url, response.text, response.content)
-    return response.content["richMenuId"]
+    tmp = json.loads(response.content)
+    return tmp["richMenuId"]
 
 def get_rich_menu_image(resource_id, rich_menu_id):
 
@@ -59,7 +61,7 @@ def get_rich_menu_image(resource_id, rich_menu_id):
     headers["Authorization"] = "Bearer " + OPEN_API["token"]
 
     url = API_BO["rich_menu"]["url"] + "/" + rich_menu_id + "content"
-    LOGGER.info("push message . url:%s body:%s headers:%s", url, str(req), str(headers))
+    LOGGER.info("push message . url:%s", url)
 
     response = requests.post(url, data=json.dumps(body), headers=headers)
     if response.status_code != 200:
@@ -72,14 +74,14 @@ def set_user_specific_rich_menu(rich_menu_id, account_id):
     headers = API_BO["headers"]
     headers["consumerKey"] = OPEN_API["consumerKey"]
     headers["Authorization"] = "Bearer " + OPEN_API["token"]
-    url = API_BO["rich_menu"]["url"] + "/" + rich_menu_id + "account/"+ account_id
+    url = API_BO["rich_menu"]["url"] + "/" + rich_menu_id + "/account/"+ account_id
 
-    response = requests.post(url, data=json.dumps(rich_menu), headers=headers)
+    response = requests.post(url, headers=headers)
     if response.status_code != 200:
         LOGGER.info("push message failed. url:%s text:%s body:%s", url, response.text, response.content)
-        return False
+        return False,"set user specific rich menu failed."
     LOGGER.info("push message success. url:%s txt:%s body:%s", url, response.text, response.content)
-    return True
+    return True,None
 
 def get_rich_menus():
     headers = API_BO["headers"]
@@ -93,7 +95,8 @@ def get_rich_menus():
         LOGGER.info("push message failed. url:%s text:%s body:%s", url, response.text, response.content)
         return None
     LOGGER.info("push message success. url:%s txt:%s body:%s", url, response.text, response.content)
-    return response.content
+    tmp = json.loads(response.content)
+    return tmp["richmenus"]
 
 def canncel_user_specific_rich_menu(account_id):
     headers = API_BO["headers"]
@@ -113,8 +116,9 @@ def init_rich_menu(rich_menu_name):
 
     rich_menus = get_rich_menus()
     if rich_menus is not None:
-        menus = json.loads(rich_menus)
-        for menu in menus:
+        LOGGER.info("body:%s", rich_menus)
+        #menus = json.loads(rich_menus)
+        for menu in rich_menus:
             if menu["name"] == rich_menu_name:
                 return menu["richMenuId"]
     rich_menu_id = make_add_rich_menu_body(rich_menu_name)

@@ -23,7 +23,7 @@ API_BO =	{
                 "push_url": "https://alpha-apis.worksmobile.com/r/kr1xbFflHaxsx/message/v1/bot/107796/message/push",
                 "rich_menu":
                 {
-                    "url": "https://apis.worksmobile.com/r/kr1xbFflHaxsx/message/v1/bot/107796/richmenu",
+                    "url": "https://alpha-apis.worksmobile.com/r/kr1xbFflHaxsx/message/v1/bot/107796/richmenu",
                     "name": "test_rich_menu"
                 }
             }

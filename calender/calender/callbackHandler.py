@@ -6,8 +6,8 @@ internal hello
 import logging
 import tornado.web
 from calender.externals.sendMessage import send_message, push_message
-from common import globalData
-from externals.richmenu import *
+from calender.common import globalData
+from calender.externals.richmenu import *
 from calender.constants import API_BO
 from calender.externals.data import *
 from calender.constants import *

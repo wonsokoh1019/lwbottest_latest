@@ -13,8 +13,8 @@ import tornado.web
 import tornado.httpserver
 from tornado.httpclient import AsyncHTTPClient
 from tornado.options import define, options
-from externals.richmenu import *
-from common import globalData
+from calender.externals.richmenu import *
+from calender.common import globalData
 from calender.externals.data import *
 from calender.constants import API_BO
 
