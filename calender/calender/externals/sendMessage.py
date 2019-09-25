@@ -12,17 +12,19 @@ LOGGER = logging.getLogger("calender")
 
 """
 type req struct {
-	TenantId string
-	BotNo     int64       `json:"botNo"`
 	AccountId *string     `json:"accountId,omitempty"`
 	RoomId    *string     `json:"roomId,omitempty"`
 	Content   interface{} `json:"content"`
 }
 """
 @tornado.gen.coroutine
-def send_message(req, headers): 
+def send_message(req, header = None):
 	LOGGER.info("deail send_message")
 	error_code = False
+	headers = API_BO["headers"]
+	if header is not None:
+		headers = Merge(header, headers)
+
 	headers["consumerKey"] = OPEN_API["consumerKey"]
 	headers["Authorization"] = "Bearer " + OPEN_API["token"]
 
@@ -33,13 +35,16 @@ def send_message(req, headers):
 	if response.code != 200:
 		error_code = True
 		LOGGER.info("send message failed. url:%s body:%s", url, response.body)
-	LOGGER.info("send message success. url:%s body:%s", url,response.body)
+	LOGGER.info("send message success. url:%s body:%s", url, response.body)
 	return error_code
 
 @tornado.gen.coroutine
-def push_message(req, headers): 
+def push_message(req, header = None):
 	LOGGER.info("deail push_message")
 	error_code = False
+	headers = API_BO["headers"]
+	if header is not None:
+		headers = Merge(header, headers)
 	headers["consumerKey"] = OPEN_API["consumerKey"]
 	headers["Authorization"] = "Bearer " + OPEN_API["token"]
 

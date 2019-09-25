@@ -14,10 +14,12 @@ def make_i18n_label(language, label):
 def i18n_display_text(language, display_text):
 	return {"language":language, "displayText":display_text}
   				
-def make_postback_action(data, display_text, label=None, i18n_labels=None, i18n_display_texts=None):
+def make_postback_action(data, display_text=None, label=None, i18n_labels=None, i18n_display_texts=None):
 
-	action = {"type":"postback", "data":data, "displayText":display_text}
+	action = {"type":"postback", "data":data}
 
+	if display_text is not None:
+		action["displayText"] = display_text
 	if label is not None:
 		action["label"] = label
 	if i18n_labels is not None:
