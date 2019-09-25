@@ -196,12 +196,26 @@ def check_para(body):
         return error_code, error_message
 #会发确认
     if body["content"]["postback"].find("confirm_in") != -1:
-        error_code, error_message = yield confirm_in(account_id, body["content"]["postback"])
-        return error_code, error_message
+        success, content = yield confirm_in(account_id, body["content"]["postback"])
+        if success:
+            request["content"] = content
+            error_code = yield push_message(request)
+            if error_code:
+                LOGGER.info("yield confirm_in failed. room_id:%s account_id:%s", str(room_id), str(account_id))
+                return False, "send message failed."
+            return error_code, error_message
+        return success, content
 
     if body["content"]["postback"].find("confirm_out") != -1:
-        error_code, error_message = yield confirm_out(account_id, body["content"]["postback"])
-        return error_code, error_message
+        success, content = yield confirm_out(account_id, body["content"]["postback"])
+        if success:
+            request["content"] = content
+            error_code = yield push_message(request)
+            if error_code:
+                LOGGER.info("yield confirm_out failed. room_id:%s account_id:%s", str(room_id), str(account_id))
+                return False, "send message failed."
+            return error_code, error_message
+        return success, content
 
 @tornado.gen.coroutine
 def firt_message():
@@ -480,9 +494,10 @@ def confirm_out(account_id, callback):
         begin_time = info["begin"]
 
         if not modify_schedules(calendar_id, begin_time, my_time, my_time):
+            LOGGER.info("modify_schedules failed account_id:%s", str(account_id))
         if schedule_id is None:
-            LOGGER.info("modify_schedules failed account_id:%s, room_id:%s", str(account_id))
-            return False, "create schedules failed."
+            LOGGER.info("schedule_id is None account_id:%s", str(account_id))
+            return False, "modify schedules failed."
         modify_schedule_by_user(account_id, current_date, schedule_id, my_time)
     else:
         LOGGER.info("schedules has exist. account_id:%s, room_id:%s", str(account_id))
