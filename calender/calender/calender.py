@@ -99,11 +99,11 @@ def startCalender():
     """
     server = tornado.httpserver.HTTPServer(calender.router.getRouter())
     server.bind(options.port)
-    server.start(options.workers)
+    server.start(1)
 
     initLogger()
     initRichMenu()
-    initCalender()
+    #initCalender()
 
     asyncio.get_event_loop().run_forever()
     #tornado.ioloop.IOLoop.instance().start()

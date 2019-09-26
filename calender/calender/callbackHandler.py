@@ -48,14 +48,18 @@ type CustomerCallbackV2Request struct {
 @tornado.gen.coroutine
 def check_para(body):
     LOGGER.info("begin deal check_para")
-    if body["type"] != "message":
-        return False, "parameter error Type is not message"
     error_code = False
     error_message = None
     account_id = None
     room_id = None
     request = {}
-    if body["content"] is None or body["content"]["type"] != "text" or "postback" not in body["content"] or body["content"]["postback"] is None:
+    if body is None or "source" not in body or "accountId" not in body["source"]:
+        return False, "parameter error."
+
+    account_id = body["source"].get("accountId", None)
+    room_id = body["source"].get("roomId", None)    
+
+    if  body["type"] == "message" and "type" in body["content"] and body["content"]["type"] == "text" and body["content"]["postback"] is None:
         account_id = body["source"].get("accountId",None)
         room_id = body["source"].get("roomId", None)
 
@@ -64,7 +68,9 @@ def check_para(body):
         if room_id is not None:
             request["roomId"] = room_id
 
-        error_message, content = yield deal_message(account_id, message)
+        LOGGER.info("begin to deal room_id:%s account_id:%s", str(room_id), str(account_id))
+        #body["content"]["txt"]
+        error_message, content = yield deal_message(account_id, body["content"]["text"])
         if error_message == "error_message":
             if content is None:
                 LOGGER.info("yield error_message failed. room_id:%s account_id:%s", str(room_id), str(account_id))
@@ -75,7 +81,6 @@ def check_para(body):
             if error_code:
                 LOGGER.info("yield error_message failed. room_id:%s account_id:%s", str(room_id), str(account_id))
                 return False, "error_message failed."
-            return error_code, error_message
 
             request["content"] = content["seconde"]
             error_code = yield push_message(request)
@@ -96,30 +101,22 @@ def check_para(body):
         else:
             return False, "deal error message."
 
-    account_id = body["source"].get("accountId", None)
-    room_id = body["source"].get("roomId", None)
-
-    if account_id is not None:
-        request["accountId"] = account_id
-    if room_id is not None:
-        request["roomId"] = room_id
-
-    if body["content"]["postback"] == "Start":
-        request["content"] = yield firt_message()
+    elif body["type"] == "message" and body["content"]["postback"] == "start":
+        request["content"] = yield first_message()
         error_code = yield push_message(request)
         if error_code:
-            LOGGER.info("yield firt_message failed. room_id:%s account_id:%s", str(room_id), str(account_id))
+            LOGGER.info("yield first_message failed. room_id:%s account_id:%s", str(room_id), str(account_id))
             return False, "send message failed."
 
         request["content"] = yield image_interduce()
         error_code = yield push_message(request)
         if error_code:
-            LOGGER.info("yield firt_message failed. room_id:%s account_id:%s", str(room_id), str(account_id))
+            LOGGER.info("yield first_message failed. room_id:%s account_id:%s", str(room_id), str(account_id))
             return False, "send message failed."
 
         error_code, error_message = yield sign(account_id)
         return error_code, error_message
-    if body["content"]["postback"] == "sign_in":
+    elif (body["type"] == "postback" and "data" in body and body["data"] == "sign_in") or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "sign_in"):
         canncel_user_specific_rich_menu(account_id)
         request["content"] = yield sign_in()
         error_code = yield push_message(request)
@@ -137,7 +134,7 @@ def check_para(body):
             return False, "send message failed."
         return error_code, error_message
 
-    if body["content"]["postback"] == "to_firt":
+    if body["content"]["postback"] == "to_first":
         error_code, error_message = yield sign(account_id)
         return error_code, error_message
 
@@ -217,8 +214,9 @@ def check_para(body):
             return error_code, error_message
         return success, content
 
+    return False, "can't deal message"
 @tornado.gen.coroutine
-def firt_message():
+def first_message():
     cn_text = i18n_text("zh_CN", "欢迎使用calender bot")
     en_text = i18n_text("en_US", "welcome access calender bot")
     kr_text = i18n_text("ko_KR", "안녕하세요, 출퇴근 시간을 입력하고관리할 수 있도록 도와드리는 라인웍스의管理出勤bot 입니다.")
@@ -231,13 +229,16 @@ def firt_message():
 @tornado.gen.coroutine
 def image_interduce():
     action1 = make_postback_action("aaa", label="aaa")
-    column1 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPf8cfPmTj66orID4K4e8fAmVG8mUKIqNsQEQQ5C0DCzzXmvKNfwK532uJUa8it5mTjojCjwogrZoJI3IbttbjTg", action=action1)
+    #column1 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPf8cfPmTj66orID4K4e8fAmVG8mUKIqNsQEQQ5C0DCzzXmvKNfwK532uJUa8it5mTjojCjwogrZoJI3IbttbjTg", action=action1)
+    column1 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPd4hdVveaCll7UqqRDDydLF47nTiwvwHZ/g4YJcCLXP35mhlbOPOOLqI/dcCdqT3c1rRC6dA3Wbyot2++pVKOoJ", action=action1)
 
     action2 = make_postback_action("bbb", label="bbb")
-    column2 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPeFrpUOaB2F4MTiAVWocDkRdfUcfOiRRSd59zUhlf18g1LQ7DyvIv+Tf4AGqBZuCTN1NSpxtm2Hv3crjhJzgW8R",action=action2)
+    #column2 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPeFrpUOaB2F4MTiAVWocDkRdfUcfOiRRSd59zUhlf18g1LQ7DyvIv+Tf4AGqBZuCTN1NSpxtm2Hv3crjhJzgW8R",action=action2)
+    column2 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPf77l6CwblhVstm2Ufs3FIjqIbFbg+zZ7ha/P/hF4s0r558lwEA9gV5LOeqKFbtf2CgcsnAIVBmq85qWw0fDmLv",action=action2)
 
-    action3 = make_message_action("ccc", label="ccc")
-    column3 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPdXwKHbrPJsfaSLaBQq9K3J1plRD4qCRNwTIWQAepAkjFoh/XKrETXDgsX/irKFyIhOmRBp9Kz+C2HhFqsGRF43", action=action3)
+    action3 = make_postback_action("ccc", label="ccc")
+    #column3 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPdXwKHbrPJsfaSLaBQq9K3J1plRD4qCRNwTIWQAepAkjFoh/XKrETXDgsX/irKFyIhOmRBp9Kz+C2HhFqsGRF43", action=action3)
+    column3 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPc56K5J27l8cxKd1c7ubgQYBowCQe0y3ieE6XsF6AsTy5X0N4h1IygqDqzS/69fBRH0NvYVybILMZsSJfP3cekh", action=action3)
 
     columns = [column1, column2, column3]
     return  make_image_carousel(columns)
@@ -316,13 +317,13 @@ def deal_sign_in(cur_time = None):
     en_text3 = make_i18n_label("en_US", "yes")
     kr_text3 = make_i18n_label("ko_KR", "확정")
     display_label = [cn_text3, en_text3, kr_text3]
-    action1 = make_postback_action("confirm_in&time="+current_time_tickit, label = "확정", i18n_labels = display_label)
+    action1 = make_postback_action("confirm_in&time="+str(current_time_tickit), label = "확정", i18n_labels = display_label, display_text = "확정?")
 
     cn_text2 = make_i18n_label("zh_CN", "上一步")
     en_text2 = make_i18n_label("en_US", "Previous step")
     kr_text2 = make_i18n_label("ko_KR", "전보")
     display_label2 = [cn_text2, en_text2, kr_text2]
-    action2 = make_postback_action("sign_in", label = "전보", i18n_labels = display_label2)
+    action2 = make_postback_action("sign_in", label = "전보", i18n_labels = display_label2, display_text = "전보?")
     reply_item1 = make_quick_reply_item(action1)
     reply_item2 = make_quick_reply_item(action2)
 
@@ -377,18 +378,18 @@ def manual_sign_in(account_id):
 
     text1 = make_text("바로 출근 시간 입력해주세요", i18n_texts1)
 
-    cn_text = i18n_text("zh_CN", "输入时间时，请按顺序填写4位数字。\r\n例如，如果想填写下午8点20分的话，请填写2020的数字。")
-    en_text = i18n_text("en_US", "When entering time, please fill in 4 digits in order.\r\nFor example, if you want to fill in at 8:20 p.m., please fill in the number of 2020.")
-    kr_text = i18n_text("ko_KR", "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.\r\n예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.")
+    cn_text = i18n_text("zh_CN", "输入时间时，请按顺序填写4位数字。例如，如果想填写下午8点20分的话，请填写2020的数字。")
+    en_text = i18n_text("en_US", "When entering time, please fill in 4 digits in order.For example, if you want to fill in at 8:20 p.m., please fill in the number of 2020.")
+    kr_text = i18n_text("ko_KR", "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.")
 
     i18n_texts2 = [cn_text, en_text, kr_text]
-    text2 = make_text("시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.\r\n예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.", i18n_texts2)
+    text2 = make_text("시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.", i18n_texts2)
 
     error_code, error_message = set_status_by_user_date(account_id, current_date, "wait_in",["wait_in", "in_done", "out_done"])
     if not error_code:
         LOGGER.error("set_status_by_user_date failed.")
         return None
-    return {"firt":text1,"seconde": text2}
+    return {"first":text1,"seconde": text2}
 
 @tornado.gen.coroutine
 def manual_sign_out(account_id):
@@ -401,19 +402,19 @@ def manual_sign_out(account_id):
 
     text1 = make_text("퇴근 시간 바로 입력해주세요", i18n_texts1)
 
-    cn_text = i18n_text("zh_CN", "输入时间时，请按顺序填写4位数字。\r\n例如，如果想填写下午8点20分的话，请填写2020的数字。")
+    cn_text = i18n_text("zh_CN", "输入时间时，请按顺序填写4位数字。例如，如果想填写下午8点20分的话，请填写2020的数字。")
     en_text = i18n_text("en_US",
-                        "When entering time, please fill in 4 digits in order.\r\nFor example, if you want to fill in at 8:20 p.m., please fill in the number of 2020.")
+                        "When entering time, please fill in 4 digits in order.For example, if you want to fill in at 8:20 p.m., please fill in the number of 2020.")
     kr_text = i18n_text("ko_KR",
-                        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.\r\n예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.")
+                        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.")
 
     i18n_texts2 = [cn_text, en_text, kr_text]
     text2 = make_text(
-        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.\r\n예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.",
+        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.",
         i18n_texts2)
 
     set_status_by_user_date(account_id, current_date, "wait_out", ["wait_in", "in_done", "out_done"])
-    return {"firt": text1, "seconde": text2}
+    return {"first": text1, "seconde": text2}
 
 @tornado.gen.coroutine
 def error_message():
@@ -425,18 +426,18 @@ def error_message():
 
     text1 = make_text("퇴근 시간 바로 입력해주세요", i18n_texts1)
 
-    cn_text = i18n_text("zh_CN", "输入时间时，请按顺序填写4位数字。\r\n例如，如果想填写下午8点20分的话，请填写2020的数字。")
+    cn_text = i18n_text("zh_CN", "输入时间时，请按顺序填写4位数字。例如，如果想填写下午8点20分的话，请填写2020的数字。")
     en_text = i18n_text("en_US",
-                        "When entering time, please fill in 4 digits in order.\r\nFor example, if you want to fill in at 8:20 p.m., please fill in the number of 2020.")
+                        "When entering time, please fill in 4 digits in order.For example, if you want to fill in at 8:20 p.m., please fill in the number of 2020.")
     kr_text = i18n_text("ko_KR",
-                        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.\r\n예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.")
+                        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.")
 
     i18n_texts2 = [cn_text, en_text, kr_text]
     text2 = make_text(
-        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.\r\n예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.",
+        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.",
         i18n_texts2)
 
-    return {"firt": text1, "seconde": text2}
+    return {"first": text1, "seconde": text2}
 
 @tornado.gen.coroutine
 def confirm_in(account_id, callback):
@@ -515,32 +516,41 @@ def confirm_out(account_id, callback):
 
 @tornado.gen.coroutine
 def deal_message(account_id, message):
+
     loalcal_time = time.localtime(time.time())
-    loalcal_time.tm_hour = user_time/10
-    loalcal_time.tm_min = user_time % 10
-    loalcal_time.tm_sec = 0
 
-    user_time_ticket = time.mktime(loalcal_time)
-    #user_time = time.strftime("%Y-%m-%d %H:%M:%S", loalcal_time)
-    current_date = time.strftime("%Y-%m-%d", loalcal_time)
-
-    content = None
+    current_date = time.strftime("%Y-%m-%d", loalcal_time) 
     status = get_status_by_user(account_id, current_date)
 
     if status is None:
         LOGGER.info("status is None account_id:%s message:%s", account_id, message)
         return "failed", None
+    try:
+        user_time = int(message)
+    except Exception as e:
+        content = yield error_message()
+        return "error_message", content
+    #loalcal_time.tm_hour = user_time/10
+    #loalcal_time.tm_min = user_time % 10
+    #loalcal_time.tm_sec = 0
+    
+    tm = (loalcal_time.tm_year, loalcal_time.tm_mon, loalcal_time.tm_mday, int(user_time/10), int(user_time % 10), 00, loalcal_time.tm_wday, loalcal_time.tm_yday, loalcal_time.tm_isdst)
 
-    user_time = int(message)
+    user_time_ticket = int(time.mktime(tm))
+
+    content = None
     if (status == "wait_in" or status == "wait_out") and (user_time < 0 or user_time > 2400):
-        return "error_message", error_message()
+        content = yield error_message()
+        return "error_message", content
 
     if status == "wait_in":
         set_status_by_user_date(account_id, current_date, "in_done", ["None", "wait_in", "in_done"])
-        return "success", yield deal_sign_in(user_time_ticket)
+        content =  yield deal_sign_in(user_time_ticket)
+        return "success", content
     elif status == "wait_out":
         set_status_by_user_date(account_id, current_date, "out_done", ["None", "wait_out", "out_done"])
-        return "success", yield deal_sign_out(user_time_ticket)
+        content =  yield deal_sign_out(user_time_ticket)
+        return "success", content
     else:
         LOGGER.info("can't deal this message account_id:%s message:%s status:%s", account_id, message, status)
     return "failed", None

@@ -10,6 +10,8 @@ from calender.common.fileCache import *
 import requests
 import uuid
 
+LOGGER = logging.getLogger("calender")
+
 def create_headers():
     headers = API_BO["headers"]
     headers["consumerKey"] = OPEN_API["consumerKey"]
@@ -59,7 +61,7 @@ def create_calender():
         "desc": "Punch schedule",
         "invitationMapListJson": {
             "email": ADMIN_ACCOUNT,
-            "actionType": insert
+            "actionType": "insert"
             #"roleId": "2"
         }
     }
@@ -131,7 +133,7 @@ def modify_schedules(calendar_id, begin, end, current, account_id):
     return tmp["returnValue"]
 
 def init_calender():
-    calender_id = get_calender_id(OPEN_API["botNo"])
+    calender_id = get_calender_id()
     if calender_id is not None:
         return calender_id
     calender_id = create_calender()
