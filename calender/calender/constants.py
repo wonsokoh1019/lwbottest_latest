@@ -28,7 +28,7 @@ API_BO =	{
                 {
                     "url": "https://alpha-apis.worksmobile.com/r/kr1xbFflHaxsx/message/v1/bot/107796/richmenu",
                     "name": "test_rich_menu",
-                    "resource_id":"XAAAUFu0VclmHteAMq0SJrW1/4AHGX2QyVGF8otBknnDsQOBHci7yKpLgqgZTd+KKEmHbrfKlKmc0xpm/0q6dAzLoqMnoywk3IzzsDoyZLSRqc3n"
+                    "resource_id":"XAAAUFu0VclmHteAMq0SJrW1/4CKWPq5DOMRCCWpAzUJroxiTpNhtBo86FlPa9IeNwvvkHzfSpBaObDPwoZCdGaqE1zLBaOhLQqdIyWP4ZUvySYK"
                 },
                 "calendar":
                 {

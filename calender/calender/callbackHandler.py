@@ -44,32 +44,32 @@ type CustomerCallbackV2Request struct {
 	UserKey     *common.UserKey                    `json:"userKey,omitempty"`
 }
 """
+cmd_messge = ["start", "manual_sign_out", "manual_sign_in", "direct_sign_out", "direct_sign_in", "sign_out", "sign_in"]
+
+def check_is_messge_time(message):
+    if message in cmd_messge or message.find("confirm_out") != -1 or message.find("confirm_in") != -1:
+        return False
+    return True
 
 @tornado.gen.coroutine
 def check_para(body):
     LOGGER.info("begin deal check_para")
-    error_code = False
     error_message = None
-    account_id = None
-    room_id = None
     request = {}
     if body is None or "source" not in body or "accountId" not in body["source"]:
         return False, "parameter error."
 
     account_id = body["source"].get("accountId", None)
-    room_id = body["source"].get("roomId", None)    
+    room_id = body["source"].get("roomId", None)
 
-    if  body["type"] == "message" and "type" in body["content"] and body["content"]["type"] == "text" and body["content"]["postback"] is None:
-        account_id = body["source"].get("accountId",None)
-        room_id = body["source"].get("roomId", None)
+    if account_id is not None:
+        request["accountId"] = account_id
+    if room_id is not None:
+        request["roomId"] = room_id
 
-        if account_id is not None:
-            request["accountId"] = account_id
-        if room_id is not None:
-            request["roomId"] = room_id
-
+    if  body["type"] == "message" and "type" in body["content"] and body["content"]["type"] == "text" \
+            and body["content"]["postback"] is None and "text" in body["content"] and check_is_messge_time(body["content"]["text"]):
         LOGGER.info("begin to deal room_id:%s account_id:%s", str(room_id), str(account_id))
-        #body["content"]["txt"]
         error_message, content = yield deal_message(account_id, body["content"]["text"])
         if error_message == "error_message":
             if content is None:
@@ -101,7 +101,8 @@ def check_para(body):
         else:
             return False, "deal error message."
 
-    elif body["type"] == "message" and body["content"]["postback"] == "start":
+    elif (body["type"] == "message" and body["content"]["postback"] == "start") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "start") :
         request["content"] = yield first_message()
         error_code = yield push_message(request)
         if error_code:
@@ -116,7 +117,8 @@ def check_para(body):
 
         error_code, error_message = yield sign(account_id)
         return error_code, error_message
-    elif (body["type"] == "postback" and "data" in body and body["data"] == "sign_in") or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "sign_in"):
+    elif (body["type"] == "postback" and "data" in body and body["data"] == "sign_in") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "sign_in"):
         canncel_user_specific_rich_menu(account_id)
         request["content"] = yield sign_in()
         error_code = yield push_message(request)
@@ -125,7 +127,8 @@ def check_para(body):
             return False, "send message failed."
         return error_code, error_message
 
-    if body["content"]["postback"] == "sign_out":
+    if (body["type"] == "postback" and "data" in body and body["data"] == "sign_out") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "sign_out"):
         canncel_user_specific_rich_menu(account_id)
         request["content"] =  yield sign_out()
         error_code = yield push_message(request)
@@ -134,11 +137,14 @@ def check_para(body):
             return False, "send message failed."
         return error_code, error_message
 
-    if body["content"]["postback"] == "to_first":
+    if (body["type"] == "postback" and "data" in body and body["data"] == "to_first") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "sign_out"):
         error_code, error_message = yield sign(account_id)
         return error_code, error_message
 
-    if body["content"]["postback"] == "direct_sign_in":
+    if (body["type"] == "postback" and "data" in body and body["data"] == "direct_sign_in") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "direct_sign_in"):
+
         request["content"] = yield deal_sign_in()
         error_code = yield push_message(request)
         if error_code:
@@ -146,7 +152,8 @@ def check_para(body):
             return False, "send message failed."
         return error_code, error_message
 
-    if body["content"]["postback"] == "direct_sign_out":
+    if (body["type"] == "postback" and "data" in body and body["data"] == "direct_sign_out") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "direct_sign_out"):
         request["content"] = yield deal_sign_out()
         error_code = yield push_message(request)
         if error_code:
@@ -154,7 +161,8 @@ def check_para(body):
             return False, "send message failed."
         return error_code, error_message
 
-    if body["content"]["postback"] == "manual_sign_in":
+    if (body["type"] == "postback" and "data" in body and body["data"] == "manual_sign_in") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "manual_sign_in"):
         content = yield manual_sign_in(account_id)
         if content is None:
             LOGGER.info("yield manual_sign_in failed. room_id:%s account_id:%s", str(room_id), str(account_id))
@@ -173,7 +181,8 @@ def check_para(body):
             return False, "send message failed."
         return error_code, error_message
 
-    if body["content"]["postback"] == "manual_sign_out":
+    if (body["type"] == "postback" and "data" in body and body["data"] == "manual_sign_out") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "manual_sign_out"):
         content = yield manual_sign_out(account_id)
         if content is None:
             LOGGER.info("yield manual_sign_out failed. room_id:%s account_id:%s", str(room_id), str(account_id))
@@ -192,7 +201,8 @@ def check_para(body):
             return False, "send message failed."
         return error_code, error_message
 #会发确认
-    if body["content"]["postback"].find("confirm_in") != -1:
+    if (body["type"] == "postback" and "data" in body and body["data"] == "confirm_in") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and body["content"]["text"] == "confirm_in"):
         success, content = yield confirm_in(account_id, body["content"]["postback"])
         if success:
             request["content"] = content
@@ -203,6 +213,8 @@ def check_para(body):
             return error_code, error_message
         return success, content
 
+    if (body["type"] == "postback" and "data" in body and body["data"] == "confirm_out") \
+            or (body["type"] == "message" and "content" in body and "text" in body["content"] and body["content"]["text"] == "confirm_out"):
     if body["content"]["postback"].find("confirm_out") != -1:
         success, content = yield confirm_out(account_id, body["content"]["postback"])
         if success:
@@ -229,15 +241,12 @@ def first_message():
 @tornado.gen.coroutine
 def image_interduce():
     action1 = make_postback_action("aaa", label="aaa")
-    #column1 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPf8cfPmTj66orID4K4e8fAmVG8mUKIqNsQEQQ5C0DCzzXmvKNfwK532uJUa8it5mTjojCjwogrZoJI3IbttbjTg", action=action1)
     column1 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPd4hdVveaCll7UqqRDDydLF47nTiwvwHZ/g4YJcCLXP35mhlbOPOOLqI/dcCdqT3c1rRC6dA3Wbyot2++pVKOoJ", action=action1)
 
     action2 = make_postback_action("bbb", label="bbb")
-    #column2 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPeFrpUOaB2F4MTiAVWocDkRdfUcfOiRRSd59zUhlf18g1LQ7DyvIv+Tf4AGqBZuCTN1NSpxtm2Hv3crjhJzgW8R",action=action2)
     column2 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPf77l6CwblhVstm2Ufs3FIjqIbFbg+zZ7ha/P/hF4s0r558lwEA9gV5LOeqKFbtf2CgcsnAIVBmq85qWw0fDmLv",action=action2)
 
     action3 = make_postback_action("ccc", label="ccc")
-    #column3 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPdXwKHbrPJsfaSLaBQq9K3J1plRD4qCRNwTIWQAepAkjFoh/XKrETXDgsX/irKFyIhOmRBp9Kz+C2HhFqsGRF43", action=action3)
     column3 = make_image_carousel_column(image_resource_id="XAAAUO6yD2IJSJ8t9GRDNwMsZPc56K5J27l8cxKd1c7ubgQYBowCQe0y3ieE6XsF6AsTy5X0N4h1IygqDqzS/69fBRH0NvYVybILMZsSJfP3cekh", action=action3)
 
     columns = [column1, column2, column3]

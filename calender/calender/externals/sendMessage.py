@@ -50,8 +50,6 @@ def push_message(req, header = None):
 
 	url = API_BO["push_url"]
 	LOGGER.info("push message . url:%s body:%s headers:%s", url, str(req), str(headers))
-	#client = AsyncHTTPClient()
-	#response = yield client.fetch(url, headers=headers, method='POST', body=json.dumps(req))
 	response = requests.post(url, data=json.dumps(req), headers=headers)
 	if response.status_code != 200:
 		error_code = True
