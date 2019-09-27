@@ -12,12 +12,14 @@ def make_i18n_label(language, label):
 	return {"language":language, "label":label}
   		
 def i18n_display_text(language, display_text):
-	return {"language":language, "displayText":displayText}
+	return {"language":language, "displayText":display_text}
   				
-def make_postback_action(data, display_text, label=None, i18n_labels=None, i18n_display_texts=None):
+def make_postback_action(data, display_text=None, label=None, i18n_labels=None, i18n_display_texts=None):
 
-	action = {"type":"postback", "data":data, "displayText":display_text}
+	action = {"type":"postback", "data":data}
 
+	if display_text is not None:
+		action["displayText"] = display_text
 	if label is not None:
 		action["label"] = label
 	if i18n_labels is not None:
@@ -30,10 +32,11 @@ def make_postback_action(data, display_text, label=None, i18n_labels=None, i18n_
 def i18n_text(language, text):
 	return {"language":language, "text":text}
   				
-def make_message_action(label, text, post_back, i18n_labels=None, i18n_texts=None):
+def make_message_action(label, post_back, text=None, i18n_labels=None, i18n_texts=None):
 
-	action = {"type":"message", "label":label, "text":text, "postback":post_back}
-
+	action = {"type":"message", "label":label, "postback":post_back}
+	if text is not None:
+		action["text"] = text
 	if i18n_labels is not None:
 		action["i18nLabels"] = i18n_labels
 	if i18n_texts is not None:
@@ -74,7 +77,7 @@ def make_quick_reply_item(action, url = None, image_resource_id=None, i18n_thumb
 	return reply_item
 
 def make_quick_reply(replay_items):
-	return {"quickReply":{"items":replay_items}}
+	return {"items":replay_items}
 		
 """text (https://developers.worksmobile.com/kr/document/100500801?lang=ko)"""
 #def make_i18n_text(language, text):
@@ -96,12 +99,10 @@ POST (Content-Type: application / json; charset = UTF-8)
 def make_i18n_image_url(language, image_url):
 	return {"language":language, "imageUrl":image_url}
 		
-def make_image_carousel_column(image_url, image_resource_id = None, i18n_image_urls = None, i18n_image_resource_ids = None):
+def make_image_carousel_column(image_url=None, image_resource_id = None, action=None, i18n_image_urls = None, i18n_image_resource_ids = None):
 	column_data = {}
 	if image_url is not None:
 		column_data["imageUrl"] = image_url
-	if image_resource_id is not None:
-		column_data["imageResourceId"] = image_resource_id
 	if image_resource_id is not None:
 		column_data["imageResourceId"] = image_resource_id
 	if action is not None:
@@ -138,8 +139,8 @@ def make_bound(x,y,w,h):
 def make_area(bound, action):
 	return {"bounds":bound, "action":action}
 
-def make_rich_menu(resource_path, size, areas):
-	return {"image": {"resourcePath":resource_path}, "richMenu": {"size": size, "areas": areas}}
+def make_add_rich_menu(name, size, areas):
+	return {"name": name, "size": size, "areas": areas}
 """
 button
 """
@@ -147,10 +148,10 @@ button
 def make_i18n_content_texts(language, content_text):
 	return {"language":language, "contentText":content_text}
 
-def make_button(text,  content_texts, actions):
-	return {"type":"button_template", "text":text, "i18nContentTexts":content_texts, "actions":actions}
-		
-
+def make_button(text, actions, content_texts=None):
+	if content_texts is not None:
+		return {"type":"button_template", "contentText":text, "i18nContentTexts":content_texts, "actions":actions}
+	return {"type":"button_template", "contentText":text, "actions":actions}
 
 		
 

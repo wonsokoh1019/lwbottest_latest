@@ -3,13 +3,13 @@
 name_of_self=$(basename ${0})
 path_to_self=$(dirname ${0})
 abspath_to_self=$(cd $path_to_self; pwd)
-log_path=/home1/irteamsu/logs/calender
+log_path=/home1/irteam/logs/calender
 calender_pid_file=${log_path}/calender.pid
 nginx_pid_file=${log_path}/nginx/nginx.pid
 selfhealing_stop_file=/tmp/selfhealing.stop
 cd ${abspath_to_self}
 
-export PATH=/home1/irteamsu/miniconda3/bin:$PATH
+export PATH=/home1/irteam/miniconda3/bin:$PATH
 
 case "${1}" in
     start)

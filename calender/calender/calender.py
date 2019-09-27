@@ -13,6 +13,12 @@ import tornado.web
 import tornado.httpserver
 from tornado.httpclient import AsyncHTTPClient
 from tornado.options import define, options
+from calender.externals.richmenu import *
+from calender.common import globalData
+from calender.externals.data import *
+from calender.externals.calenderReq import *
+from calender.constants import API_BO
+
 import psutil
 
 import calender.router
@@ -69,16 +75,36 @@ def initLogger():
     logging.getLogger("tornado.application").addHandler(file_handler)
     logging.getLogger("tornado.general").addHandler(file_handler)
 
+def initRichMenu():
+    rich_menu_id = init_rich_menu(API_BO["rich_menu"]["name"])
+    if rich_menu_id is None:
+        LOGGER = logging.getLogger("calender")
+        LOGGER.info("init rich menu failed.")
+        raise Exception("init rich menu failed.")
+    else:
+        globalData.set_value(API_BO["rich_menu"]["name"], rich_menu_id)
+
+def initCalender():
+    calender_id = init_calender()
+    if calender_id is None:
+        LOGGER = logging.getLogger("calender")
+        LOGGER.info("init calender failed.")
+        raise Exception("init calender failed.")
+    else:
+        globalData.set_value(API_BO["calendar"]["name"], calender_id)
+
 def startCalender():
     """
     the calender launch code
     """
     server = tornado.httpserver.HTTPServer(calender.router.getRouter())
     server.bind(options.port)
-    server.start(options.workers)
+    server.start(1)
 
     initLogger()
-    
+    initRichMenu()
+    #initCalender()
+
     asyncio.get_event_loop().run_forever()
     #tornado.ioloop.IOLoop.instance().start()
     server.stop()

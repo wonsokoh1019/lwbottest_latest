@@ -13,13 +13,32 @@ ABSDIR_OF_SELF           = os.path.dirname(os.path.abspath(__file__))
 LOG_CONF_FILE            = ABSDIR_OF_SELF + '/log.conf'
 ABSDIR_OF_PARENT         = os.path.dirname(ABSDIR_OF_SELF)
 
+ADMIN_ACCOUNT = "admin@nwetest.com"
+
 API_BO =	{
                 "method": "POST",
                 "headers": {
                     "content-type": "application/json",
                     "charset": "UTF-8"
                 },
-                "url": "https://alpha-apis.worksmobile.com/API_ID/message/sendMessage/v2"
+                "url": "https://alpha-apis.worksmobile.com/kr1xbFflHaxsx/message/sendMessage/v2",
+                "upload_url":"http://alpha-storage.worksmobile.com/openapi/message/upload.api",
+                "push_url": "https://alpha-apis.worksmobile.com/r/kr1xbFflHaxsx/message/v1/bot/107796/message/push",
+                "rich_menu":
+                {
+                    "url": "https://alpha-apis.worksmobile.com/r/kr1xbFflHaxsx/message/v1/bot/107796/richmenu",
+                    "name": "test_rich_menu",
+                    "resource_id":"XAAAUFu0VclmHteAMq0SJrW1/4CKWPq5DOMRCCWpAzUJroxiTpNhtBo86FlPa9IeNwvvkHzfSpBaObDPwoZCdGaqE1zLBaOhLQqdIyWP4ZUvySYK"
+                },
+                "calendar":
+                {
+                    "create_calender_url":"https://alpha-apis.worksmobile.com/kr1xbFflHaxsx/calendar/createCalendar",
+                    "get_calenders_url":"https://alpha-apis.worksmobile.com/r/kr1xbFflHaxsx/calendar/rest/v1/users/me/calendarList",
+                    "create_schedule_url":"https://alpha-apis.worksmobile.com/kr1xbFflHaxsx/calendar/createSchedule",
+                    "modify_schedule_url":"https://alpha-apis.worksmobile.com/kr1xbFflHaxsx/calendar/modifySchedule",
+                    "name": "test_calendar",
+                    "TZone": "Asia/Seoul"
+                }
             }
 					
 OPEN_API= {
@@ -30,6 +49,10 @@ OPEN_API= {
       "botNames": ["calender bot"],
       "token":"AAAA+UqCOwVLOdscB1a6o7FfTGl+VDzbXCcs35KtxoL+zsB/iqp4Egfa/4LOnh9t8+Omb1ddnTRyNG8J+sYoEYlIBmle9iKzgVQ2vWvczn5a7Wt5aTAc6YnhdJTKt4PjIvDLAueat8VF1CKm4yK1qHpLGp5q47WFqBZqcTJ9Z6u4Xm7GmBo/SeSG6Q9c/6DbqE73M4hxlkdNjjduJEk2Gh8+Fedu0XnY26W9p5+CzzHieE4HdsGFR9uZ16xodc9OoBRSJCkA6bki0E45zfOdkjvE1tAhzYbghgD1vU0nDQwKBM28QhHd70uEbYI6hhYp9I9m3PJzA13ZJ3Xl4q1F1mygfaI="
     }
+
+FILE_SYSTEM = {
+    "cache_dir": "/home1/irteam/cache",
+
 }
     
 
