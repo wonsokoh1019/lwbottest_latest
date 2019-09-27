@@ -81,7 +81,7 @@ def set_rich_menu_image(resource_id, rich_menu_id):
     headers["consumerKey"] = OPEN_API["consumerKey"]
     headers["Authorization"] = "Bearer " + OPEN_API["token"]
 
-    url = API_BO["rich_menu"]["url"] + "/" + rich_menu_id + "content"
+    url = API_BO["rich_menu"]["url"] + "/" + rich_menu_id + "/content"
     LOGGER.info("push message . url:%s", url)
 
     response = requests.post(url, data=json.dumps(body), headers=headers)
@@ -123,10 +123,10 @@ def canncel_user_specific_rich_menu(account_id):
     headers = API_BO["headers"]
     headers["consumerKey"] = OPEN_API["consumerKey"]
     headers["Authorization"] = "Bearer " + OPEN_API["token"]
-    url = API_BO["rich_menu"]["url"] + "account/" + account_id
+    url = API_BO["rich_menu"]["url"] + "/account/" + account_id
 
     LOGGER.info("push message begin. url:%s", url)
-    response = requests.DELETE(url, headers=headers)
+    response = requests.delete(url, headers=headers)
     if response.status_code != 200:
         LOGGER.info("push message failed. url:%s text:%s body:%s", url, response.text, response.content)
         return False

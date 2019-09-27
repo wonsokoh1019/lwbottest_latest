@@ -4,7 +4,7 @@ import os
 import json
 from calender.constants import API_BO, OPEN_API, FILE_SYSTEM
 
-def set_status_by_user_date(user, date, status, check_status):
+def set_status_by_user_date(user, date, status):
     bot_no = OPEN_API["botNo"]
     tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + user
     status_file = tmp_path + "/" + date + ".status"
@@ -17,9 +17,6 @@ def set_status_by_user_date(user, date, status, check_status):
     content_str = json.dumps(content)
     if os.path.exists(status_file):
         file_handle = open(status_file, mode='r+')
-        content = json.loads(file_handle.read())
-        if "status" in content and content["status"] not in check_status:
-            return False, "check after status failed"
         file_handle.seek(0)
         file_handle.truncate()
         file_handle.write(content_str)
@@ -47,6 +44,13 @@ def get_status_by_user(user, date):
     if "status" not in content:
         return None
     return content["status"]
+
+def clean_status_by_user(user, date):
+    bot_no = OPEN_API["botNo"]
+    tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + user
+    status_file = tmp_path + "/" + date + ".status"
+    if os.path.exists(status_file):
+        os.remove(status_file)
 
 def set_schedule_by_user(account_id, date, schedule_id, begin, end):
     bot_no = OPEN_API["botNo"]
