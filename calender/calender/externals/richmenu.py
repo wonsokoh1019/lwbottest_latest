@@ -30,33 +30,51 @@ def upload_content(file_path):
 
 def make_add_rich_menu_body(rich_menu_name):
     size = make_size(2500, 1686)
-    bound1 = make_bound(0, 0, 1250, 1286)
 
-    cn_text1 = i18n_display_text("zh_CN", "上班打卡")
-    en_text1 = i18n_display_text("en_US", "Get work records")
-    kr_text1 = i18n_display_text("ko_KR", "출근 기록 가져오기")
-    display_text1 = [cn_text1, en_text1, kr_text1]
-    action1 = make_postback_action("sign_in", "출근 기록 가져오기","上班打卡", i18n_display_texts=display_text1)
+    bound0 = make_bound(0, 0, 1250, 1286)
+    jp_text0 = i18n_display_text("ja_JP", "出勤を記録する")
+    en_text0 = i18n_display_text("en_US", "Record clock-in")
+    kr_text0 = i18n_display_text("ko_KR", "출근 기록하기")
+    display_text0 = [jp_text0, en_text0, kr_text0]
 
-    bound2 = make_bound(0, 1250, 2500, 1286)
-    cn_text2 = i18n_display_text("zh_CN", "下班打卡")
-    en_text2 = i18n_display_text("en_US", "Get off-duty records")
-    kr_text2 = i18n_display_text("ko_KR", "퇴근 기록 가져오기")
-    display_text2 = [cn_text2, en_text2, kr_text2]
+    jp_label_text0 = make_i18n_label("ja_JP", "出勤を記録する")
+    en_label_text0 = make_i18n_label("en_US", "Record clock-in")
+    kr_label_text0 = make_i18n_label("ko_KR", "출근 기록하기")
+    display_label0 = [jp_label_text0, en_label_text0, kr_label_text0]
 
-    action2 = make_postback_action("sign_out", "퇴근 기록 가져오기", "下班打卡", i18n_display_texts = display_text2)
+    action0 = make_postback_action("sign_in", display_text = "출근 기록하기", label = "上班打卡",
+                                   i18n_display_texts = display_text0, i18n_labels = display_label0)
 
-    bound3 = make_bound(0, 1286, 2500, 1686)
-    cn_text3 = i18n_display_text("zh_CN", "回到首页")
-    en_text3 = i18n_display_text("en_US", "Back to the front page")
-    kr_text3 = i18n_display_text("ko_KR", "홈페이지로 돌아오다")
-    display_text3 = [cn_text3, en_text3, kr_text3]
+    bound1 = make_bound(0, 1250, 2500, 1286)
+    jp_text1 = i18n_display_text("ja_JP", "退勤を記録する")
+    en_text1 = i18n_display_text("en_US", "Record clock-out")
+    kr_text1 = i18n_display_text("ko_KR", "퇴근 기록하기")
+    display_text1 = [jp_text1, en_text1, kr_text1]
 
-    action3 = make_postback_action("to_firt", "홈페이지로 돌아오다","回到首页", i18n_display_texts = display_text3)
+    jp_label_text1 = make_i18n_label("ja_JP", "退勤を記録する")
+    en_label_text1 = make_i18n_label("en_US", "Record clock-out")
+    kr_label_text1 = make_i18n_label("ko_KR", "퇴근 기록하기")
+    display_label1 = [jp_label_text1, en_label_text1, kr_label_text1]
+
+    action1 = make_postback_action("sign_out", display_text = "퇴근 기록하기", label = "퇴근 기록하기",
+                                   i18n_display_texts = display_text1, i18n_labels = display_label1)
+
+    bound2 = make_bound(0, 1286, 2500, 1686)
+    jp_text2 = i18n_display_text("ja_JP", "最初へ")
+    en_text2 = i18n_display_text("en_US", "Start over")
+    kr_text2 = i18n_display_text("ko_KR", "처음으로")
+    display_text2 = [jp_text2, en_text2, kr_text2]
+
+    jp_label_text2 = make_i18n_label("ja_JP", "最初へ")
+    en_label_text2 = make_i18n_label("en_US", "Start over")
+    kr_label_text2 = make_i18n_label("ko_KR", "처음으로")
+    display_label2 = [jp_label_text2, en_label_text2, kr_label_text2]
+
+    action2 = make_postback_action("to_firt", display_text = "처음으로", label = "처음으로", i18n_display_texts = display_text2, i18n_labels = display_label2)
 
     rich_menu = make_add_rich_menu(rich_menu_name,
                    size,
-                   [make_area(bound1, action1),make_area(bound2, action2),make_area(bound3, action3)])
+                   [make_area(bound0, action0),make_area(bound1, action1),make_area(bound2, action2)])
 
     headers = API_BO["headers"]
     headers["consumerKey"] = OPEN_API["consumerKey"]

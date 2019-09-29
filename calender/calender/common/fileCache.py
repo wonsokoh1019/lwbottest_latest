@@ -4,22 +4,32 @@ import os
 import json
 from calender.constants import API_BO, OPEN_API, FILE_SYSTEM
 
-def set_status_by_user_date(user, date, status):
+def set_status_by_user_date(user, date, status = None, process=None):
     bot_no = OPEN_API["botNo"]
     tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + user
     status_file = tmp_path + "/" + date + ".status"
-    content = {
-        "status": status
-    }
+    content = {}
+    if status is not None:
+        content["status"] = status
+    if process is not None:
+        content["process"] = process
 
     if not os.path.exists(tmp_path):
         os.makedirs(tmp_path)
     content_str = json.dumps(content)
     if os.path.exists(status_file):
         file_handle = open(status_file, mode='r+')
+        old_content = file_handle.read()
+        old_content_json = {}
+        if old_content is not None:
+            old_content_json = json.loads(old_content)
+        if status is not None:
+            old_content_json["status"] = status
+        if process is not None:
+            old_content_json["process"] = process
         file_handle.seek(0)
         file_handle.truncate()
-        file_handle.write(content_str)
+        file_handle.write(json.dumps(old_content_json))
         file_handle.close()
         return True, None
 
@@ -41,9 +51,7 @@ def get_status_by_user(user, date):
         return None
     content = json.loads(content_str)
     file_handle.close()
-    if "status" not in content:
-        return None
-    return content["status"]
+    return content
 
 def clean_status_by_user(user, date):
     bot_no = OPEN_API["botNo"]
