@@ -5,7 +5,7 @@ import io
 import logging
 import json
 from calender.externals.data import *
-from calender.constants import API_BO, OPEN_API
+from calender.constants import API_BO, OPEN_API, RICH_MENUS
 import tornado.gen
 import requests
 LOGGER = logging.getLogger("calender")
@@ -80,7 +80,7 @@ def make_add_rich_menu_body(rich_menu_name):
     headers["consumerKey"] = OPEN_API["consumerKey"]
     headers["Authorization"] = "Bearer " + OPEN_API["token"]
 
-    url = API_BO["rich_menu"]["url"]
+    url = API_BO["rich_menu_url"]
     LOGGER.info("push message . url:%s", url)
 
     response = requests.post(url, data=json.dumps(rich_menu), headers=headers)
@@ -99,7 +99,7 @@ def set_rich_menu_image(resource_id, rich_menu_id):
     headers["consumerKey"] = OPEN_API["consumerKey"]
     headers["Authorization"] = "Bearer " + OPEN_API["token"]
 
-    url = API_BO["rich_menu"]["url"] + "/" + rich_menu_id + "/content"
+    url = API_BO["rich_menu_url"] + "/" + rich_menu_id + "/content"
     LOGGER.info("push message . url:%s", url)
 
     response = requests.post(url, data=json.dumps(body), headers=headers)
@@ -113,7 +113,7 @@ def set_user_specific_rich_menu(rich_menu_id, account_id):
     headers = API_BO["headers"]
     headers["consumerKey"] = OPEN_API["consumerKey"]
     headers["Authorization"] = "Bearer " + OPEN_API["token"]
-    url = API_BO["rich_menu"]["url"] + "/" + rich_menu_id + "/account/"+ account_id
+    url = API_BO["rich_menu_url"] + "/" + rich_menu_id + "/account/"+ account_id
 
     response = requests.post(url, headers=headers)
     if response.status_code != 200:
@@ -126,7 +126,7 @@ def get_rich_menus():
     headers = API_BO["headers"]
     headers["consumerKey"] = OPEN_API["consumerKey"]
     headers["Authorization"] = "Bearer " + OPEN_API["token"]
-    url = API_BO["rich_menu"]["url"]
+    url = API_BO["rich_menu_url"]
 
     LOGGER.info("push message begin. url:%s", url)
     response = requests.get(url, headers=headers)
@@ -151,15 +151,31 @@ def canncel_user_specific_rich_menu(account_id):
     LOGGER.info("push message success. url:%s txt:%s body:%s", url, response.text, response.content)
     return True
 
-def init_rich_menu(rich_menu_name):
-
+def init_rich_menu():
+    il8n_rich_menu_id = {}
     rich_menus = get_rich_menus()
     if rich_menus is not None:
         LOGGER.info("body:%s", rich_menus)
         for menu in rich_menus:
-            if menu["name"] == rich_menu_name:
-                return menu["richMenuId"]
-    rich_menu_id = make_add_rich_menu_body(rich_menu_name)
-    if not set_rich_menu_image(API_BO["rich_menu"]["resource_id"], rich_menu_id):
-        rich_menu_id = None
-    return rich_menu_id
+            if menu["name"] == RICH_MENUS["kr"]["name"]:
+                il8n_rich_menu_id[RICH_MENUS["kr"]["name"]] = menu["richMenuId"]
+            elif menu["name"] == RICH_MENUS["jp"]["name"]:
+                il8n_rich_menu_id[RICH_MENUS["jp"]["name"]] = menu["richMenuId"]
+            elif menu["name"] == RICH_MENUS["en"]["name"]:
+                il8n_rich_menu_id[RICH_MENUS["en"]["name"]] = menu["richMenuId"]
+    if "kr" not in il8n_rich_menu_id:
+        rich_menu_id = make_add_rich_menu_body(RICH_MENUS["kr"]["name"])
+        if not set_rich_menu_image(RICH_MENUS["kr"]["resource_id"], rich_menu_id):
+            LOGGER.error("set rich menu image failed.")
+        il8n_rich_menu_id[RICH_MENUS["kr"]["name"]]=rich_menu_id
+    if RICH_MENUS["jp"]["name"] not in il8n_rich_menu_id:
+        rich_menu_id = make_add_rich_menu_body(RICH_MENUS["jp"]["name"])
+        if not set_rich_menu_image(RICH_MENUS["jp"]["resource_id"], rich_menu_id):
+            LOGGER.error("set rich menu image failed.")
+        il8n_rich_menu_id[RICH_MENUS["jp"]["name"]] = rich_menu_id
+    if RICH_MENUS["en"]["name"] not in il8n_rich_menu_id:
+        rich_menu_id = make_add_rich_menu_body(RICH_MENUS["en"]["name"])
+        if not set_rich_menu_image(RICH_MENUS["en"]["resource_id"], rich_menu_id):
+            LOGGER.error("set rich menu image failed.")
+        il8n_rich_menu_id[RICH_MENUS["en"]["name"]] = rich_menu_id
+    return il8n_rich_menu_id

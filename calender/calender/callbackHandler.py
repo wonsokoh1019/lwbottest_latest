@@ -11,7 +11,7 @@ from calender.externals.sendMessage import push_message
 from calender.common import globalData
 from calender.externals.richmenu import *
 from calender.externals.calenderReq import *
-from calender.constants import API_BO
+from calender.constants import API_BO, IMAGE_CAROUSEL, RICH_MENUS
 from calender.externals.data import *
 from calender.common import globalData
 from calender.common.fileCache import *
@@ -291,9 +291,9 @@ def to_first():
 
 @tornado.gen.coroutine
 def image_interduce():
-    resource_kr0 = make_i18n_image_resource_id("ko_KR", API_BO["image_carousel"]["resource_id"]["ko_KR"][0])
-    resource_en0 = make_i18n_image_resource_id("en_US", API_BO["image_carousel"]["resource_id"]["en_US"][0])
-    resource_jp0 = make_i18n_image_resource_id("ja_JP", API_BO["image_carousel"]["resource_id"]["ja_JP"][0])
+    resource_kr0 = make_i18n_image_resource_id("ko_KR", IMAGE_CAROUSEL["resource_id"]["ko"][0])
+    resource_en0 = make_i18n_image_resource_id("en_US", IMAGE_CAROUSEL["resource_id"]["en"][0])
+    resource_jp0 = make_i18n_image_resource_id("ja_JP", IMAGE_CAROUSEL["resource_id"]["jp"][0])
     i18n_resource0 = [resource_kr0, resource_en0, resource_jp0]
 
     jp_text0 = make_i18n_label("ja_JP", "今使ってみてください")
@@ -308,11 +308,11 @@ def image_interduce():
     action1 = make_postback_action("a", display_text="버튼 클릭만으로 손쉽게 출퇴근  시간을 기록할 수 있습니다",
                                    i18n_display_texts = i18n_display_text0, label="지금 사용해 보세요", i18n_labels=display_label0)
 
-    column1 = make_image_carousel_column(image_resource_id=API_BO["image_carousel"]["resource_id"]["ko_KR"][0], i18n_image_resource_ids = i18n_resource0, action=action1)
+    column1 = make_image_carousel_column(image_resource_id=IMAGE_CAROUSEL["resource_id"]["kr"][0], i18n_image_resource_ids = i18n_resource0, action=action1)
 
-    resource_kr1 = make_i18n_image_resource_id("ko_KR", API_BO["image_carousel"]["resource_id"]["ko_KR"][1])
-    resource_en1 = make_i18n_image_resource_id("en_US", API_BO["image_carousel"]["resource_id"]["en_US"][1])
-    resource_jp1 = make_i18n_image_resource_id("ja_JP", API_BO["image_carousel"]["resource_id"]["ja_JP"][1])
+    resource_kr1 = make_i18n_image_resource_id("ko_KR", IMAGE_CAROUSEL["resource_id"]["kr"][1])
+    resource_en1 = make_i18n_image_resource_id("en_US", IMAGE_CAROUSEL["resource_id"]["en"][1])
+    resource_jp1 = make_i18n_image_resource_id("ja_JP", IMAGE_CAROUSEL["resource_id"]["jp"][1])
     i18n_resource1 = [resource_kr1, resource_en1, resource_jp1]
 
     display_text_jp1 = i18n_display_text("ja_JP", "入力された勤怠記録は、共有カレンダー に自動で入力されます。")
@@ -322,11 +322,11 @@ def image_interduce():
 
     action2 = make_postback_action("b",  display_text="입력된 근태 기록은 공유 캘린더에  자동으로 입력됩니다",
                                    i18n_display_texts = i18n_display_text1, label="지금 사용해 보세요", i18n_labels=display_label0)
-    column2 = make_image_carousel_column(image_resource_id=API_BO["image_carousel"]["resource_id"]["ko_KR"][1], i18n_image_resource_ids = i18n_resource1, action=action2)
+    column2 = make_image_carousel_column(image_resource_id=IMAGE_CAROUSEL["resource_id"]["kr"][1], i18n_image_resource_ids = i18n_resource1, action=action2)
 
-    resource_kr2 = make_i18n_image_resource_id("ko_KR", API_BO["image_carousel"]["resource_id"]["ko_KR"][2])
-    resource_en2 = make_i18n_image_resource_id("en_US", API_BO["image_carousel"]["resource_id"]["en_US"][2])
-    resource_jp2 = make_i18n_image_resource_id("ja_JP", API_BO["image_carousel"]["resource_id"]["ja_JP"][2])
+    resource_kr2 = make_i18n_image_resource_id("ko_KR", IMAGE_CAROUSEL["resource_id"]["kr"][2])
+    resource_en2 = make_i18n_image_resource_id("en_US", IMAGE_CAROUSEL["resource_id"]["en"][2])
+    resource_jp2 = make_i18n_image_resource_id("ja_JP", IMAGE_CAROUSEL["resource_id"]["jp"][2])
     i18n_resource2 = [resource_kr2, resource_en2, resource_jp2]
 
     display_text_jp2 = i18n_display_text("ja_JP", "勤怠管理共有カレンダーで \nすべての社員の勤怠記録を \n一目で確認できます。")
@@ -337,7 +337,7 @@ def image_interduce():
 
     action3 = make_postback_action("c", display_text="공유 캘린더에서 \n모든 직원의 근태 기록을 한눈에 \n확인해볼 수 있습니다",
                                    i18n_display_texts = i18n_display_text2, label="지금 사용해 보세요", i18n_labels=display_label0)
-    column3 = make_image_carousel_column(image_resource_id=API_BO["image_carousel"]["resource_id"]["ko_KR"][2], i18n_image_resource_ids = i18n_resource2, action=action3)
+    column3 = make_image_carousel_column(image_resource_id=IMAGE_CAROUSEL["resource_id"]["kr"][2], i18n_image_resource_ids = i18n_resource2, action=action3)
 
     columns = [column1, column2, column3]
     return  make_image_carousel(columns)
@@ -347,7 +347,7 @@ def sign(account_id):
     if account_id is None:
         LOGGER.error("account_id is None.")
         return False
-    rich_menu_id = globalData.get_value(API_BO["rich_menu"]["name"], None)
+    rich_menu_id = globalData.get_value(RICH_MENUS["kr"]["name"], None)
     if rich_menu_id is None:
         LOGGER.error("get rich_menu_id failed.")
         return False, "get rich_menu_id failed."

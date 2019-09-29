@@ -76,13 +76,14 @@ def initLogger():
     logging.getLogger("tornado.general").addHandler(file_handler)
 
 def initRichMenu():
-    rich_menu_id = init_rich_menu(API_BO["rich_menu"]["name"])
-    if rich_menu_id is None:
+    rich_menus = init_rich_menu()
+    if rich_menus is None:
         LOGGER = logging.getLogger("calender")
         LOGGER.info("init rich menu failed.")
         raise Exception("init rich menu failed.")
     else:
-        globalData.set_value(API_BO["rich_menu"]["name"], rich_menu_id)
+        for key in rich_menus:
+            globalData.set_value(key, rich_menus[key])
 
 def initCalender():
     calender_id = init_calender()
@@ -103,7 +104,7 @@ def startCalender():
 
     initLogger()
     initRichMenu()
-    initCalender()
+    #initCalender()
 
     asyncio.get_event_loop().run_forever()
     #tornado.ioloop.IOLoop.instance().start()
