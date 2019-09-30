@@ -36,7 +36,7 @@ RICH_MENUS = {
                     "name": "calender_bot_rich_menu_en",
                     "resource_id": "XAAAUFu0VclmHteAMq0SJrW1/4B7AfU4XCm+o5siThmOnD1Kckb7ovd013TiozT/pVuN/2hHaP0uB289Fj7rlEpnXLtQLtnRVX2iEYsb5il9VxMO"
                 }
-            },
+            }
 
 IMAGE_CAROUSEL = {
                     "resource_id":{ "kr":["XAAAUO6yD2IJSJ8t9GRDNwMsZPf0KlLXL9XLawyZeGWQ8Cy/OSLvngOurK22XLHmBCEx/QB0CwWJu4H54Dn6KbI9jSf/ztCml7ll6SMu4UJHAIGU",
@@ -49,7 +49,7 @@ IMAGE_CAROUSEL = {
                                           "XAAAUO6yD2IJSJ8t9GRDNwMsZPfAYQuWWgcXaBB3ucjQBKgflBlSKnJaDjTPZNrNimT4bL+5QWMWQyE8va2CF1oh5cQnWFTqCcw0A32rPmht1uCi",
                                           "XAAAUO6yD2IJSJ8t9GRDNwMsZPeGPIGLQEKeCGjrG6fGtNa5AmojOnc9UKRI9o/M7t/F/QXFvhJUKSE5UAKpBhWmNNz93aNekf6J58c/ZQ/tVNm2"]
                                 }
-                },
+                }
 API_BO =	{
                 "headers": {
                     "content-type": "application/json",
@@ -64,10 +64,12 @@ API_BO =	{
                 "calendar":
                 {
                     "name": "test_calendar",
+                    "test_calender_id":"test calender id",
                     "create_calender_url":"https://alpha-apis.worksmobile.com/"+API_ID+"/calendar/createCalendar",
                     "get_calenders_url":"https://alpha-apis.worksmobile.com/r/"+API_ID+"/calendar/rest/v1/users/me/calendarList",
                     "create_schedule_url":"https://alpha-apis.worksmobile.com/"+API_ID+"/calendar/createSchedule",
-                    "modify_schedule_url":"https://alpha-apis.worksmobile.com/"+API_ID+"/calendar/modifySchedule"
+                    "modify_schedule_url":"https://alpha-apis.worksmobile.com/"+API_ID+"/calendar/modifySchedule",
+                    "TZone":"Asia/Seoul"
                 },
 
                 "TZone":
@@ -87,7 +89,7 @@ OPEN_API= {
     }
 
 FILE_SYSTEM = {
-    "cache_dir": "./cache",
+    "cache_dir": "/home1/irteam/cache",
 }
     
 

@@ -6,6 +6,7 @@ import json
 from calender.externals.data import *
 from calender.constants import API_BO, OPEN_API, ADMIN_ACCOUNT, DOMAIN_ID
 import tornado.gen
+from calender.common import globalData
 from calender.common.fileCache import *
 import requests
 import uuid

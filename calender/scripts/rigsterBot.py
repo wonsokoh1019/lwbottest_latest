@@ -78,7 +78,7 @@ def createbot():
 	print tmp
 	return tmp["botNo"]
 def add_domain(bot_no):
-	url = "https://alpha-apis.worksmobile.com/r/"+api_id+"/message/v1/"+str(bot_no)+"/107796/domain/"+str(domain_id)
+	url = "https://alpha-apis.worksmobile.com/r/"+api_id+"/message/v1/bot/"+str(bot_no)+"/domain/"+str(domain_id)
 	data = {"usePublic":True,"usePermission":False}
 	r =requests.post(url, data=json.dumps(data), headers=headers)
 	print r.json()

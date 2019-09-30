@@ -4,7 +4,7 @@ import os
 import json
 from calender.constants import API_BO, OPEN_API, FILE_SYSTEM
 
-def set_status_by_user_date(user, date, status = None, process=None):
+def set_status_by_user_date(user, date, status = None, process=None, delete_flag=False):
     bot_no = OPEN_API["botNo"]
     tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + user
     status_file = tmp_path + "/" + date + ".status"
@@ -25,6 +25,8 @@ def set_status_by_user_date(user, date, status = None, process=None):
             old_content_json = json.loads(old_content)
         if status is not None:
             old_content_json["status"] = status
+        elif delete_flag:
+            del old_content_json["status"]
         if process is not None:
             old_content_json["process"] = process
         file_handle.seek(0)
@@ -106,12 +108,11 @@ def modify_schedule_by_user(account_id, date, schedule_id, end):
 
         file_handle = open(cache_file, mode='r+')
         content_str = file_handle.read()
-        if content_str is None:
-            content = None
-        else:
+        content = None
+        if content_str is not None:
             content = json.loads(content_str)
-        file_handle.close()
         if content is None or content["schedule_id"] != schedule_id:
+            file_handle.close()
             return False
         content["end"] = end
         file_handle.seek(0)

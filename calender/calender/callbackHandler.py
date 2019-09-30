@@ -6,6 +6,7 @@ internal hello
 import logging
 import tornado.web
 import time
+import uuid
 import asyncio
 from calender.externals.sendMessage import push_message
 from calender.common import globalData
@@ -55,15 +56,6 @@ en_month = ["January","February","March","April","May","June","July","August","S
 #kr_month = ["일월","이월","삼월","사월","오월","유월","칠월","팔월","구월","시월","십이월","십이월"]
 #jp_month = ["いちがつ", "にがつ", "さんがつ", "しがつ", "ごがつ", "ろくがつ", "しちがつ", "はちがつ", "くがつ", "じゅうがつ", "じゅういちがつ", "じゅうにがつ"]
 
-status_value = {
-    "wait_in":1,
-    "in_done":2,
-    "sign_in_done":3,
-    "wait_out":4,
-    "out_done":5,
-    "sign_out_done":6
-}
-
 def check_is_messge_time(message):
     if message in cmd_messge or message.find("confirm_out") != -1 or message.find("confirm_in") != -1:
         return False
@@ -81,6 +73,8 @@ def check_para(body):
     room_id = body["source"].get("roomId", None)
 
     create_time = time.time()
+    local_time = time.localtime(create_time)
+    current_date = time.strftime("%Y-%m-%d", local_time)
     if account_id is not None:
         request["accountId"] = account_id
     elif room_id is not None:
@@ -138,6 +132,7 @@ def check_para(body):
         #clean_status_by_user(account_id, date)
         error_code, error_message = yield sign(account_id)
         return error_code, error_message
+
     elif (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "to_firt") \
             or (body["type"] == "postback" and "data" in body and body["data"] == "to_firt") :
         request["content"] = yield to_first()
@@ -151,7 +146,7 @@ def check_para(body):
         return error_code, error_message
     elif (body["type"] == "postback" and "data" in body and body["data"] == "sign_in") \
             or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "sign_in"):
-        request["content"] = yield sign_in()
+        request["content"] = yield sign_in(account_id, create_time)
         error_code = yield push_message(request)
         if error_code:
             LOGGER.info("yield sgin in failed. room_id:%s account_id:%s", str(room_id), str(account_id))
@@ -160,16 +155,11 @@ def check_para(body):
 
     if (body["type"] == "postback" and "data" in body and body["data"] == "sign_out") \
             or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "sign_out"):
-        request["content"] =  yield sign_out()
+        request["content"] =  yield sign_out(account_id, create_time)
         error_code = yield push_message(request)
         if error_code:
             LOGGER.info("sign_out failed. room_id:%s account_id:%s", str(room_id), str(account_id))
             return False, "send message failed."
-        return error_code, error_message
-
-    if (body["type"] == "postback" and "data" in body and body["data"] == "to_first") \
-            or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "sign_out"):
-        error_code, error_message = yield sign(account_id)
         return error_code, error_message
 
     if (body["type"] == "postback" and "data" in body and body["data"] == "direct_sign_in") \
@@ -196,7 +186,7 @@ def check_para(body):
     if (body["type"] == "postback" and "data" in body and body["data"] == "manual_sign_in") \
             or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "manual_sign_in") \
             or (body["type"] == "message" and "content" in body and "postback" in body["content"] and body["content"]["postback"] == "manual_sign_in"):
-        content = yield manual_sign_in(account_id)
+        content = yield manual_sign_in(account_id, create_time)
         if content is None:
             LOGGER.info("yield manual_sign_in failed. room_id:%s account_id:%s", str(room_id), str(account_id))
             return False, "manual_sign_in failed."
@@ -216,7 +206,7 @@ def check_para(body):
     if (body["type"] == "postback" and "data" in body and body["data"] == "manual_sign_out") \
             or (body["type"] == "message" and "content" in body and "text" in body["content"] and  body["content"]["text"] == "manual_sign_out") \
             or (body["type"] == "message" and "content" in body and "postback" in body["content"] and body["content"]["postback"] == "manual_sign_out"):
-        content = yield manual_sign_out(account_id)
+        content = yield manual_sign_out(account_id,create_time)
         if content is None:
             LOGGER.info("yield manual_sign_out failed. room_id:%s account_id:%s", str(room_id), str(account_id))
             return False, "manual_sign_out failed."
@@ -279,6 +269,7 @@ def first_message():
     text = make_text("공유 캘린더에서 \n모든 직원의 근태 기록을 한눈에 \n 확인해볼 수 있습니다", i18n_texts)
     return text
 
+@tornado.gen.coroutine
 def to_first():
     jp_text = i18n_text("ko_KR", "출근, 퇴근하실 때 하단 메뉴에서 \r각각에 맞는 ‘기록하기’ 버튼을 선택해 주세요")
     en_text = i18n_text("en_US", "Please select \"Record\" on the bottom of the menu \neach time when you clock in and clock out.")
@@ -291,7 +282,7 @@ def to_first():
 
 @tornado.gen.coroutine
 def image_interduce():
-    resource_kr0 = make_i18n_image_resource_id("ko_KR", IMAGE_CAROUSEL["resource_id"]["ko"][0])
+    resource_kr0 = make_i18n_image_resource_id("ko_KR", IMAGE_CAROUSEL["resource_id"]["kr"][0])
     resource_en0 = make_i18n_image_resource_id("en_US", IMAGE_CAROUSEL["resource_id"]["en"][0])
     resource_jp0 = make_i18n_image_resource_id("ja_JP", IMAGE_CAROUSEL["resource_id"]["jp"][0])
     i18n_resource0 = [resource_kr0, resource_en0, resource_jp0]
@@ -355,38 +346,55 @@ def sign(account_id):
     return set_user_specific_rich_menu(rich_menu_id, account_id)
 
 @tornado.gen.coroutine
-def sign_in(create_time):
+def sign_in(account_id, create_time):
 
     local_time = time.localtime(create_time)
     current_date = time.strftime("%Y-%m-%d", local_time)
-    content = get_status_by_user(user, current_date)
-    if "process" in content and (content["process"] == "sign_in_done" or content["process"] == "sign_out_done"):
+    content = get_status_by_user(account_id, current_date)
+    if content is not None and "status" in content and content["status"] == "wait_in":
+        set_status_by_user_date(account_id, current_date, delete_flag=True)
+    if content is not None and "process" in content and (content["process"] == "sign_in_done" or content["process"] == "sign_out_done"):
         return reminder_message("sign_in_done")
     jp_text = make_i18n_content_texts("ja_JP", "出勤時間の入力方式を選択してください。")
     en_text = make_i18n_content_texts("en_US", "Register current time as clock-in time")
     kr_text = make_i18n_content_texts("ko_KR", "출근 시간 입력 방식을 선택해 주세요.")
     content_texts = [jp_text, en_text, kr_text]
-
+    """
     jp_text1 = make_i18n_label("ja_JP", "現在時間で出勤を登録する")
     en_text1 = make_i18n_label("en_US", "Enter current time")
     kr_text1 = make_i18n_label("ko_KR", "현재 시간으로 출근 등록하기")
+    """
+    jp_text1 = make_i18n_label("ja_JP", "現在する")
+    en_text1 = make_i18n_label("en_US", "Enter current time")
+    kr_text1 = make_i18n_label("ko_KR", "현재 하기")
     display_label1 = [jp_text1, en_text1, kr_text1]
-    action1 = make_message_action("현재 시간으로 출근 등록하기", "direct_sign_in", i18n_labels=display_label1)
+    #action1 = make_message_action("현재 시간으로 출근 등록하기", "direct_sign_in", i18n_labels=display_label1)
+    action1 = make_message_action("현재 시간", "direct_sign_in", i18n_labels=display_label1)
 
+    """
     jp_text2 = make_i18n_label("ja_JP", "出勤時間を直接入力する")
     en_text2 = make_i18n_label("en_US", "Manually enter clock-in time")
     kr_text2 = make_i18n_label("ko_KR", "출근 시간 직접 입력하기")
+    """
+    jp_text2 = make_i18n_label("ja_JP", "出勤力する")
+    en_text2 = make_i18n_label("en_US", "clock-in time")
+    kr_text2 = make_i18n_label("ko_KR", "출근 입력하")
     display_label2 = [jp_text2, en_text2, kr_text2]
-    action2 = make_message_action("출근 시간 직접 입력하기", "manual_sign_in", i18n_labels=display_label2)
+    #action2 = make_message_action("출근 시간 직접 입력하기", "manual_sign_in", i18n_labels=display_label2)
+    action2 = make_message_action("출근 시간", "manual_sign_in", i18n_labels=display_label2)
 
     return make_button("출근 시간 입력 방식을 선택해 주세요.", [action1, action2], content_texts=content_texts)
 
 @tornado.gen.coroutine
-def sign_out():
+def sign_out(account_id, create_time):
     local_time = time.localtime(create_time)
     current_date = time.strftime("%Y-%m-%d", local_time)
-    content = get_status_by_user(user, current_date)
-    if "process" not in content:
+    content = get_status_by_user(account_id, current_date)
+
+    if content is not None and "status" in content and content["status"] == "wait_out":
+        set_status_by_user_date(account_id, current_date, status="in_done")
+
+    if content is None or "process" not in content:
         return reminder_message(None)
 
     if content["process"] == "sign_out_done":
@@ -396,18 +404,29 @@ def sign_out():
     en_text = make_i18n_content_texts("en_US", "Please select the clock-out time entry method.")
     kr_text = make_i18n_content_texts("ko_KR", "퇴근 시간 입력 방식을 선택해 주세요.")
     content_texts = [jp_text, en_text, kr_text]
-
+    """
     jp_text1 = make_i18n_label("ja_JP", "現在時間で退勤を登録する")
     en_text1 = make_i18n_label("en_US", "Register current time as clock-out time")
     kr_text1 = make_i18n_label("ko_KR", "현재 시간으로 퇴근 등록하기")
-    display_label1 = [jp_text1, en_text1, kr_text1]
-    action1 = make_message_action("현재 시간으로 퇴근 등록하기", "direct_sign_out", i18n_labels=display_label1)
+    """
 
+    jp_text1 = make_i18n_label("ja_JP", "現録する")
+    en_text1 = make_i18n_label("en_US", "clock-out time")
+    kr_text1 = make_i18n_label("ko_KR", "현재 하기")
+    display_label1 = [jp_text1, en_text1, kr_text1]
+    #action1 = make_message_action("현재 시간으로 퇴근 등록하기", "direct_sign_out", i18n_labels=display_label1)
+    action1 = make_message_action("현재 시", "direct_sign_out", i18n_labels=display_label1)
+    """
     jp_text2 = make_i18n_label("ja_JP", "退勤時間を直接入力する")
     en_text2 = make_i18n_label("en_US", "Manually enter clock-out time")
     kr_text2 = make_i18n_label("ko_KR", "퇴근 시간 직접 입력하기")
+    """
+    jp_text2 = make_i18n_label("ja_JP", "直接入力")
+    en_text2 = make_i18n_label("en_US", "Manually out time")
+    kr_text2 = make_i18n_label("ko_KR", "퇴근 시간기")
     display_label2 = [jp_text2, en_text2, kr_text2]
-    action2 = make_message_action("퇴근 시간 직접 입력하기","manual_sign_out", i18n_labels=display_label2)
+    #action2 = make_message_action("퇴근 시간 직접 입력하기","manual_sign_out", i18n_labels=display_label2)
+    action2 = make_message_action("퇴근 시", "manual_sign_out", i18n_labels=display_label2)
 
     return make_button("퇴근 시간 입력 방식을 선택해 주세요.", [action1, action2], content_texts=content_texts)
 @tornado.gen.coroutine
@@ -434,11 +453,17 @@ def deal_sign_in(sign_time, manual_falg = False):
     interval_kr = "오전"
 
     hours = str(local_time.tm_hour)
-    if hours > 12:
+
+    str_current_time_tickt = str(sign_time)
+    pos = str_current_time_tickt.find(".")
+    if pos != -1:
+        str_current_time_tickt = str_current_time_tickt[:pos - 1]
+
+    if local_time.tm_hour > 12:
         interval_jp = "午後"
         interval_en = "PM"
         interval_kr = "오후"
-        hours = hours - 12
+        hours = str(local_time.tm_hour - 12)
 
     jp_text = i18n_text("ja_JP", "現在時間 "+month+"月 "+date+"日 "+week_date_jp+" "+interval_jp+" "+hours+"時 "+min+"分で出勤時間を登録しますか？")
     en_text = i18n_text("en_US", "Register the current time "+month+", "+date+" "+week_date_en+" at "+hours+":"+min+" "+interval_en+" as clock-out time?")
@@ -450,7 +475,7 @@ def deal_sign_in(sign_time, manual_falg = False):
     en_text3 = make_i18n_label("en_US", "yes")
     kr_text3 = make_i18n_label("ko_KR", "예")
     display_label = [jp_text3, en_text3, kr_text3]
-    action1 = make_postback_action("confirm_in&time="+str(sign_time), label = "예", i18n_labels = display_label, display_text = "예")
+    action1 = make_postback_action("confirm_in&time="+str_current_time_tickt, label = "예", i18n_labels = display_label, display_text = "예")
 
     jp_text2 = make_i18n_label("ja_JP", "いいえ")
     en_text2 = make_i18n_label("en_US", "No")
@@ -489,11 +514,16 @@ def deal_sign_out(sign_time, manual_falg = False):
     interval_kr = "오전"
 
     hours = str(local_time.tm_hour)
-    if hours > 12:
+    if local_time.tm_hour > 12:
         interval_jp = "午後"
         interval_en = "PM"
         interval_kr = "오후"
-        hours = hours - 12
+        hours = str(local_time.tm_hour - 12)
+
+    str_current_time_tickt = str(sign_time)
+    pos = str_current_time_tickt.find(".")
+    if pos != -1:
+        str_current_time_tickt = str_current_time_tickt[:pos - 1]
 
     jp_text = i18n_text("ja_JP", "現在時間 "+month+"月 "+date+"日 "+week_date_jp+" "+interval_jp+" "+hours+"時 "+min+"分で退勤時間を登録しますか？")
     en_text = i18n_text("en_US", "Register the current time "+month+", "+date+" "+week_date_en+" at "+hours+":"+min+" "+interval_en+" as clock-out time?")
@@ -505,7 +535,7 @@ def deal_sign_out(sign_time, manual_falg = False):
     en_text3 = make_i18n_label("en_US", "yes")
     kr_text3 = make_i18n_label("ko_KR", "확정")
     display_label = [jp_text3, en_text3, kr_text3]
-    action1 = make_postback_action("confirm_out&time="+str(current_time_tickt),  label = "확정", i18n_labels = display_label, display_text = "확정?")
+    action1 = make_postback_action("confirm_out&time="+str_current_time_tickt,  label = "확정", i18n_labels = display_label, display_text = "확정?")
 
     jp_text2 = make_i18n_label("ja_JP", "上一步")
     en_text2 = make_i18n_label("en_US", "Previous step")
@@ -521,7 +551,7 @@ def deal_sign_out(sign_time, manual_falg = False):
 
 def reminder_message(process):
     text = None
-    if process == "sign_in_process":
+    if process == "sign_in_done":
         jp_text = i18n_text("ja_JP", "すでに登録済みの出勤時間があります。\n退勤するときに、下のメニューから「退勤を記録する」ボタンを選択してください。")
         en_text = i18n_text("en_US", "There is already a clock-in time. \nPlease select \"Record\" on the bottom of the menu when you clock out.")
         kr_text = i18n_text("ko_KR", "이미 등록된 출근 시간이 있습니다. \n퇴근하실 때, 하단 메뉴에서  ‘퇴근 기록하기’ 버튼을 선택해 주세요.")
@@ -529,7 +559,7 @@ def reminder_message(process):
         i18n_texts1 = [jp_text, en_text, kr_text]
         text = make_text("이미 등록된 출근 시간이 있습니다. \n퇴근하실 때, 하단 메뉴에서  ‘퇴근 기록하기’ 버튼을 선택해 주세요.", i18n_texts1)
 
-    elif process == "sign_out_process":
+    elif process == "sign_out_done":
         jp_text = i18n_text("ja_JP", "すでに登録済みの退勤時間があります。\n出勤するときに、下のメニューから「出勤を記録する」ボタンを選択してください。")
         en_text = i18n_text("en_US", "There is already a clock-out time.\nPlease select \"Record\" on the bottom of the menu when you clock in.")
         kr_text = i18n_text("ko_KR", "이미 등록된 퇴근 시간이 있습니다.\n출근하실 때, 하단 메뉴에서 ‘출근 기록하기’ 버튼을 선택해 주세요.")
@@ -555,7 +585,6 @@ def invalid_message():
     text = make_text("이미 등록된 출근 시간이 있습니다. \n퇴근하실 때, 하단 메뉴에서  ‘퇴근 기록하기’ 버튼을 선택해 주세요.", i18n_texts1)
 
     return text
-
 
 @tornado.gen.coroutine
 def manual_sign_in(account_id, create_time):
@@ -634,13 +663,20 @@ def error_message():
 @tornado.gen.coroutine
 def confirm_in(account_id, callback):
     pos = callback.find("time=")
-    str_time = callback[pos:]
+    str_time = callback[pos+5:]
     my_time = int(str_time)
-
+    my_end_time = my_time + 60
     current_date = time.strftime("%Y-%m-%d", time.localtime(my_time))
     #current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(my_time))
 
-    calender_id = globalData.get_value(API_BO["calendar"]["name"])
+    #calender_id = API_BO["calendar"]["test_calender_id"]
+    info = get_schedule_by_user(account_id, current_date)
+    schedule_id = str(uuid.uuid4()) + account_id
+    if info is None:
+        set_schedule_by_user(account_id, current_date, schedule_id, my_time, my_end_time)
+    """
+    current_date = time.strftime("%Y-%m-%d", time.localtime(my_time))
+    calender_id = globalData.get_value(API_BO["calendar"]["name"], None)
     if calender_id is None:
         calender_id = get_calender_id()
         if calender_id is None:
@@ -657,8 +693,8 @@ def confirm_in(account_id, callback):
     else:
         LOGGER.info("schedules has exist. account_id:%s, room_id:%s", str(account_id))
         return False, "create schedules failed."
-
-    #set_status_by_user_date(user, date, process="sign_in_done")
+    """
+    LOGGER.info("schedule_id is None account_id:%s", str(account_id))
     jp_text = i18n_text("ja_JP", "出勤時間の登録が完了しました。")
     en_text = i18n_text("en_US", "Clock-in time has been registered.")
     kr_text = i18n_text("ko_KR", "출근 시간 등록이 완료되었습니다.")
@@ -669,25 +705,29 @@ def confirm_in(account_id, callback):
 @tornado.gen.coroutine
 def confirm_out(account_id, callback):
     pos = callback.find("time=")
-    str_time = callback[pos:]
+    str_time = callback[pos+5:]
     my_time = int(str_time)
 
     local_time = time.localtime(my_time)
 
     current_date = time.strftime("%Y-%m-%d", local_time)
-
+    """
+    current_date = time.strftime("%Y-%m-%d", local_time)
+    
     calender_id = globalData.get_value(API_BO["calendar"]["name"])
     if calender_id is None:
         calender_id = get_calender_id()
         if calender_id is None:
             LOGGER.info("calender_id is None account_id:%s, room_id:%s", str(account_id))
             return False, "calender_id is None."
-    info = get_schedule_by_user(account_id, date)
-
+    """
+    begin_time = 0
+    schedule_id = None
+    info = get_schedule_by_user(account_id, current_date)
     if info is not None:
         schedule_id = info["schedule_id"]
         begin_time = info["begin"]
-
+    """    
         if not modify_schedules(calendar_id, begin_time, my_time, my_time):
             LOGGER.info("modify_schedules failed account_id:%s", str(account_id))
         if schedule_id is None:
@@ -697,8 +737,9 @@ def confirm_out(account_id, callback):
     else:
         LOGGER.info("schedules has exist. account_id:%s, room_id:%s", str(account_id))
         return False, "create schedules failed."
-
-    #set_status_by_user_date(user, date, process="sign_out_done")
+    """
+    modify_schedule_by_user(account_id, current_date, schedule_id, my_time)
+    LOGGER.info("schedule_id is None account_id:%s", str(account_id))
 
     hours = int((my_time - begin_time)/3600)
     min = ((my_time - begin_time) % 3600)/60
@@ -723,13 +764,14 @@ def deal_message(account_id, message, create_time):
     current_date = time.strftime("%Y-%m-%d", local_time)
     content = get_status_by_user(account_id, current_date)
 
-    if status not in content:
+    if content is None or "status" not in content:
         LOGGER.info("status is None account_id:%s message:%s", account_id, message)
         return "failed", None
+
     try:
         user_time = int(message)
     except Exception as e:
-        if status in content and (content["status"] == "wait_in" or content["status"] == "wait_out"):
+        if "status" in content and (content["status"] == "wait_in" or content["status"] == "wait_out"):
             content = yield error_message()
             return "error_message", content
         else:

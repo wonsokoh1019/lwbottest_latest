@@ -42,7 +42,7 @@ def make_add_rich_menu_body(rich_menu_name):
     kr_label_text0 = make_i18n_label("ko_KR", "출근 기록하기")
     display_label0 = [jp_label_text0, en_label_text0, kr_label_text0]
 
-    action0 = make_postback_action("sign_in", display_text = "출근 기록하기", label = "上班打卡",
+    action0 = make_postback_action("sign_in", display_text = "출근 기록하기", label = "출근 기록하기",
                                    i18n_display_texts = display_text0, i18n_labels = display_label0)
 
     bound1 = make_bound(0, 1250, 2500, 1286)
@@ -157,11 +157,11 @@ def init_rich_menu():
     if rich_menus is not None:
         LOGGER.info("body:%s", rich_menus)
         for menu in rich_menus:
-            if menu["name"] == RICH_MENUS["kr"]["name"]:
+            if str(menu["name"]) == RICH_MENUS["kr"]["name"]:
                 il8n_rich_menu_id[RICH_MENUS["kr"]["name"]] = menu["richMenuId"]
-            elif menu["name"] == RICH_MENUS["jp"]["name"]:
+            elif str(menu["name"]) == RICH_MENUS["jp"]["name"]:
                 il8n_rich_menu_id[RICH_MENUS["jp"]["name"]] = menu["richMenuId"]
-            elif menu["name"] == RICH_MENUS["en"]["name"]:
+            elif str(menu["name"]) == RICH_MENUS["en"]["name"]:
                 il8n_rich_menu_id[RICH_MENUS["en"]["name"]] = menu["richMenuId"]
     if "kr" not in il8n_rich_menu_id:
         rich_menu_id = make_add_rich_menu_body(RICH_MENUS["kr"]["name"])
