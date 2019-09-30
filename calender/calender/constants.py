@@ -10,7 +10,6 @@ import os
 # Constants and global variables
 # ---------------------------------------------------------------------
 ABSDIR_OF_SELF           = os.path.dirname(os.path.abspath(__file__))
-LOG_CONF_FILE            = ABSDIR_OF_SELF + '/log.conf'
 ABSDIR_OF_PARENT         = os.path.dirname(ABSDIR_OF_SELF)
 
 ADMIN_ACCOUNT = "admin@nwetest.com"
@@ -89,7 +88,7 @@ OPEN_API= {
     }
 
 FILE_SYSTEM = {
-    "cache_dir": "/home1/irteam/cache",
+    "cache_dir": ABSDIR_OF_PARENT+"cache",
 }
     
 

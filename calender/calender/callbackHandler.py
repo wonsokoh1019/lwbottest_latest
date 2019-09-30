@@ -236,7 +236,7 @@ def check_para(body):
             if error_code:
                 LOGGER.info("yield confirm_in failed. room_id:%s account_id:%s", str(room_id), str(account_id))
                 return False, "send message failed."
-            set_status_by_user_date(account_id, current_date, process="sign_in_done")
+            set_status_by_user_date(account_id, current_date,status="in_done", process="sign_in_done")
             return error_code, error_message
         return success, content
 
@@ -253,7 +253,7 @@ def check_para(body):
             if error_code:
                 LOGGER.info("yield confirm_out failed. room_id:%s account_id:%s", str(room_id), str(account_id))
                 return False, "send message failed."
-            set_status_by_user_date(account_id, current_date, process="sign_out_done")
+            set_status_by_user_date(account_id, current_date,status="out_done", process="sign_out_done")
             return error_code, error_message
         return success, content
 
@@ -457,7 +457,7 @@ def deal_sign_in(sign_time, manual_falg = False):
     str_current_time_tickt = str(sign_time)
     pos = str_current_time_tickt.find(".")
     if pos != -1:
-        str_current_time_tickt = str_current_time_tickt[:pos - 1]
+        str_current_time_tickt = str_current_time_tickt[:pos]
 
     if local_time.tm_hour > 12:
         interval_jp = "午後"
@@ -481,7 +481,7 @@ def deal_sign_in(sign_time, manual_falg = False):
     en_text2 = make_i18n_label("en_US", "No")
     kr_text2 = make_i18n_label("ko_KR", "아니요")
     display_label2 = [jp_text2, en_text2, kr_text2]
-    action2 = make_postback_action(call_back, label = "전보", i18n_labels = display_label2, display_text = "전보?")
+    action2 = make_postback_action(call_back, label = "아니요", i18n_labels = display_label2, display_text = "아니요")
     reply_item1 = make_quick_reply_item(action1)
     reply_item2 = make_quick_reply_item(action2)
 
@@ -523,7 +523,7 @@ def deal_sign_out(sign_time, manual_falg = False):
     str_current_time_tickt = str(sign_time)
     pos = str_current_time_tickt.find(".")
     if pos != -1:
-        str_current_time_tickt = str_current_time_tickt[:pos - 1]
+        str_current_time_tickt = str_current_time_tickt[:pos]
 
     jp_text = i18n_text("ja_JP", "現在時間 "+month+"月 "+date+"日 "+week_date_jp+" "+interval_jp+" "+hours+"時 "+min+"分で退勤時間を登録しますか？")
     en_text = i18n_text("en_US", "Register the current time "+month+", "+date+" "+week_date_en+" at "+hours+":"+min+" "+interval_en+" as clock-out time?")
@@ -531,17 +531,17 @@ def deal_sign_out(sign_time, manual_falg = False):
 
     text = make_text("입력하신 "+month+"월 "+date+"일 "+week_date_kr+" "+interval_kr+" "+hours+"시 "+min+"분으로 출근 시간을 등록하시겠습니까?" + current_time, [jp_text, en_text, kr_text])
 
-    jp_text3 = make_i18n_label("ja_JP", "确定")
-    en_text3 = make_i18n_label("en_US", "yes")
-    kr_text3 = make_i18n_label("ko_KR", "확정")
+    jp_text3 = make_i18n_label("ja_JP", "はい")
+    en_text3 = make_i18n_label("en_US", "Yes")
+    kr_text3 = make_i18n_label("ko_KR", "예")
     display_label = [jp_text3, en_text3, kr_text3]
-    action1 = make_postback_action("confirm_out&time="+str_current_time_tickt,  label = "확정", i18n_labels = display_label, display_text = "확정?")
+    action1 = make_postback_action("confirm_out&time="+str_current_time_tickt,  label = "예", i18n_labels = display_label, display_text = "예")
 
-    jp_text2 = make_i18n_label("ja_JP", "上一步")
-    en_text2 = make_i18n_label("en_US", "Previous step")
-    kr_text2 = make_i18n_label("ko_KR", "전보")
+    jp_text2 = make_i18n_label("ja_JP", "いいえ")
+    en_text2 = make_i18n_label("en_US", "No")
+    kr_text2 = make_i18n_label("ko_KR", "아니요")
     display_label2 = [jp_text2, en_text2, kr_text2]
-    action2 = make_postback_action(call_back, label = "전보", i18n_labels = display_label2, display_text = "전보?")
+    action2 = make_postback_action(call_back, label = "아니요", i18n_labels = display_label2, display_text = "아니요")
     reply_item1 = make_quick_reply_item(action1)
     reply_item2 = make_quick_reply_item(action2)
 
@@ -589,17 +589,18 @@ def invalid_message():
 @tornado.gen.coroutine
 def manual_sign_in(account_id, create_time):
     yield from asyncio.sleep(1)
-    current_date = time.strftime("%Y-%m-%d", time.localtime(create_time))
-    jp_text = i18n_text("ja_JP", "请直接输入上班时间")
-    en_text = i18n_text("en_US", "Please enter the working hours directly")
-    kr_text = i18n_text("ko_KR", "바로 출근 시간 입력해주세요")
+    local_time = time.localtime(create_time)
+    current_date = time.strftime("%Y-%m-%d", local_time)
+    jp_text = i18n_text("ja_JP", "申し訳ございません。作成した時間が理解できませんでした。もう一度時間入力の方法を確認し、時間を入力してください。")
+    en_text = i18n_text("en_US", "Sorry, but unable to comprehend your composed time. Please check the time entry method again, and enter the time.")
+    kr_text = i18n_text("ko_KR", "죄송합니다. 작성하신 시간을 이해하지 못하였습니다. 다시 한 번 시간 입력 방법을 확인하시고 시간을 입력해 주세요. ")
 
     i18n_texts1 = [jp_text, en_text, kr_text]
 
-    text1 = make_text("바로 출근 시간 입력해주세요", i18n_texts1)
+    text1 = make_text("죄송합니다. 작성하신 시간을 이해하지 못하였습니다. 다시 한 번 시간 입력 방법을 확인하시고 시간을 입력해 주세요. ", i18n_texts1)
 
-    jp_text = i18n_text("ja_JP", "输入时间时，请按顺序填写4位数字。例如，如果想填写下午8点20分的话，请填写2020的数字。")
-    en_text = i18n_text("en_US", "When entering time, please fill in 4 digits in order.For example, if you want to fill in at 8:20 p.m., please fill in the number of 2020.")
+    jp_text = i18n_text("ja_JP", "시간을 입력하실 때는 총 4자리 숫자를 시,분 순서대로 기재해 주세요.\n\n예를 들어, 오후 8시 20분을 기재 하고 싶으시면 2020이라는 숫자를 작성해 주시면 됩니다.")
+    en_text = i18n_text("en_US", "Please use the military time format with a total of 4 numerical digits (hhmm) when entering the time.\n\nFor example, type 2020 to indicate 8:20 PM.")
     kr_text = i18n_text("ko_KR", "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.")
 
     i18n_texts2 = [jp_text, en_text, kr_text]
@@ -613,29 +614,8 @@ def manual_sign_in(account_id, create_time):
 
 @tornado.gen.coroutine
 def manual_sign_out(account_id, create_time):
-    yield from asyncio.sleep(1)
-    current_date = time.strftime("%Y-%m-%d", time.localtime(create_time))
-    jp_text = i18n_text("ja_JP", "请直接输入下班时间")
-    en_text = i18n_text("en_US", "Please enter the closing time directly.")
-    kr_text = i18n_text("ko_KR", "퇴근 시간 바로 입력해주세요.")
-
-    i18n_texts1 = [jp_text, en_text, kr_text]
-
-    text1 = make_text("퇴근 시간 바로 입력해주세요", i18n_texts1)
-
-    jp_text = i18n_text("ja_JP", "输入时间时，请按顺序填写4位数字。例如，如果想填写下午8点20分的话，请填写2020的数字。")
-    en_text = i18n_text("en_US",
-                        "When entering time, please fill in 4 digits in order.For example, if you want to fill in at 8:20 p.m., please fill in the number of 2020.")
-    kr_text = i18n_text("ko_KR",
-                        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.")
-
-    i18n_texts2 = [jp_text, en_text, kr_text]
-    text2 = make_text(
-        "시간을 입력 하실 때는 총 4자리 숫자를 시,분 순서대로 기입해 주세요.예를 들어, 오후 8시 20분을 기입 하고 싶으시면 2020 이라는 숫자를 작성해 주시면 됩니다.",
-        i18n_texts2)
-
-    set_status_by_user_date(account_id, current_date, "wait_out")
-    return {"first": text1, "seconde": text2}
+    content = yield manual_sign_in(account_id, create_time)
+    return content
 
 @tornado.gen.coroutine
 def error_message():
@@ -742,7 +722,7 @@ def confirm_out(account_id, callback):
     LOGGER.info("schedule_id is None account_id:%s", str(account_id))
 
     hours = int((my_time - begin_time)/3600)
-    min = ((my_time - begin_time) % 3600)/60
+    min = int(((my_time - begin_time) % 3600)/60)
     week_date_jp = jp_week[local_time.tm_wday]
     week_date_kr = kr_week[local_time.tm_wday]
     week_date_en = en_week[local_time.tm_wday]
