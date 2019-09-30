@@ -4,25 +4,34 @@ import os
 import json
 from calender.constants import API_BO, OPEN_API, FILE_SYSTEM
 
-def set_status_by_user_date(user, date, status, check_status):
+def set_status_by_user_date(user, date, status = None, process=None, delete_flag=False):
     bot_no = OPEN_API["botNo"]
     tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + user
     status_file = tmp_path + "/" + date + ".status"
-    content = {
-        "status": status
-    }
+    content = {}
+    if status is not None:
+        content["status"] = status
+    if process is not None:
+        content["process"] = process
 
     if not os.path.exists(tmp_path):
         os.makedirs(tmp_path)
     content_str = json.dumps(content)
     if os.path.exists(status_file):
         file_handle = open(status_file, mode='r+')
-        content = json.loads(file_handle.read())
-        if "status" in content and content["status"] not in check_status:
-            return False, "check after status failed"
+        old_content = file_handle.read()
+        old_content_json = {}
+        if old_content is not None:
+            old_content_json = json.loads(old_content)
+        if status is not None:
+            old_content_json["status"] = status
+        elif delete_flag:
+            del old_content_json["status"]
+        if process is not None:
+            old_content_json["process"] = process
         file_handle.seek(0)
         file_handle.truncate()
-        file_handle.write(content_str)
+        file_handle.write(json.dumps(old_content_json))
         file_handle.close()
         return True, None
 
@@ -44,9 +53,14 @@ def get_status_by_user(user, date):
         return None
     content = json.loads(content_str)
     file_handle.close()
-    if "status" not in content:
-        return None
-    return content["status"]
+    return content
+
+def clean_status_by_user(user, date):
+    bot_no = OPEN_API["botNo"]
+    tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + user
+    status_file = tmp_path + "/" + date + ".status"
+    if os.path.exists(status_file):
+        os.remove(status_file)
 
 def set_schedule_by_user(account_id, date, schedule_id, begin, end):
     bot_no = OPEN_API["botNo"]
@@ -94,12 +108,11 @@ def modify_schedule_by_user(account_id, date, schedule_id, end):
 
         file_handle = open(cache_file, mode='r+')
         content_str = file_handle.read()
-        if content_str is None:
-            content = None
-        else:
+        content = None
+        if content_str is not None:
             content = json.loads(content_str)
-        file_handle.close()
         if content is None or content["schedule_id"] != schedule_id:
+            file_handle.close()
             return False
         content["end"] = end
         file_handle.seek(0)

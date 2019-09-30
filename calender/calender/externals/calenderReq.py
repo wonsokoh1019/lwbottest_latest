@@ -4,22 +4,59 @@ import io
 import logging
 import json
 from calender.externals.data import *
-from calender.constants import API_BO, OPEN_API, ADMIN_ACCOUNT
+from calender.constants import API_BO, OPEN_API, ADMIN_ACCOUNT, DOMAIN_ID
 import tornado.gen
+from calender.common import globalData
 from calender.common.fileCache import *
 import requests
 import uuid
+import pytz
 
 LOGGER = logging.getLogger("calender")
 
+def get_time_zone():
+    external_key_url = API_BO["TZone"]["external_key_url"]
+    headers = {
+        "content-type":"application/x-www-form-urlencoded",
+        "charset": "UTF-8"
+    }
+
+    body = '"account" : ADMIN_ACCOUNT'
+    response = requests.post(external_key_url, data=json.dumps(body), headers=headers)
+    if response.status_code != 200 or response.content is None:
+        LOGGER.info("get external key failed. url:%s text:%s body:%s", url, response.text, response.content)
+        return None
+    tmp_req = json.loads(response.content)
+    if "externalKey" not in tmp_req:
+        return None
+    external_key = tmp_req["externalKey"]
+
+    time_zone_url = API_BO["TZone"]["time_zone_url"]
+    time_zone_url = time_zone_url.replace("DOMAIN_ID",DOMAIN_ID)
+    time_zone_url = time_zone_url.replace("EXTERNAL_KEY", external_key)
+
+    headers = API_BO["headers"]
+    response = requests.get(time_zone_url, headers=headers)
+    if response.status_code != 200 or response.content is None:
+        LOGGER.info("get external key failed. url:%s text:%s body:%s", url, response.text, response.content)
+        return None
+    tmp_req = json.loads(response.content)
+    if "timeZone" not in tmp_req:
+        return None
+    return tmp_req["timeZone"]
+
+def get_offset_by_timezone(time_zone):
+    offset = datetime.datetime.now(pytz.timezone(time_zone)).utcoffset().total_seconds()
+    offset_hour = offset / 3600;
+    offset_min = (offset % 3600)/60;
+    return offset_hour, offset_min
+
 def create_headers():
     headers = API_BO["headers"]
-    headers["consumerKey"] = OPEN_API["consumerKey"]
-    headers["Authorization"] = "Bearer " + OPEN_API["token"]
+    headers["consumerKey"] = OPEN_API["service_consumerKey"]
     return headers
 
-def make_icalender_data(begin, end, current, account_id, careate_flag=False):
-    uid = str(uuid.uuid4()) + account_id
+def make_icalender_data(uid, begin, end, current, account_id, careate_flag=False):
     schedule_lcal_string = "BEGIN:VCALENDAR\r\n"
     schedule_lcal_string = schedule_lcal_string + "VERSION:2.0\r\n"
     schedule_lcal_string = schedule_lcal_string + "PRODID:Naver Calendar\r\n"
@@ -96,7 +133,8 @@ def get_calenders(time): #syncToken (yyyyMMddHHmmss).
     return json.loads(response.content)
 
 def create_schedules(calendar_id, begin, end, current, account_id):
-    body = {"calendarId":calendar_id, "scheduleIcalString":make_icalender_data(begin, end, current, account_id, True)}
+    uid = str(uuid.uuid4()) + account_id
+    body = {"calendarId":calendar_id, "scheduleIcalString":make_icalender_data(uid, begin, end, current, account_id, True)}
 
     headers = create_headers()
     url = API_BO["calendar"]["create_schedule_url"]
@@ -111,11 +149,11 @@ def create_schedules(calendar_id, begin, end, current, account_id):
     tmp_req = json.loads(response.content)
     if tmp_req["result"] != "success":
         return None
-    return tmp["returnValue"]
+    return tmp["returnValue"], uid
 
-def modify_schedules(calendar_id, begin, end, current, account_id):
+def modify_schedules(uid, calendar_id, begin, end, current, account_id):
 
-    body = {"calendarId":calendar_id, "scheduleIcalString":make_icalender_data(begin, end, current, account_id)}
+    body = {"calendarId":calendar_id, "scheduleIcalString":make_icalender_data(uid, begin, end, current, account_id)}
 
     headers = create_headers()
     url = API_BO["calendar"]["modify_schedule_url"]
