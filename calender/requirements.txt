@@ -1,13 +1,6 @@
 asyncio==3.4.3
-#daemonize==2.4.7
-#filelock==3.0.4
-#psutil==5.4.6
-#PyCRC==1.21
+pycodestyle==2.5.0
+pytz==2019.2
 tornado==5.1
 uuid==1.30
 uvloop==0.11.0
-pytz
-#coverage
-#pylint
-#unittest-xml-reporting
-#pycurl==7.43 curl -V; export PYCURL_SSL_LIBRARY=(nss|openssl) //CI error
