@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 import os
 import json
-from calender.constants import API_BO, OPEN_API, FILE_SYSTEM
+from calender.constant import API_BO, OPEN_API, FILE_SYSTEM
 
-def set_status_by_user_date(user, date, status = None, process=None, delete_flag=False):
+
+def set_status_by_user_date(user, date, status=None, process=None,
+                            delete_flag=False):
     bot_no = OPEN_API["botNo"]
     tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + user
     status_file = tmp_path + "/" + date + ".status"
@@ -40,6 +42,7 @@ def set_status_by_user_date(user, date, status = None, process=None, delete_flag
     file_handle.close()
     return True, None
 
+
 def get_status_by_user(user, date):
     bot_no = OPEN_API["botNo"]
     tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + user
@@ -55,12 +58,17 @@ def get_status_by_user(user, date):
     file_handle.close()
     return content
 
+
 def clean_status_by_user(user, date):
     bot_no = OPEN_API["botNo"]
     tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + user
+    cache_file = tmp_path + "/" + date + ".data"
     status_file = tmp_path + "/" + date + ".status"
     if os.path.exists(status_file):
         os.remove(status_file)
+    if os.path.exists(cache_file):
+        os.remove(cache_file)
+
 
 def set_schedule_by_user(account_id, date, schedule_id, begin, end):
     bot_no = OPEN_API["botNo"]
@@ -99,6 +107,7 @@ def get_schedule_by_user(account_id, date):
     else:
         return None
 
+
 def modify_schedule_by_user(account_id, date, schedule_id, end):
     bot_no = OPEN_API["botNo"]
     tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no) + "/" + account_id
@@ -122,6 +131,7 @@ def modify_schedule_by_user(account_id, date, schedule_id, end):
     else:
         return False
     return True
+
 
 def set_calender_id(calender_id):
     bot_no = OPEN_API["botNo"]
@@ -149,6 +159,7 @@ def set_calender_id(calender_id):
         file_handle.close()
         return True
 
+
 def get_calender_id():
     bot_no = OPEN_API["botNo"]
     tmp_path = FILE_SYSTEM["cache_dir"] + "/" + str(bot_no)
@@ -163,8 +174,3 @@ def get_calender_id():
     content = json.loads(file_handle.read())
     file_handle.close()
     return content["calender_id"]
-
-
-
-
-

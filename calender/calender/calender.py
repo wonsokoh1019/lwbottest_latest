@@ -1,4 +1,4 @@
-#! /bin/bash python3
+#!/bin/bash python
 # -*- coding: utf-8 -*-
 """
 launch calender
@@ -17,54 +17,56 @@ from calender.externals.richmenu import *
 from calender.common import globalData
 from calender.externals.data import *
 from calender.externals.calenderReq import *
-from calender.constants import API_BO
+from calender.constant import API_BO, LOCAL
 
 import psutil
 
 import calender.router
 import calender.contextlog
-import calender.safetimedrotatingfilehandler
-from calender.settings import CALENDER_PORT, CALENDER_LOG_FMT, CALENDER_LOG_LEVEL, CALENDER_LOG_FILE, CALENDER_LOG_ROTATE
+from calender.safetimedrotatingfilehandler import SafeTimedRotatingFileHandler
+from calender.settings import CALENDER_PORT, CALENDER_LOG_FMT, \
+    CALENDER_LOG_LEVEL, CALENDER_LOG_FILE, CALENDER_LOG_ROTATE
 
-define("port", default=CALENDER_PORT, help="server listen port. default 9090")
-define("workers", default=0, help="the count of workers. default the same as cpu cores")
+define("port", default=CALENDER_PORT, help="server listen port. "
+                                           "default 8080")
+define("workers", default=0, help="the count of workers. "
+                                  "default the same as cpu cores")
 define("logfile", default=None, help="the path for log")
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
-def sigHandler(sig, _):
+
+def sig_handler(sig, _):
     """
     signal handler
     """
-    print("sig %s received"% str(sig))
+    print("sig %s received" % str(sig))
     try:
         parent = psutil.Process(os.getpid())
         children = parent.children()
         for process in children:
             process.send_signal(sig)
-    except (psutil.NoSuchProcess, psutil.ZombieProcess, psutil.AccessDenied) as ex:
+    except (psutil.NoSuchProcess, psutil.ZombieProcess,
+            psutil.AccessDenied) as ex:
         print(str(ex))
-    tornado.ioloop.IOLoop.instance().add_callback(killServer)
+    tornado.ioloop.IOLoop.instance().add_callback(kill_server)
 
-def killServer():
+
+def kill_server():
     """
     stop the ioloop
     """
     asyncio.get_event_loop().stop()
-    #tornado.ioloop.IOLoop.instance().stop()
 
-def initLogger():
+
+def init_logger():
     """
     init logger setting
     """
-    #access_log = logging.getLogger("tornado.access")
-
     formatter = logging.Formatter(CALENDER_LOG_FMT)
     calender_log = logging.getLogger("calender")
-    file_handler = calender.safetimedrotatingfilehandler.SafeTimedRotatingFileHandler(
-        filename=CALENDER_LOG_FILE,
-        when=CALENDER_LOG_ROTATE,
-    )
+    file_handler = SafeTimedRotatingFileHandler(filename=CALENDER_LOG_FILE,
+                                                when=CALENDER_LOG_ROTATE,)
     file_handler.setFormatter(formatter)
 
     calender_log.setLevel(CALENDER_LOG_LEVEL)
@@ -75,26 +77,25 @@ def initLogger():
     logging.getLogger("tornado.application").addHandler(file_handler)
     logging.getLogger("tornado.general").addHandler(file_handler)
 
-def initRichMenu():
-    rich_menus = init_rich_menu()
+
+def init_rich_menu_first():
+    rich_menus = init_rich_menu(LOCAL)
     if rich_menus is None:
-        LOGGER = logging.getLogger("calender")
-        LOGGER.info("init rich menu failed.")
         raise Exception("init rich menu failed.")
     else:
         for key in rich_menus:
             globalData.set_value(key, rich_menus[key])
 
-def initCalender():
+
+def init_calender_first():
     calender_id = init_calender()
     if calender_id is None:
-        LOGGER = logging.getLogger("calender")
-        LOGGER.info("init calender failed.")
         raise Exception("init calender failed.")
     else:
         globalData.set_value(API_BO["calendar"]["name"], calender_id)
 
-def startCalender():
+
+def start_calender():
     """
     the calender launch code
     """
@@ -102,14 +103,15 @@ def startCalender():
     server.bind(options.port)
     server.start(1)
 
-    initLogger()
-    initRichMenu()
-    #initCalender()
+    init_logger()
+    try:
+        init_rich_menu_first()
+        # init_calender_first()
+    except Exception as ex:
+        print("init failed %s" % (str(ex),))
 
     asyncio.get_event_loop().run_forever()
-    #tornado.ioloop.IOLoop.instance().start()
     server.stop()
-    #tornado.ioloop.IOLoop.instance().stop()
     asyncio.get_event_loop().close()
 
     print("exit...")

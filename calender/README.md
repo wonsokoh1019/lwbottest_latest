@@ -2,45 +2,23 @@
 ### reference information
 #### ref: http://www.tornadoweb.org
 ####      https://minzkraut.com/2016/11/23/making-a-simple-spritesheet-generator-in-python
-### The default deployment path is /home/irteam/apps/, and if you want to change the deployment path, please modify the configuration file
+### The default deployment path is ~/oneapp_samplebot/calender, and if you want to change the deployment path, please modify the configuration file
 #### nginx.conf setting.py
 ### Using the default irteam user to boot by default 
 ### python version 3.6.3
 
-1. install miniconda2(python2.7 env) to /home1/irteam/miniconda2 and add /home1/irteam/miniconda2/bin to $PATH; install miniconda3(python3.6 env) to /home1/irteam/miniconda3
-
+1. install miniconda3(python3.6 env) to ~/miniconda3; add ~/miniconda3/bin to $PATH;
    refer https://conda.io/miniconda.html 
    
-2. use pip to install supervisor, superlance (python2); install the modules in requirements.txt to python3
-
-   pngdefry: pip install ./externals/pngdefry-0.4-fixed.tar.gz (to python3)
-
+2. install the modules in requirements.txt to python3
    refer https://pip.pypa.io/en/stable/user_guide/#installing-packages
 
-3. clone this repository and cd calender/                               
+3. clone this repository and cd oneapp_samplebot/calender/
+    https://oss.navercorp.com/works-mobile/oneapp_samplebot.git
 
-4. sh autobuild.sh #build and install
+4. modify scripts/common.py
 
-5. cp calender/constants/constants.XXX to calender/constants.py (XXX is your run-env)
+5. sh autoInit.sh [alpha|stage|real] [update|no]
 
 6. simple running
-
-   ./oneapp.calender.ctl start #(./oneapp.calender.ctl stop for stop)
-   
-7. product running
-
-   supervisord -c supervisord/supervisor.conf
-   
-   refer http://supervisord.org/running.html
-   
-8. static code checking
-
-   pylint -f parseable --rcfile=./tests/pylint.rc calender
-   
-9. coverage
-   
-   coverage run --source='calender' --branch test.py
-   
-   coverage report
-   
-   refer https://coverage.readthedocs.io/en/coverage-4.5.1/cmd.html
+   python main.py --port=8080 --daemonize True

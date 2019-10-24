@@ -5,6 +5,7 @@ internal hello
 """
 import tornado.web
 
+
 class HelloHandler(tornado.web.RequestHandler):
     """
     /internal/hello

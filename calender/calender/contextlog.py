@@ -8,6 +8,7 @@ from logging import Filter
 from uuid import uuid4
 from tornado.stack_context import StackContext
 
+
 class RequestContextData(object):
     """
     request_id
@@ -17,6 +18,7 @@ class RequestContextData(object):
 
     def __eq__(self, other):
         return self.request_id == other.request_id
+
 
 class Metaclass(type):
     """
@@ -31,7 +33,8 @@ class Metaclass(type):
             return RequestContextData()
         return cls._state.data
 
-class RequestContext(object, metaclass = Metaclass):
+
+class RequestContext(object, metaclass=Metaclass):
     """
     The context class for request_id
     """
@@ -50,6 +53,7 @@ class RequestContext(object, metaclass = Metaclass):
         del self._prev_data
         return False
 
+
 class RequestContextFilter(Filter):
     """
     logging filter for add request_id to record
@@ -66,6 +70,7 @@ class RequestContextFilter(Filter):
         record.request_id = request_id
 
         return True
+
 
 def contextualizedLogging(handler):
     """
