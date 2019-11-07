@@ -22,3 +22,22 @@
 
 6. simple running
    python main.py --port=8080 --daemonize True
+
+# document
+A document is published in https://pages.oss.navercorp.com/works-mobile/oneapp_samplebot/
+
+## how to edit
+Just edit `doc/*.md` files
+
+## test
+```
+pip install mkdocs
+mkdocs serve
+```
+http://localhost:8000/
+
+
+## publish
+```
+mkdocs gh-deploy
+```
