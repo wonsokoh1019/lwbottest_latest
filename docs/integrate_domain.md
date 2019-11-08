@@ -7,7 +7,7 @@ https://developers.worksmobile.com/kr/document/1005008?lang=en
 1. server list에server 추구후, 비밀키 다운로드필요
 ![step1](integrate_domain_1.png)
 ![consumer_key](integrate_domain_2.png)
-> https://developers.worksmobile.com/kr/document/1002002?lang=en
+    > https://developers.worksmobile.com/kr/document/1002002?lang=en
 1. console>SSO : External Key Mapping 설정
 해당 파일을다운로드후external key 추가 후, 다시 업로드필요.
 (봇을 사용하는 모든 사용자상대로external key 생성필요 해당키는 유니크해야 함.)
