@@ -31,8 +31,8 @@ Just edit `doc/*.md` files
 
 ## test
 ```
-pip install mkdocs
-mkdocs serve
+pydoc-markdown > docs/codes.md
+mkdocs serve -a 0.0.0.0:8000
 ```
 http://localhost:8000/
 
