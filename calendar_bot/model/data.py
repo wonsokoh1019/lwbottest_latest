@@ -102,7 +102,7 @@ def make_quick_reply(replay_items):
 #    return {"language":language, "text":text}
 
 
-def make_text(text, i18n_texts):
+def make_text(text, i18n_texts=None):
     if i18n_texts is not None:
         return {"type": "text", "text": text, "i18nTexts": i18n_texts}
     return {"type": "text", "text": text}

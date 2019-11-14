@@ -24,38 +24,11 @@ LOGGER = logging.getLogger("calendar_bot")
 def confirm_out_message(user_time, hours, min):
     user_time = TimeStruct(user_time)
 
-    jp_text = i18n_text("ja_JP", "退勤時間の登録が完了しました。"
-                        + user_time.month + "月 "
-                        + user_time.date + "日 "
-                        + user_time.week_date_jp + "の合計勤務時間は  "
-                        + str(hours) + "時間 "
-                        + str(min) + "分です。")
-    en_text = i18n_text("en_US",
-                        "Clock-out time has been registered."
-                        "The total working hours for "
-                        + user_time.week_date_en + ", "
-                        + en_month[int(user_time.month)] + " "
-                        + user_time.date + " is "
-                        + str(hours) + " hours and "
-                        + str(min) + " minutes.")
-    kr_text = i18n_text("ko_KR",
-                        "퇴근 시간 등록이 완료되었습니다. "
-                        + user_time.month + "월 "
-                        + user_time.date + "일 "
-                        + user_time.week_date_kr + " 총 근무 시간은 "
-                        + str(hours) + "시간 "
-                        + str(min) + "분입니다.")
-
-    text = make_text(
-        "퇴근 시간 등록이 완료되었습니다. "
-        + user_time.month + "월 "
-        + user_time.date + "일 "
-        + user_time.week_date_kr + " 총 근무 시간은 "
-        + str(hours) + "시간 "
-        + str(min) + "분입니다.",
-        [jp_text, en_text, kr_text])
-
-    return text
+    return make_text("Clock-out time has been registered."
+                     "The total working hours for {date} "
+                     "is {hours} hours and {minutes} minutes."
+                     .format(date=user_time.date.strftime('%A, %B %d'),
+                             hours=hours, minutes=min))
 
 
 @tornado.gen.coroutine

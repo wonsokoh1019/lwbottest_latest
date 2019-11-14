@@ -21,16 +21,6 @@ from calendar_bot.model.calendarDBHandle import set_schedule_by_user, \
 LOGGER = logging.getLogger("calendar_bot")
 
 
-def confirm_in_message():
-    jp_text = i18n_text("ja_JP", "出勤時間の登録が完了しました。")
-    en_text = i18n_text("en_US", "Clock-in time has been registered.")
-    kr_text = i18n_text("ko_KR", "출근 시간 등록이 완료되었습니다.")
-
-    text = make_text("출근 시간 등록이 완료되었습니다.",
-                     [jp_text, en_text, kr_text])
-    return text
-
-
 @tornado.gen.coroutine
 def deal_confirm_in(account_id, create_time, callback):
     pos = callback.find("time=")
@@ -52,7 +42,7 @@ def deal_confirm_in(account_id, create_time, callback):
     set_schedule_by_user(schedule_uid, account_id, current_date,
                          user_time, my_end_time)
 
-    return confirm_in_message()
+    return make_text("Clock-in time has been registered.")
 
 
 @tornado.gen.coroutine
