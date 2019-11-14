@@ -16,77 +16,27 @@ def deal_sign_in_message(sign_time, manual_flag):
     if manual_flag:
         call_back = "manual_sign_in"
 
-    my_time = TimeStruct(sign_time)
+    user_time = TimeStruct(sign_time)
 
-    jp_text = i18n_text("ja_JP", "現在時間 " + my_time.month + "月 "
-                        + my_time.date + "日 "
-                        + my_time.week_date_jp + " "
-                        + my_time.interval_jp + " "
-                        + my_time.hours + "時 " +
-                        my_time.min + "分で出勤時間を登録しますか？")
-    en_text = i18n_text("en_US", "Register the current time "
-                        + my_time.month + ", "
-                        + my_time.date + " "
-                        + my_time.week_date_en + " at "
-                        + my_time.hours + ":"
-                        + my_time.min + " "
-                        + my_time.interval_en + " as clock-out time?")
-    kr_text = i18n_text("ko_KR", "현재 시간 " + my_time.month + "월 "
-                        + my_time.date + "일 "
-                        + my_time.week_date_kr + " "
-                        + my_time.interval_kr + " "
-                        + my_time.hours + "시 "
-                        + my_time.min + "분으로 출근 시간 등록하시겠습니까?")
-
-    text = make_text("현재 시간 " + my_time.month + "월 "
-                     + my_time.date + "일 "
-                     + my_time.week_date_kr + " "
-                     + my_time.interval_kr + " "
-                     + my_time.hours + "시 "
-                     + my_time. min + "분으로 출근 시간 등록하시겠습니까?",
-                     [jp_text, en_text, kr_text])
+    text = make_text("Register the current time {date} at {hours}:{min} "
+                     "{interval} as clock-in time?"
+                     .format(date=user_time.date_time.strftime('%m, %d %A'),
+                             hours=user_time.hours, min=user_time.min,
+                             interval=user_time.interval_en))
 
     if manual_flag:
-        jp_text = i18n_text("ja_JP",
-                            "入力した " + my_time.month + "月 "
-                            + my_time.date + "日 "
-                            + my_time.week_date_jp + " "
-                            + my_time.interval_jp + " "
-                            + my_time.hours + "時 "
-                            + my_time.min + "分で出勤時間を登録しますか？")
-        en_text = i18n_text("en_US",
-                            "Register the entered " + my_time.month + ", "
-                            + my_time.date + " "
-                            + my_time.week_date_en + " at "
-                            + my_time.hours + ":"
-                            + my_time.min + " "
-                            + my_time.interval_en + " as clock-out time?")
-        kr_text = i18n_text("ko_KR",
-                            "입력하신 " + my_time.month + "월 "
-                            + my_time.date + "일 "
-                            + my_time.week_date_kr + " "
-                            + my_time.interval_kr + " "
-                            + my_time.hours + "시 "
-                            + my_time.min
-                            + "분으로 출근 시간을 등록하시겠습니까?")
-
-        text = make_text(
-            "입력하신 " + my_time.month + "월 "
-            + my_time.date + "일 "
-            + my_time.week_date_kr + " "
-            + my_time.interval_kr + " "
-            + my_time.hours + "시 "
-            + my_time.min + "분으로 출근 시간을 등록하시겠습니까?",
-            [jp_text, en_text, kr_text])
-
-    content = text
+        text = make_text("Register the entered {date} at {hours}:{min} "
+                         "{interval} as clock-in time?"
+                         .format(date=user_time.date_time.strftime('%m, %d %A'),
+                                 hours=user_time.hours, min=user_time.min,
+                                 interval=user_time.interval_en))
 
     reply_items = create_quick_replay_items(
-        "confirm_in&time=" + my_time.str_current_time_tick, call_back)
+        "confirm_in&time=" + user_time.str_current_time_tick, call_back)
 
-    content["quickReply"] = make_quick_reply(reply_items)
+    text["quickReply"] = make_quick_reply(reply_items)
 
-    return content
+    return text
 
 
 @tornado.gen.coroutine

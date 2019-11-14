@@ -12,7 +12,7 @@ from calendar_bot.model.data import i18n_text, make_text
 from calendar_bot.externals.calendar_req import modify_schedule
 from calendar_bot.externals.send_message import push_messages
 from calendar_bot.actions.message import invalid_message, prompt_input, \
-    en_month, TimeStruct, number_message
+    TimeStruct, number_message
 from calendar_bot.model.processStatusDBHandle import get_status_by_user, \
     set_status_by_user_date
 from calendar_bot.model.calendarDBHandle import get_schedule_by_user, \
@@ -27,7 +27,7 @@ def confirm_out_message(user_time, hours, min):
     return make_text("Clock-out time has been registered."
                      "The total working hours for {date} "
                      "is {hours} hours and {minutes} minutes."
-                     .format(date=user_time.date.strftime('%A, %B %d'),
+                     .format(date=user_time.date_time.strftime('%A, %B %d'),
                              hours=hours, minutes=min))
 
 
