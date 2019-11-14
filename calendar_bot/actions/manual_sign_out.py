@@ -13,13 +13,7 @@ LOGGER = logging.getLogger("calendar_bot")
 
 
 def manual_sign_out_message():
-    jp_text = i18n_text("ja_JP", "退勤時間を直接入力してください。")
-    en_text = i18n_text("en_US", "Please manually enter the clock-out time.")
-    kr_text = i18n_text("ko_KR", "퇴근 시간을 직접 입력해 주세요. ")
-
-    i18n_texts1 = [jp_text, en_text, kr_text]
-
-    text1 = make_text("퇴근 시간을 직접 입력해 주세요. ", i18n_texts1)
+    text1 = make_text("Please manually enter the clock-out time.")
 
     text2 = prompt_input()
 

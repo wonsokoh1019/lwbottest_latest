@@ -12,18 +12,9 @@ LOGGER = logging.getLogger("calendar_bot")
 
 
 def sign_out_message():
-    jp_text = make_i18n_content_texts("ja_JP", "退勤時間の入力方式"
-                                               "を選択してください。")
-    en_text = make_i18n_content_texts("en_US", "Please select the clock-out "
-                                               "time entry method.")
-    kr_text = make_i18n_content_texts("ko_KR", "퇴근 시간 입력 "
-                                               "방식을 선택해 주세요.")
-    content_texts = [jp_text, en_text, kr_text]
-
     actions = create_button_actions("direct_sign_out", "manual_sign_out")
-
-    return make_button("퇴근 시간 입력 방식을 선택해 주세요.",
-                       actions, content_texts=content_texts)
+    return make_button("Please select the clock-out time entry method.",
+                       actions)
 
 
 @tornado.gen.coroutine

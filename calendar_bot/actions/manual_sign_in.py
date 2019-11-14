@@ -13,13 +13,7 @@ LOGGER = logging.getLogger("calendar_bot")
 
 
 def manual_sign_in_message():
-    jp_text = i18n_text("ja_JP", "出勤時間を直接入力してください。")
-    en_text = i18n_text("en_US", "Please manually enter the clock-in time.")
-    kr_text = i18n_text("ko_KR", "출근 시간을 직접 입력해 주세요. ")
-
-    i18n_texts1 = [jp_text, en_text, kr_text]
-
-    text1 = make_text("출근 시간을 직접 입력해 주세요. ", i18n_texts1)
+    text1 = make_text("Please manually enter the clock-in time.")
 
     text2 = prompt_input()
 

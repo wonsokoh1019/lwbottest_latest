@@ -12,18 +12,10 @@ LOGGER = logging.getLogger("calendar_bot")
 
 
 def sign_in_message():
-    jp_text = make_i18n_content_texts("ja_JP", "出勤時間の入力方式"
-                                               "を選択してください。")
-    en_text = make_i18n_content_texts("en_US", "Register current "
-                                               "time as clock-in time")
-    kr_text = make_i18n_content_texts("ko_KR", "출근 시간 입력 "
-                                               "방식을 선택해 주세요.")
-    content_texts = [jp_text, en_text, kr_text]
-
     actions = create_button_actions("direct_sign_in", "manual_sign_in")
 
-    return make_button("출근 시간 입력 방식을 선택해 주세요.",
-                       actions, content_texts=content_texts)
+    return make_button("Register current time as clock-in time",
+                       actions)
 
 
 @tornado.gen.coroutine
