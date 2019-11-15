@@ -69,51 +69,9 @@ def headers():
 def create_bot(photo_address):
     url = "https://" + DEVELOP_API_DOMAIN + "/r/" + API_ID + "/message/v1/bot"
     data = {
-        "name": "근태관리 봇",
-        "i18nNames": [
-            {
-                "language": "ko_KR",
-                "name": "근태관리 봇"
-            },
-            {
-                "language": "ja_JP",
-                "name": "勤怠管理Bot"
-            },
-            {
-                "language": "en_US",
-                "name": "Attendance management bot"
-            }
-        ],
+        "name": "Attendance management bot",
         "photoUrl": photo_address,
-        "i18nPhotoUrls": [
-            {
-                "language": "ko_KR",
-                "photoUrl": photo_address
-            },
-            {
-                "language": "ja_JP",
-                "photoUrl": photo_address
-            },
-            {
-                "language": "en_US",
-                "photoUrl": photo_address
-            }
-        ],
-        "description": "근태관리 봇",
-        "i18nDescriptions": [
-            {
-                "language": "ko_KR",
-                "description": "근태관리 봇"
-            },
-            {
-                "language": "ja_JP",
-                "description": "勤怠管理Bot"
-            },
-            {
-                "language": "ja_JP",
-                "description": "Attendance management bot"
-            }
-        ],
+        "description": "Attendance management bot",
         "managers": [ADMIN_ACCOUNT],
         "submanagers": [],
         "useGroupJoin": False,
