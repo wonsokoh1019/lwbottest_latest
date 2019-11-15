@@ -3,6 +3,10 @@
 """
 launch calendar_bot
 """
+
+__all__ = ['sig_handler', 'kill_server', 'init_logger', 'check_init_bot',
+           'init_rich_menu_first', 'init_calendar_first', 'start_calendar_bot']
+
 import os
 import logging
 from logging import StreamHandler
@@ -62,7 +66,7 @@ def kill_server():
 
 def init_logger():
     """
-    init logger setting
+    Initializes the logger settings.
     """
     formatter = logging.Formatter(CALENDAR_LOG_FMT)
     calendar_log = logging.getLogger("calendar_bot")
@@ -73,12 +77,17 @@ def init_logger():
     file_handler.addFilter(calendar_bot.contextlog.RequestContextFilter())
     calendar_log.addHandler(file_handler)
 
-    # add app/gen ERROR log
     logging.getLogger("tornado.application").addHandler(file_handler)
     logging.getLogger("tornado.general").addHandler(file_handler)
 
 
 def check_init_bot():
+    """
+    Initialize bot no, check if the bot is initialized.
+    If this function gets an exception, it is probably like script/registerBot.py.
+    This is not executed or the execution failed.
+    ref: https://developers.worksmobile.com/jp/document/3005001?lang=en
+    """
     extra = get_init_status("bot_no")
     if extra is None:
         raise Exception("bot no init failed.")
@@ -86,6 +95,10 @@ def check_init_bot():
 
 
 def init_rich_menu_first():
+    """
+    Initialize rich menu API. Check also: calendar_bot/externals/richmenu.py
+    ref: https://developers.worksmobile.com/jp/document/1005040?lang=en
+    """
     rich_menu_id = get_init_status("rich_menu")
 
     if rich_menu_id is None:
@@ -96,7 +109,11 @@ def init_rich_menu_first():
         raise Exception("init rich menu failed.")
     global_data.set_value("rich_menu", rich_menu_id)
 
+
 def init_calendar_first():
+    """
+    Initialize calendar API.
+    """
     calendar_id = get_init_status("calendar")
     if calendar_id is None:
         calendar_id = init_calendar()
@@ -108,7 +125,17 @@ def init_calendar_first():
 def start_calendar_bot():
     """
     the calendar_bot launch code
+
+    tornado.httpserver a non-blocking, single-threaded HTTP server
+    ref: https://www.tornadoweb.org/en/stable/httpserver.html
+
+    tornado.routing flexible routing implementation.
+    ref: https://www.tornadoweb.org/en/stable/routing.html
+
+    If you use the event loop that comes with tornado, many third-party
+    packages based on asyncio may not be used, such as aioredis.
     """
+
     server = tornado.httpserver.HTTPServer(calendar_bot.router.getRouter())
 
     server.bind(options.port)
