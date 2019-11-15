@@ -3,7 +3,6 @@
 import os
 
 # account
-LANG = "kr"    # ["kr"|"en"|"jp"]
 ADMIN_ACCOUNT = "admin@krbot.com"
 DOMAIN_ID = 18644
 

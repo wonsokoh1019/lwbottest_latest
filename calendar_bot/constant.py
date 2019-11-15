@@ -15,7 +15,6 @@ ABSDIR_OF_SELF = os.path.dirname(os.path.abspath(__file__))
 ABSDIR_OF_PARENT = os.path.dirname(ABSDIR_OF_SELF)
 
 SERVICE_CONSUMER_KEY = None
-LOCAL = LANG
 HEROKU_SERVER_ID = SERVER_ID
 IP_TOKEN = TOKEN
 PRIVATE_KEY_PATH = ABSDIR_OF_PARENT + "/key/" + PRIVATE_KEY_NAME
@@ -27,36 +26,18 @@ DEVELOP_API_DOMAIN = "alpha-apis.worksmobile.com"
 
 # RICH_MENUS
 RICH_MENUS = {
-                "kr": {
-                    "name": "calendar_bot_rich_menu_kr",
-                    "path": ABSDIR_OF_PARENT + "/image/kr/Rich_Menu.png"
-                },
-                "jp":
-                {
-                    "name": "calendar_bot_rich_menu_jp",
-                    "path": ABSDIR_OF_PARENT + "/image/jp/Rich_Menu.png"
-                 },
-                "en":
-                {
-                    "name": "calendar_bot_rich_menu_en",
-                    "path": ABSDIR_OF_PARENT + "/image/en/Rich_Menu.png"
-                }
-            }
+                "name": "calendar_bot_rich_menu_en",
+                "path": ABSDIR_OF_PARENT + "/image/en/Rich_Menu.png"
+             }
 
 # IMAGE CAROUSEL
 IMAGE_CAROUSEL = {
                     "resource_url":
-                    {
-                        "kr": [LOCAL_ADDRESS + "static/kr/IMG_Carousel_01.png",
-                               LOCAL_ADDRESS + "static/kr/IMG_Carousel_02.png",
-                               LOCAL_ADDRESS + "static/kr/IMG_Carousel_03.png"],
-                        "en": [LOCAL_ADDRESS + "static/en/IMG_Carousel_01.png",
-                               LOCAL_ADDRESS + "static/en/IMG_Carousel_02.png",
-                               LOCAL_ADDRESS + "static/en/IMG_Carousel_03.png"],
-                        "jp": [LOCAL_ADDRESS + "static/jp/IMG_Carousel_01.png",
-                               LOCAL_ADDRESS + "static/jp/IMG_Carousel_02.png",
-                               LOCAL_ADDRESS + "static/jp/IMG_Carousel_03.png"]
-                    }
+                    [
+                        LOCAL_ADDRESS + "static/en/IMG_Carousel_01.png",
+                        LOCAL_ADDRESS + "static/en/IMG_Carousel_02.png",
+                        LOCAL_ADDRESS + "static/en/IMG_Carousel_03.png"
+                    ]
                 }
 
 # API

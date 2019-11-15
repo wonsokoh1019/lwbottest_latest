@@ -17,7 +17,7 @@ from tornado.options import define, options
 from calendar_bot.externals.richmenu import init_rich_menu
 from calendar_bot.common import global_data
 from calendar_bot.externals.calendar_req import init_calendar
-from calendar_bot.constant import API_BO, LOCAL
+from calendar_bot.constant import API_BO
 from calendar_bot.model.initStatusDBHandle import insert_init_status, \
     get_init_status
 
@@ -86,20 +86,15 @@ def check_init_bot():
 
 
 def init_rich_menu_first():
-    extra = get_init_status("rich_menu")
+    rich_menu_id = get_init_status("rich_menu")
 
-    if extra is None:
-        rich_menus = init_rich_menu(LOCAL)
-        insert_init_status("rich_menu", json.dumps(rich_menus))
-    else:
-        rich_menus = json.loads(extra)
+    if rich_menu_id is None:
+        rich_menu_id = init_rich_menu()
+        insert_init_status("rich_menu", rich_menu_id)
 
-    if rich_menus is None:
+    if rich_menu_id is None:
         raise Exception("init rich menu failed.")
-    else:
-        for key in rich_menus:
-            global_data.set_value(key, rich_menus[key])
-
+    global_data.set_value("rich_menu", rich_menu_id)
 
 def init_calendar_first():
     calendar_id = get_init_status("calendar")

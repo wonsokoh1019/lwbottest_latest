@@ -12,7 +12,7 @@ from icalendar import Calendar, Event, Timezone, TimezoneStandard
 from calendar_bot.common.utils import auth_get, auth_post, auth_put
 from calendar_bot.common.local_timezone import load_time_zone
 from calendar_bot.common.local_external_key import load_external_key
-from calendar_bot.constant import API_BO, OPEN_API, ADMIN_ACCOUNT, DOMAIN_ID, LOCAL
+from calendar_bot.constant import API_BO, OPEN_API, ADMIN_ACCOUNT, DOMAIN_ID
 from calendar_bot.common.global_data import get_value
 
 LOGGER = logging.getLogger("calendar_bot")
@@ -63,15 +63,10 @@ def make_icalendar_data(uid, summary, current, end, begin, account_id, create_fl
 
 
 def create_calendar():
-    names = {
-        "kr": "근태관리 봇",
-        "jp": "勤怠管理Bot",
-        "en": "Attendance management bot"
-    }
 
     body = {
-        "name": names[LOCAL],
-        "description": names[LOCAL],
+        "name": "Attendance management bot",
+        "description": "Attendance management bot",
         "invitationUserList": [{
             "email": ADMIN_ACCOUNT,
             "actionType": "insert",
@@ -101,14 +96,8 @@ def create_calendar():
 
 
 def create_schedule(current, end, begin, account_id):
-    summarys = {
-        "kr": "출근시간",
-        "jp": "出勤時間",
-        "en": "Clock-in time"
-    }
-
     uid = str(uuid.uuid4()) + account_id
-    schedule_data = make_icalendar_data(uid, summarys[LOCAL], current,
+    schedule_data = make_icalendar_data(uid, "Clock-in time", current,
                                         end, begin, account_id, True)
     body = {
         "ical": schedule_data
@@ -154,13 +143,8 @@ def create_schedule(current, end, begin, account_id):
 
 
 def modify_schedule(calendar_uid, current, end, begin, account_id):
-    summarys = {
-        "kr": "근무시간",
-        "jp": "勤務時間",
-        "en": "Working hours"
-    }
 
-    calendar_data = make_icalendar_data(calendar_uid, summarys[LOCAL],
+    calendar_data = make_icalendar_data(calendar_uid, "Working hours",
                                         current, end, begin, account_id)
     body = {
         "ical": calendar_data

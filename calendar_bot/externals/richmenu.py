@@ -43,55 +43,19 @@ def make_add_rich_menu_body(rich_menu_name):
     size = make_size(2500, 1686)
 
     bound0 = make_bound(0, 0, 1250, 1286)
-    jp_text0 = i18n_display_text("ja_JP", "出勤を記録する")
-    en_text0 = i18n_display_text("en_US", "Record clock-in")
-    kr_text0 = i18n_display_text("ko_KR", "출근 기록하기")
-    display_text0 = [jp_text0, en_text0, kr_text0]
-
-    jp_label_text0 = make_i18n_label("ja_JP", "出勤を記録する")
-    en_label_text0 = make_i18n_label("en_US", "Record clock-in")
-    kr_label_text0 = make_i18n_label("ko_KR", "출근 기록하기")
-    display_label0 = [jp_label_text0, en_label_text0, kr_label_text0]
-
     action0 = make_postback_action("sign_in",
-                                   display_text="출근 기록하기",
-                                   label="출근 기록하기",
-                                   i18n_display_texts=display_text0,
-                                   i18n_labels=display_label0)
+                                   display_text="Record clock-in",
+                                   label="Record clock-in",)
 
     bound1 = make_bound(1250, 0, 1250, 1286)
-    jp_text1 = i18n_display_text("ja_JP", "退勤を記録する")
-    en_text1 = i18n_display_text("en_US", "Record clock-out")
-    kr_text1 = i18n_display_text("ko_KR", "퇴근 기록하기")
-    display_text1 = [jp_text1, en_text1, kr_text1]
-
-    jp_label_text1 = make_i18n_label("ja_JP", "退勤を記録する")
-    en_label_text1 = make_i18n_label("en_US", "Record clock-out")
-    kr_label_text1 = make_i18n_label("ko_KR", "퇴근 기록하기")
-    display_label1 = [jp_label_text1, en_label_text1, kr_label_text1]
-
     action1 = make_postback_action("sign_out",
-                                   display_text="퇴근 기록하기",
-                                   label="퇴근 기록하기",
-                                   i18n_display_texts=display_text1,
-                                   i18n_labels=display_label1)
+                                   display_text="Record clock-out",
+                                   label="Record clock-out")
 
     bound2 = make_bound(0, 1286, 2500, 400)
-    jp_text2 = i18n_display_text("ja_JP", "最初へ")
-    en_text2 = i18n_display_text("en_US", "Start over")
-    kr_text2 = i18n_display_text("ko_KR", "처음으로")
-    display_text2 = [jp_text2, en_text2, kr_text2]
-
-    jp_label_text2 = make_i18n_label("ja_JP", "最初へ")
-    en_label_text2 = make_i18n_label("en_US", "Start over")
-    kr_label_text2 = make_i18n_label("ko_KR", "처음으로")
-    display_label2 = [jp_label_text2, en_label_text2, kr_label_text2]
-
     action2 = make_postback_action("to_first",
-                                   display_text="처음으로",
-                                   label="처음으로",
-                                   i18n_display_texts=display_text2,
-                                   i18n_labels=display_label2)
+                                   display_text="Start over",
+                                   label="Start over")
 
     rich_menu = make_add_rich_menu(
                     rich_menu_name,
@@ -199,38 +163,14 @@ def canncel_user_specific_rich_menu(account_id):
                 url, response.text, response.content)
 
 
-def init_rich_menu(local=None):
-    il8n_rich_menu_id = {}
+def init_rich_menu():
     rich_menus = get_rich_menus()
     if rich_menus is not None:
         for menu in rich_menus:
-            if local is not None and local in RICH_MENUS:
-                if str(menu["name"]) == RICH_MENUS[local]["name"]:
-                    il8n_rich_menu_id[RICH_MENUS[local]["name"]] = \
-                        menu["richMenuId"]
-                    break
-            for tmp_local, info in RICH_MENUS.items():
-                if str(menu["name"]) == info["name"]:
-                    il8n_rich_menu_id[info["name"]] = menu["richMenuId"]
-                    return il8n_rich_menu_id
+            if str(menu["name"]) == RICH_MENUS["name"]:
+                return  menu["richMenuId"]
 
-    if local in RICH_MENUS and \
-            RICH_MENUS[local]["name"] not in il8n_rich_menu_id:
-
-        rich_menu_id = make_add_rich_menu_body(RICH_MENUS[local]["name"])
-
-        resource_id = upload_content(RICH_MENUS[local]["path"])
-        set_rich_menu_image(resource_id, rich_menu_id)
-
-        il8n_rich_menu_id[RICH_MENUS[local]["name"]] = rich_menu_id
-        return il8n_rich_menu_id
-
-    for local, info in RICH_MENUS.items():
-        if info["name"] not in il8n_rich_menu_id:
-            rich_menu_id = make_add_rich_menu_body(info["name"])
-
-            resource_id = upload_content(info["path"])
-            set_rich_menu_image(resource_id, rich_menu_id)
-            il8n_rich_menu_id[info["name"]] = rich_menu_id
-
-    return il8n_rich_menu_id
+    rich_menu_id = make_add_rich_menu_body(RICH_MENUS["name"])
+    resource_id = upload_content(RICH_MENUS["path"])
+    set_rich_menu_image(resource_id, rich_menu_id)
+    return rich_menu_id
