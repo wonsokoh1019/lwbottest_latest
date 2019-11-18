@@ -91,10 +91,7 @@ def create_process_status_table():
             except DuplicateTable:
                 pass
 
-def main():
+def init_db():
     create_calendar_table()
     create_init_status()
     create_process_status_table()
-
-if __name__ == "__main__":
-    main()
