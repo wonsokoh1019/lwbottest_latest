@@ -126,7 +126,7 @@ def add_bot_in_db(bot_no):
 
     return True
 
-def main():
+def init_bot():
     bot_no = check_bot_in_db()
     if bot_no is not None:
         print("bot no has created. bot_no:%s" % (bot_no,))
@@ -138,7 +138,3 @@ def main():
     print("callback:%s" % (CALLBACK_ADDRESS,))
     if bot_no is not None:
         add_bot_in_db(bot_no)
-
-
-if __name__ == "__main__":
-    main()

@@ -1,3 +1,2 @@
-release: python scripts/initDB.py
-release: python scripts/registerBot.py
+release: python scripts/initialize.py
 web: python main.py --port=$PORT
