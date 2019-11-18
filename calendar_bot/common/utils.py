@@ -6,17 +6,13 @@ import logging
 from tornado.web import HTTPError
 from calendar_bot.common.token import generate_token
 from calendar_bot.common.global_data import get_value, set_value
-from calendar_bot.constant import IP_TOKEN
 
 LOGGER = logging.getLogger("calendar_bot")
 
 
 def refresh_token():
-    if IP_TOKEN is not None:
-        my_token = IP_TOKEN
-    else:
-        my_token = generate_token()
-        set_value("token", my_token)
+    my_token = generate_token()
+    set_value("token", my_token)
     return my_token
 
 

@@ -7,7 +7,7 @@ import datetime
 import requests
 import json
 from calendar_bot.constant import API_BO, HEROKU_SERVER_ID, \
-    PRIVATE_KEY_PATH, IP_TOKEN
+    PRIVATE_KEY_PATH
 
 
 def create_tmp_token(key_path, server_id):

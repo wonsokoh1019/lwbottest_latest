@@ -16,13 +16,12 @@ ABSDIR_OF_PARENT = os.path.dirname(ABSDIR_OF_SELF)
 
 SERVICE_CONSUMER_KEY = None
 HEROKU_SERVER_ID = SERVER_ID
-IP_TOKEN = TOKEN
 PRIVATE_KEY_PATH = ABSDIR_OF_PARENT + "/key/" + PRIVATE_KEY_NAME
 
 # domain
-STORAGE_DOMAIN = "alpha-storage.worksmobile.com"
-AUTH_DOMAIN = "alpha-auth.worksmobile.com"
-DEVELOP_API_DOMAIN = "alpha-apis.worksmobile.com"
+STORAGE_DOMAIN = "storage.worksmobile.com"
+AUTH_DOMAIN = "auth.worksmobile.com"
+DEVELOP_API_DOMAIN = "apis.worksmobile.com"
 
 # RICH_MENUS
 RICH_MENUS = {
