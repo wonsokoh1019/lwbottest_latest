@@ -1,5 +1,12 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Initialize the data structure.
+"""
+
+__all__ = ['create_calendar_table', 'create_init_status_table',
+           'create_process_status_table', 'init_db']
+
 import sys
 import json
 import psycopg2
@@ -9,8 +16,20 @@ sys.path.append('./')
 from calendar_bot.constant import DB_CONFIG
 
 
-# create calendar table
 def create_calendar_table():
+    """
+    create calendar table.
+    Save the user's check-in and check-out schedule information.
+
+    schedule_id: Schedule id, The bot will create a daily schedule for each
+                 user who sign in and out.
+    account: user account id.
+    cur_date: current date by local time.
+    begin_time: schedule begin time.
+    end_time: schedule end time.
+    create_time：record creation time.
+    """
+
     create_sql = '''
                 CREATE TABLE IF NOT EXISTS bot_calendar_record( 
                  schedule_id  varchar(128)      NOT NULL, 
@@ -36,8 +55,16 @@ def create_calendar_table():
             except DuplicateTable:
                 pass
 
-# create init status table
-def create_init_status():
+
+def create_init_status_table():
+    """
+    create init status table, Save system initialization information(register bot ,
+        register rich menu, create calender).
+
+    action：Initialized item （bot no, rich menu, calender id, ...）,
+    extra: Initialized data or status,
+    create_time: record creation time
+    """
     create_sql = ''' 
                 CREATE TABLE IF NOT EXISTS system_init_status( 
                  action       varchar(64)   NOT NULL, 
@@ -53,8 +80,30 @@ def create_init_status():
         with conn.cursor() as cur:
             cur.execute(create_sql)
 
-# create status tables
+
 def create_process_status_table():
+    """
+    create status tables. Save user's status information.
+    m_status: Is a enum type value('wait_in', 'in_done', 'wait_out', 'out_done')，
+        wait_in: Waiting for the user to enter the check-in time status.
+        in_done: User input check-in time completed.
+        wait_out: Waiting for the user to enter the check-out time status.
+        out_done: User input check-out time completed.
+
+    m_process: Is a enum type value('sign_in_done', 'sign_out_done')
+        sign_in_done： Check-in operation completed。
+        sign_out_done： Check-out operation completed。
+
+    If the type already exists, the duplicateobject exception will be thrown.
+
+    bot_process_status
+        account: user account id,
+        cur_date: current date by local time,
+        status：is m_status value,
+        process: is m_process value,
+        create_time: record creation time
+
+    """
     status_type_sql = '''
                         CREATE TYPE m_status AS  
                             ENUM('none', 'wait_in', 'in_done', 
@@ -91,10 +140,14 @@ def create_process_status_table():
             except DuplicateTable:
                 pass
 
-def main():
+def init_db():
+    """
+    Initialize the data structure.
+    table list:
+        bot_calendar_record
+        system_init_status
+        bot_process_status
+    """
     create_calendar_table()
-    create_init_status()
+    create_init_status_table()
     create_process_status_table()
-
-if __name__ == "__main__":
-    main()

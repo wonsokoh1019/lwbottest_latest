@@ -3,24 +3,23 @@
 import os
 
 # account
-ADMIN_ACCOUNT = "admin@krbot.com"
-DOMAIN_ID = 18644
+ADMIN_ACCOUNT = "admin@xxx.com"
+DOMAIN_ID = 18xx4
 
 # api
-API_ID = "kr1EHAIjvfJVz"
-CONSUMER_KEY = "To8SnC7sLIAv8GjqXZhO"
+API_ID = "kr1EHxxxxfJVz"
+SERVER_CONSUMER_KEY = "To8SnC7sxxxxxjqXZhO"
 
 TOKEN = None
-SERVER_ID = "96460cc1e778402dae5bfe35fa97ce76"
-PRIVATE_KEY_NAME = "private_20191017164308.key"
+SERVER_ID = "96460cc1e778402xxxxxfe35fa97ce76"
+SECRET_KEY_NAME = "private_201xxxxx164308.key"
 
 # LOCAL ADDRESS
-LOCAL_ADDRESS = "https://10.105.180.133:8080/"
+LOCAL_ADDRESS = "https://[Heroku app name].herokuapp.com/"
 
 # DB config
-DB_HOST = "10.106.151.241"
+DB_HOST = "ec2-xxx-xxx-xxx-xxx.compute-1.amazonaws.com"
+DB_NAME = "x3mdxxxxsg5nx"
+DB_USER = "xsozxxxxvksikx"
 DB_PORT = "5432"
-DB_NAME = "dbwyc"
-DB_USER = "dbtest"
-DB_PASSWORD = "123456"
-DB_SSLMODE = "prefer"
+DB_PASSWORD = "xxxxxb3ff80c85d331da880f4b3e0xxxxxxxxxxxd552d64d128317653ce0xxxx"

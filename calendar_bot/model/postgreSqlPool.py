@@ -1,5 +1,9 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Connection pool for database
+[reference](https://cito.github.io/DBUtils/UsersGuide.html#pooleddb)
+"""
 
 import psycopg2
 import psycopg2.extras as extras
@@ -42,17 +46,13 @@ class PostGreSql:
         self._cursor.close()
 
     def __enter__(self):
-        # Code to start a new transaction
         return self.cursor()
 
     def __exit__(self, type, value, tb):
         if tb is None:
-            # No exception, so commit
             self.commit()
         else:
-            # Exception occurred, so rollback.
             self.rollback()
-            # return False
         self.close()
 
     @staticmethod

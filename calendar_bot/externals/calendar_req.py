@@ -1,5 +1,12 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Provides calendar API related functions
+"""
+
+__all__ = ['make_icalendar_data', 'create_calendar', 'create_schedule',
+           'modify_schedule', 'init_calendar']
+
 import io
 import logging
 import json
@@ -25,6 +32,11 @@ def create_headers():
 
 
 def make_icalendar_data(uid, summary, current, end, begin, account_id, create_flag=False):
+    """
+    Generate iCalendar data format message body.
+    [reference](https://developers.worksmobile.com/jp/document/1007011?lang=en)
+    """
+
     cal = Calendar()
     cal.add('PRODID', 'Works sample bot Calendar')
     cal.add('VERSION', '2.0')
@@ -63,7 +75,11 @@ def make_icalendar_data(uid, summary, current, end, begin, account_id, create_fl
 
 
 def create_calendar():
-
+    """
+    create calender.
+    [reference](https://developers.worksmobile.com/kr/document/100702701?lang=ko)
+    :return: calendar id.
+    """
     body = {
         "name": "Attendance management bot",
         "description": "Attendance management bot",
@@ -96,6 +112,12 @@ def create_calendar():
 
 
 def create_schedule(current, end, begin, account_id):
+    """
+    create schedule.
+    [reference](https://developers.worksmobile.com/kr/document/100702703?lang=ko)
+    :return: schedule id.
+    """
+
     uid = str(uuid.uuid4()) + account_id
     schedule_data = make_icalendar_data(uid, "Clock-in time", current,
                                         end, begin, account_id, True)
@@ -143,6 +165,11 @@ def create_schedule(current, end, begin, account_id):
 
 
 def modify_schedule(calendar_uid, current, end, begin, account_id):
+    """
+    modify schedule.
+    [reference](https://developers.worksmobile.com/kr/document/100702704?lang=ko)
+    :return: schedule id.
+    """
 
     calendar_data = make_icalendar_data(calendar_uid, "Working hours",
                                         current, end, begin, account_id)
@@ -179,6 +206,12 @@ def modify_schedule(calendar_uid, current, end, begin, account_id):
 
 
 def init_calendar():
+    """
+    init calendar.
+    The calendar initialization function is called to generate
+    the calendar id when the system starts.
+    :return: calendar id
+    """
     calendar_id = create_calendar()
     if calendar_id is None:
         raise Exception("init calendar failed.")

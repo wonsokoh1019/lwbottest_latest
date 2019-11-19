@@ -10,19 +10,17 @@ from conf.config import *
 # Constants and global variables
 # ---------------------------------------------------------------------
 
-# root path
+# ROOT PATH
 ABSDIR_OF_SELF = os.path.dirname(os.path.abspath(__file__))
 ABSDIR_OF_PARENT = os.path.dirname(ABSDIR_OF_SELF)
 
-SERVICE_CONSUMER_KEY = None
 HEROKU_SERVER_ID = SERVER_ID
-IP_TOKEN = TOKEN
-PRIVATE_KEY_PATH = ABSDIR_OF_PARENT + "/key/" + PRIVATE_KEY_NAME
+PRIVATE_KEY_PATH = ABSDIR_OF_PARENT + "/key/" + SECRET_KEY_NAME
 
-# domain
-STORAGE_DOMAIN = "alpha-storage.worksmobile.com"
-AUTH_DOMAIN = "alpha-auth.worksmobile.com"
-DEVELOP_API_DOMAIN = "alpha-apis.worksmobile.com"
+# DOMAIN
+STORAGE_DOMAIN = "storage.worksmobile.com"
+AUTH_DOMAIN = "auth.worksmobile.com"
+DEVELOP_API_DOMAIN = "apis.worksmobile.com"
 
 # RICH_MENUS
 RICH_MENUS = {
@@ -40,7 +38,7 @@ IMAGE_CAROUSEL = {
                     ]
                 }
 
-# API
+# API ADDRESS
 API_BO = {
             "headers": {
                 "content-type": "application/json",
@@ -86,21 +84,21 @@ API_BO = {
                           "%3Agrant-type%3Ajwt-bearer&assertion="
         }
 
+# OPEN API
 OPEN_API = {
         "_info": "nwetest.com",
         "apiId": API_ID,
-        "consumerKey": CONSUMER_KEY,
-        "service_consumerKey": SERVICE_CONSUMER_KEY
+        "consumerKey": SERVER_CONSUMER_KEY
     }
 
-# DB
+# DB CONFIG
 DB_CONFIG = {
     "host": DB_HOST,
     "port": DB_PORT,
     "dbname": DB_NAME,
     "user": DB_USER,
     "password": DB_PASSWORD,
-    "sslmode": DB_SSLMODE
+    "sslmode": "prefer"
 }
 
 # FILE SYSTEM

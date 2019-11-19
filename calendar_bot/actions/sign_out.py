@@ -1,5 +1,11 @@
 # !/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Handle the user's check-out
+"""
+
+__all__ = ['sign_out_message', 'sign_out_content', 'sign_out']
+
 import tornado.web
 import logging
 from calendar_bot.model.data import make_i18n_content_texts, make_button
@@ -12,6 +18,10 @@ LOGGER = logging.getLogger("calendar_bot")
 
 
 def sign_out_message():
+    """
+    generate check-out message
+    :return: button type message content
+    """
     actions = create_button_actions("direct_sign_out", "manual_sign_out")
     return make_button("Please select the clock-out time entry method.",
                        actions)
@@ -19,6 +29,12 @@ def sign_out_message():
 
 @tornado.gen.coroutine
 def sign_out_content(account_id, current_date):
+    """
+    Update user status and generate check-out message.
+    :param account_id: user account id
+    :param current_date: current date by local time.
+    :return: button type message content
+    """
 
     content = get_status_by_user(account_id, current_date)
     process = None
@@ -36,6 +52,14 @@ def sign_out_content(account_id, current_date):
 
 @tornado.gen.coroutine
 def sign_out(account_id, current_date, _, __):
+    """
+    Handle the user's check-out.
+    :param account_id: user account id.
+    :param current_date: current date by local time.
+    :param _: no use
+    :param __: no use
+    """
+
     content = yield sign_out_content(account_id, current_date)
 
     yield push_message(account_id, content)

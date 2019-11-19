@@ -1,11 +1,27 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+system_init_status table's CRUD operation.
+save the system Initialize status。
+Check also: scripts/initDB.py
+"""
+
+__all__ = ['insert_init_status', 'update_init_status',
+           'get_init_status', 'delete_init_status']
+
 import logging
 from calendar_bot.model.postgreSqlPool import PostGreSql
 from psycopg2.errors import DuplicateTable
 
 
 def insert_init_status(action, extra):
+    """
+    Inserts the initialization status of an item after initialization.
+    :param action: Initialized item
+    :param extra: Initialized data or status
+    :return: no
+    """
+
     insert_sql = "INSERT INTO system_init_status(action, extra) " \
                  "VALUES('%s', '%s') ON CONFLICT(action) " \
                  "DO UPDATE SET extra='%s', update_time=now()" % \
@@ -17,6 +33,13 @@ def insert_init_status(action, extra):
 
 
 def update_init_status(action, extra):
+    """
+    Update the initialization status of an item after initialization.
+    :param action: Initialized item
+    :param extra: Initialized data or status
+    :return: no
+    """
+
     update_sql = "UPDATE system_init_status SET update_time=now()," \
                  "extra='%s' " \
                  "WHERE action='%s'" % (extra, action)
@@ -27,6 +50,12 @@ def update_init_status(action, extra):
 
 
 def get_init_status(action):
+    """
+    Get an item initialized data or status.
+    :param action: item
+    :return: initialized data or status
+    """
+
     select_sql = "SELECT extra " \
                  "FROM system_init_status WHERE action='%s'" % (action,)
 
@@ -41,6 +70,12 @@ def get_init_status(action):
 
 
 def delete_init_status(action):
+    """
+    delete an item initialized data or status.
+    :param action: item
+    :return: no
+    """
+
     select_sql = "DELETE FROM system_init_status WHERE action='%s'" % (action,)
 
     post_gre = PostGreSql()

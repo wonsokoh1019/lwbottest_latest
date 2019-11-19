@@ -1,5 +1,11 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Deal confirm check-in
+"""
+
+__all__ = ['deal_confirm_in' ,'confirm_in']
+
 import tornado.gen
 import asyncio
 import time
@@ -23,6 +29,15 @@ LOGGER = logging.getLogger("calendar_bot")
 
 @tornado.gen.coroutine
 def deal_confirm_in(account_id, create_time, callback):
+    """
+    will be linked with the calendar internally, Check in time of registered user.
+    Check also: calendar_bot/externals/calendar_req.py
+    :param account_id: user account id.
+    :param create_time: current date by local time.
+    :param callback: The message content of the callback,
+        include the user's check-in time
+    :return: Prompt message of successful check in.
+    """
     pos = callback.find("time=")
     str_time = callback[pos+5:]
     user_time = int(str_time)
@@ -47,6 +62,16 @@ def deal_confirm_in(account_id, create_time, callback):
 
 @tornado.gen.coroutine
 def confirm_in(account_id, current_date, create_time, callback):
+    """
+    This function is triggered when the user clicks confirm check-in.
+    Update user's input reminder status, progress.
+    :param account_id: user account id.
+    :param current_date: current date by local time.
+    :param create_time: Time the request arrived at the server.
+    :param callback: User triggered callback.
+    :return: None
+    """
+
     content = yield deal_confirm_in(account_id, create_time, callback)
     yield push_message(account_id, content)
 

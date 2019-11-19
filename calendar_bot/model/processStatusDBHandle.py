@@ -1,5 +1,14 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+bot_process_status table's CRUD operation.
+save the user context.
+Check also: scripts/initDB.py
+"""
+
+__all__ = ['insert_replace_status_by_user_date', 'set_status_by_user_date',
+           'get_status_by_user', 'delete_status_by_user_date',
+           'clean_status_by_user']
 
 import logging
 from calendar_bot.model.postgreSqlPool import PostGreSql
@@ -9,6 +18,15 @@ LOGGER = logging.getLogger("calendar_bot")
 
 
 def insert_replace_status_by_user_date(account, date, status, process=None):
+    """
+    insert or update user's status.
+    :param account: user account
+    :param date: current date by local time.
+    :param status: user text input status.
+    :param process: processing progress.
+    :return: Return false when status is None Else, Return None
+    """
+
     if status is None:
         return False
 
@@ -31,6 +49,14 @@ def insert_replace_status_by_user_date(account, date, status, process=None):
 
 
 def set_status_by_user_date(account, date, status=None, process=None):
+    """
+    update user's status.
+    :param account: user account
+    :param date: current date by local time.
+    :param status: user text input status.
+    :param process: processing progress.
+    :return: no
+    """
 
     condition = "WHERE account='%s' and cur_date='%s'" % (account, date)
 
@@ -48,6 +74,12 @@ def set_status_by_user_date(account, date, status=None, process=None):
 
 
 def get_status_by_user(account, date):
+    """
+    select user's status.
+    :param account: user account
+    :param date: current date by local time.
+    :return: no
+    """
 
     select_sql = "SELECT status, process " \
                  "FROM bot_process_status " \
@@ -66,6 +98,13 @@ def get_status_by_user(account, date):
 
 
 def delete_status_by_user_date(account, date):
+    """
+    delete user's status.
+    :param account: user account
+    :param date: current date by local time.
+    :return: no
+    """
+
     delete_status_sql = "UPDATE bot_process_status SET status=NULL, " \
                         "update_time=now() " \
                         "WHERE account='%s' and cur_date='%s'" % \
@@ -77,6 +116,13 @@ def delete_status_by_user_date(account, date):
 
 
 def clean_status_by_user(account, date):
+    """
+    delete a item.
+    :param account: user account
+    :param date: current date by local time.
+    :return: no
+    """
+
     delete_sql = "DELETE FROM bot_process_status " \
                  "WHERE account='%s' and cur_date='%s' " % (account, date)
 

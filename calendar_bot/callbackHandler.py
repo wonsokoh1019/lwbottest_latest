@@ -1,8 +1,11 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 """
-internal hello
+Process requests of users
 """
+
+__all__ = ['CallbackHandler', 'post']
+
 import json
 import logging
 import tornado.web
@@ -13,13 +16,17 @@ LOGGER = logging.getLogger("calendar_bot")
 
 class CallbackHandler(tornado.web.RequestHandler):
     """
-    /internal/hello
+    Process business requests of users.
+
+    tornado.web.RequestHandler base class for HTTP request handlers.
+    [reference](https://www.tornadoweb.org/en/stable/web.html)
     """
 
     @tornado.gen.coroutine
     def post(self):
         """
-        support post
+        Implement the handle to corresponding HTTP method.
+        Check also: calendar_bot/router.py
         """
 
         LOGGER.info("request para path:%s", self.request.uri)
