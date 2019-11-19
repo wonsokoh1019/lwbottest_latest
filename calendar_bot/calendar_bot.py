@@ -86,7 +86,7 @@ def check_init_bot():
     Initialize bot no, check if the bot is initialized.
     If this function gets an exception, it is probably like script/registerBot.py.
     This is not executed or the execution failed.
-    ref: https://developers.worksmobile.com/jp/document/3005001?lang=en
+    [reference](https://developers.worksmobile.com/jp/document/3005001?lang=en)
     """
     extra = get_init_status("bot_no")
     if extra is None:
@@ -97,7 +97,7 @@ def check_init_bot():
 def init_rich_menu_first():
     """
     Initialize rich menu API. Check also: calendar_bot/externals/richmenu.py
-    ref: https://developers.worksmobile.com/jp/document/1005040?lang=en
+    [reference](https://developers.worksmobile.com/jp/document/1005040?lang=en)
     """
     rich_menu_id = get_init_status("rich_menu")
 
@@ -127,13 +127,16 @@ def start_calendar_bot():
     the calendar_bot launch code
 
     tornado.httpserver a non-blocking, single-threaded HTTP server
-    ref: https://www.tornadoweb.org/en/stable/httpserver.html
+    [reference](https://www.tornadoweb.org/en/stable/httpserver.html)
 
     tornado.routing flexible routing implementation.
-    ref: https://www.tornadoweb.org/en/stable/routing.html
+    [reference](https://www.tornadoweb.org/en/stable/routing.html)
 
     If you use the event loop that comes with tornado, many third-party
     packages based on asyncio may not be used, such as aioredis.
+
+    Message bot API overview.
+    [reference](https://developers.worksmobile.com/jp/document/3005001?lang=en)
     """
 
     server = tornado.httpserver.HTTPServer(calendar_bot.router.getRouter())

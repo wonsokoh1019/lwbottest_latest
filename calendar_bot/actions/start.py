@@ -1,5 +1,11 @@
 # !/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Start using robots
+"""
+
+__all__ = ['image_introduce', 'sign', 'start']
+
 import tornado.web
 import logging
 from calendar_bot.model.data import i18n_text, make_text, make_i18n_image_url, \
@@ -14,6 +20,13 @@ LOGGER = logging.getLogger("calendar_bot")
 
 
 def image_introduce():
+    """
+    This function constructs three image carousels for self introduction.
+    Check also: calendar_bot/model/data.py
+    [reference](https://developers.worksmobile.com/kr/document/100500809?lang=en)
+    :return: image carousels type message content.
+    """
+
     action1 = make_postback_action("a",
                                    display_text="Timeclock can be recorded "
                                                 "easily just by clicking buttons",
@@ -49,6 +62,12 @@ def image_introduce():
 
 @tornado.gen.coroutine
 def sign(account_id):
+    """
+    Set up rich menu for chat with users.
+    Check also: calendar_bot/model/data.py
+    [reference](https://developers.worksmobile.com/jp/document/1005040?lang=en)
+    :param account_id: user account id
+    """
     if account_id is None:
         LOGGER.error("account_id is None.")
         return False
@@ -74,6 +93,12 @@ def start_content(account_id):
 
 @tornado.gen.coroutine
 def start(account_id, _, __, ___):
+    """
+    Handle the user start using robots.
+    Send the robot's self introduction information,
+    and the chat room is bound with rich menu.
+    :param account_id: user account id.
+    """
     contents = yield start_content(account_id)
 
     yield push_messages(account_id, contents)

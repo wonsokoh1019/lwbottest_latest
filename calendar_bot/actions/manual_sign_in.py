@@ -1,5 +1,11 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Handle the user's manual check-in
+"""
+
+__all__ = ['manual_sign_in_message', 'manual_sign_in_content', 'manual_sign_in']
+
 import tornado.web
 import asyncio
 import logging
@@ -13,6 +19,11 @@ LOGGER = logging.getLogger("calendar_bot")
 
 
 def manual_sign_in_message():
+    """
+    generate manual check-in message
+    :return: message content list
+    """
+
     text1 = make_text("Please manually enter the clock-in time.")
 
     text2 = prompt_input()
@@ -22,6 +33,13 @@ def manual_sign_in_message():
 
 @tornado.gen.coroutine
 def manual_sign_in_content(account_id, current_date):
+    """
+    Update user status and generate manual check-in message.
+    :param account_id: user account id
+    :param current_date: current date by local time.
+    :return: message content list
+    """
+
     yield asyncio.sleep(1)
 
     content = get_status_by_user(account_id, current_date)
@@ -36,6 +54,14 @@ def manual_sign_in_content(account_id, current_date):
 
 @tornado.gen.coroutine
 def manual_sign_in(account_id, current_date, _, __):
+    """
+    Handle the user's manual check-in.
+    :param account_id: user account id.
+    :param current_date: current date by local time.
+    :param _: no use
+    :param __: no use
+    """
+
     contents = yield manual_sign_in_content(account_id, current_date)
 
     yield push_messages(account_id, contents)

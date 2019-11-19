@@ -1,5 +1,11 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+send message to user
+"""
+
+__all__ = ['push_message', 'push_messages']
+
 import io
 import logging
 import json
@@ -14,6 +20,14 @@ LOGGER = logging.getLogger("calendar_bot")
 
 @tornado.gen.coroutine
 def push_message(account_id, content, header=None):
+    """
+    Send message to user. the package is the following JSON structure.
+    [reference](https://developers.worksmobile.com/jp/document/1005008?lang=en)
+
+    :param account_id: user account id
+    :param content: message content
+    :param header: http header
+    """
 
     if content is None:
         LOGGER.info("content is None.")
@@ -41,7 +55,11 @@ def push_message(account_id, content, header=None):
 
 @tornado.gen.coroutine
 def push_messages(account_id, contents):
-
+    """
+    Send multiple messages to users
+    :param account_id: user account id
+    :param contents: message content list
+    """
     if contents is None:
         LOGGER.info("contents is None.")
         raise HTTPError(500, "internal error. contents is None.")

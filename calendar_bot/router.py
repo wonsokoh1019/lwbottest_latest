@@ -14,11 +14,11 @@ from calendar_bot.constant import FILE_SYSTEM
 def getRouter():
     """
     get the app with route info
-    ref:https://www.tornadoweb.org/en/stable/web.html
+    [reference](https://www.tornadoweb.org/en/stable/web.html)
 
     StaticFileHandler is a simple handler that can serve static content
     from a directory.
-    ref: https://www.tornadoweb.org/en/stable/web.html#tornado.web.StaticFileHandler
+    [reference](https://www.tornadoweb.org/en/stable/web.html#tornado.web.StaticFileHandler)
     """
 
     return tornado.web.Application([

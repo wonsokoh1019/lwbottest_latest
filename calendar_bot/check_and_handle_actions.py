@@ -1,5 +1,11 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Factory used to create handler and execute handler.
+"""
+
+__all__ = ['CheckAndHandleActions', 'execute']
+
 import time
 import logging
 import tornado.gen
@@ -23,6 +29,12 @@ LOGGER = logging.getLogger("calendar_bot")
 cmd_message = ["start", "clean"]
 
 def is_message_time(message):
+    """
+    Checks if the message should include time information.
+    :param message:  User's callback message.
+    :return: time of user sign in/out.
+    """
+
     if message is None or message in cmd_message \
             or message.find("confirm_out") != -1 \
             or message.find("confirm_in") != -1:
@@ -31,6 +43,10 @@ def is_message_time(message):
 
 
 class CheckAndHandleActions:
+    """
+    Factory used to create handler and execute handler.
+    """
+
     __text = ""
     __post_back = ""
     __account_id = None
@@ -48,6 +64,11 @@ class CheckAndHandleActions:
 
     @tornado.gen.coroutine
     def execute(self, body):
+        """
+        Verify the body parameter and execute handler.
+        Please refer to the reference link of the function.
+        [reference](https://developers.worksmobile.com/jp/document/100500901?lang=en)
+        """
 
         if body is None or "source" not in body or "accountId" \
                 not in body["source"]:

@@ -1,5 +1,10 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+HTTP method providing authentication
+"""
+
+__all__ = ['auth_post', 'auth_get', 'auth_del', 'auth_del']
 
 import requests
 import logging
@@ -32,6 +37,13 @@ def replace_url_bot_no(url):
 
 def auth_post(url, data=None,  headers=None, files=None,
               params=None, json=None, refresh_token_flag=False):
+    """
+    Encapsulates the post method of adding token to headers.
+    Check also: calendar_bot/common/token.py
+    parameters and return values, refer to:
+    [reference](https://3.python-requests.org/user/advanced/#request-and-response-objects)
+    """
+
     if headers is not None and not refresh_token_flag:
         my_token = get_token()
         if my_token is None:
@@ -58,6 +70,13 @@ def auth_post(url, data=None,  headers=None, files=None,
 
 
 def auth_get(url, headers=None, refresh_token_flag=False):
+    """
+    Encapsulates the get method of adding token to headers.
+    Check also: calendar_bot/common/token.py
+    parameters and return values, refer to:
+    [reference](https://3.python-requests.org/user/advanced/#request-and-response-objects)
+    """
+
     if headers is not None and not refresh_token_flag:
         my_token = get_token()
         if my_token is None:
@@ -81,6 +100,13 @@ def auth_get(url, headers=None, refresh_token_flag=False):
 
 
 def auth_del(url, headers=None, refresh_token_flag=False):
+    """
+    Encapsulates the delete method of adding token to headers.
+    Check also: calendar_bot/common/token.py
+    parameters and return values, refer to:
+    [reference](https://3.python-requests.org/user/advanced/#request-and-response-objects)
+    """
+
     if headers is not None and not refresh_token_flag:
         my_token = get_token()
         if my_token is None:
@@ -105,6 +131,12 @@ def auth_del(url, headers=None, refresh_token_flag=False):
 
 def auth_put(url, data=None,  headers=None, files=None,
               params=None, json=None, refresh_token_flag=False):
+    """
+    Encapsulates the put method of adding token to headers.
+    Check also: calendar_bot/common/token.py
+    parameters and return values, refer to:
+    [reference](https://3.python-requests.org/user/advanced/#request-and-response-objects)
+    """
     if headers is not None and not refresh_token_flag:
         my_token = get_token()
         if my_token is None:

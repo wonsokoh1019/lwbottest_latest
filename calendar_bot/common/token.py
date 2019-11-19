@@ -1,5 +1,10 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Generate token according to JWT protocol
+"""
+
+__all__ = ['create_tmp_token', 'generate_token']
 
 import python_jwt as jwt
 import jwcrypto.jwk as jwk
@@ -11,6 +16,16 @@ from calendar_bot.constant import API_BO, HEROKU_SERVER_ID, \
 
 
 def create_tmp_token(key_path, server_id):
+    """
+    This function use JWT protocol to creates a temporary token
+    for user authentication.
+
+    Focus on the "Server Token (ID Registration Style)" section of
+    the following documents.
+
+    [reference](https://developers.worksmobile.com/jp/document/1002002?lang=en)
+    """
+
     with open(key_path, "rb") as _file:
         key = _file.read()
         private_key = jwk.JWK.from_pem(key)
@@ -22,6 +37,14 @@ def create_tmp_token(key_path, server_id):
 
 
 def generate_token():
+    """
+    Using JWT protocol to create token.
+    Focus on the "Server Token (ID Registration Style)" section of
+    the following documents.
+
+    [reference](https://developers.worksmobile.com/jp/document/1002002?lang=en)
+    """
+
     tmp_token = create_tmp_token(PRIVATE_KEY_PATH, HEROKU_SERVER_ID)
     if tmp_token is None:
         raise Exception("generate tmp token failed.")

@@ -1,5 +1,12 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
+"""
+rich menu's api
+"""
+
+__all__ = ['upload_content', 'make_add_rich_menu_body', 'set_rich_menu_image',
+           'set_user_specific_rich_menu', 'get_rich_menus',
+           'cancel_user_specific_rich_menu', 'init_rich_menu']
 
 import io
 import logging
@@ -15,6 +22,12 @@ LOGGER = logging.getLogger("calendar_bot")
 
 
 def upload_content(file_path):
+    """
+    Upload rich menu background picture.
+    [reference](https://developers.worksmobile.com/kr/document/1005025?lang=en)
+    :param file_path: resource local path
+    :return: resource id
+    """
     headers = {
         "consumerKey": OPEN_API["consumerKey"],
         "x-works-apiid": OPEN_API["apiId"]
@@ -40,6 +53,12 @@ def upload_content(file_path):
 
 
 def make_add_rich_menu_body(rich_menu_name):
+    """
+    add rich menu body
+    [reference](https://developers.worksmobile.com/kr/document/100504001?lang=en)
+    :param rich_menu_name: rich menu name
+    :return: rich menu id
+    """
     size = make_size(2500, 1686)
 
     bound0 = make_bound(0, 0, 1250, 1286)
@@ -88,7 +107,13 @@ def make_add_rich_menu_body(rich_menu_name):
 
 
 def set_rich_menu_image(resource_id, rich_menu_id):
-
+    """
+    Set a rich menu image.
+    [reference](https://developers.worksmobile.com/kr/document/100504002?lang=en)
+    :param resource_id: resource id
+    :param rich_menu_id: rich menu id
+    :return:
+    """
     body = {"resourceId": resource_id}
 
     headers = API_BO["headers"]
@@ -109,6 +134,12 @@ def set_rich_menu_image(resource_id, rich_menu_id):
 
 
 def set_user_specific_rich_menu(rich_menu_id, account_id):
+    """
+    Set a user-specific rich menu.
+    [reference](https://developers.worksmobile.com/kr/document/100504010?lang=en)
+    :param rich_menu_id: rich menu id
+    :param account_id: user account id
+    """
     headers = API_BO["headers"]
     headers["consumerKey"] = OPEN_API["consumerKey"]
     url = API_BO["rich_menu_url"] + "/" \
@@ -126,6 +157,11 @@ def set_user_specific_rich_menu(rich_menu_id, account_id):
 
 
 def get_rich_menus():
+    """
+    Get rich menus
+    [reference](https://developers.worksmobile.com/kr/document/100504004?lang=en)
+    :return: rich menu list
+    """
     headers = API_BO["headers"]
     headers["consumerKey"] = OPEN_API["consumerKey"]
     url = API_BO["rich_menu_url"]
@@ -148,7 +184,12 @@ def get_rich_menus():
     return None
 
 
-def canncel_user_specific_rich_menu(account_id):
+def cancel_user_specific_rich_menu(account_id):
+    """
+    Cancel a user-specific rich menu
+    [reference](https://developers.worksmobile.com/kr/document/100504012?lang=en)
+    :param account_id: user account id
+    """
     headers = API_BO["headers"]
     headers["consumerKey"] = OPEN_API["consumerKey"]
     url = API_BO["rich_menu_url"] + "/account/" + account_id
@@ -164,6 +205,11 @@ def canncel_user_specific_rich_menu(account_id):
 
 
 def init_rich_menu():
+    """
+    init rich menu.
+    [reference](https://developers.worksmobile.com/kr/document/1005040?lang=en)
+    :return: rich menu id
+    """
     rich_menus = get_rich_menus()
     if rich_menus is not None:
         for menu in rich_menus:
