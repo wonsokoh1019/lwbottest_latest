@@ -17,6 +17,7 @@ def _init():
 def set_value(key, value):
     """
     Sets a value into the global variable cache.
+
     :param key: key
     :param value: value
     :return: no
@@ -27,6 +28,7 @@ def set_value(key, value):
 def get_value(key, def_value=None):
     """
     Gets a value from the global variable cache.
+
     :param key: key
     :param def_value: default value
     :return: value, If the key does not exist, the default value.

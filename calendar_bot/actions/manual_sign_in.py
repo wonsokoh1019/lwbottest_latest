@@ -21,6 +21,7 @@ LOGGER = logging.getLogger("calendar_bot")
 def manual_sign_in_message():
     """
     generate manual check-in message
+
     :return: message content list
     """
 
@@ -35,6 +36,7 @@ def manual_sign_in_message():
 def manual_sign_in_content(account_id, current_date):
     """
     Update user status and generate manual check-in message.
+
     :param account_id: user account id
     :param current_date: current date by local time.
     :return: message content list
@@ -56,6 +58,7 @@ def manual_sign_in_content(account_id, current_date):
 def manual_sign_in(account_id, current_date, _, __):
     """
     Handle the user's manual check-in.
+
     :param account_id: user account id.
     :param current_date: current date by local time.
     :param _: no use

@@ -24,20 +24,9 @@
    python main.py --port=8080 --daemonize True
 
 # document
-A document is published in https://pages.oss.navercorp.com/works-mobile/oneapp_samplebot/
-
-## how to edit
-Just edit `doc/*.md` files
-
-## test
 ```
-pydoc-markdown > docs/codes.md
-mkdocs serve -a 0.0.0.0:8000
-```
-http://localhost:8000/
-
-
-## publish
-```
-mkdocs gh-deploy
+cd docs/
+sphinx-apidoc ../calendar_bot/ -o . -f
+make markdown
+ls _build/markdown/
 ```

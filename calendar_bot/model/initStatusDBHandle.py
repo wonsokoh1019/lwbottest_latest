@@ -17,6 +17,7 @@ from psycopg2.errors import DuplicateTable
 def insert_init_status(action, extra):
     """
     Inserts the initialization status of an item after initialization.
+
     :param action: Initialized item
     :param extra: Initialized data or status
     :return: no
@@ -35,6 +36,7 @@ def insert_init_status(action, extra):
 def update_init_status(action, extra):
     """
     Update the initialization status of an item after initialization.
+
     :param action: Initialized item
     :param extra: Initialized data or status
     :return: no
@@ -52,6 +54,7 @@ def update_init_status(action, extra):
 def get_init_status(action):
     """
     Get an item initialized data or status.
+
     :param action: item
     :return: initialized data or status
     """
@@ -72,6 +75,7 @@ def get_init_status(action):
 def delete_init_status(action):
     """
     delete an item initialized data or status.
+
     :param action: item
     :return: no
     """

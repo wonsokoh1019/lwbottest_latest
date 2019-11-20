@@ -22,7 +22,8 @@ def make_postback_action(data, display_text=None, label=None,
                          i18n_labels=None, i18n_display_texts=None):
     """
     make post back action.
-    [reference](https://developers.worksmobile.com/jp/document/1005050?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/1005050?lang=en
+
     :param data: post back string
     :return: actions content
     """
@@ -49,7 +50,8 @@ def make_message_action(label, post_back,
                         text=None, i18n_labels=None, i18n_texts=None):
     """
     make message action.
-    [reference](https://developers.worksmobile.com/jp/document/1005050?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/1005050?lang=en
+
     :param post_back: post back string
     :return: actions content
     """
@@ -68,7 +70,8 @@ def make_message_action(label, post_back,
 def make_url_action(label, url, i18n_labels=None):
     """
     make url action.
-    [reference](https://developers.worksmobile.com/jp/document/1005050?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/1005050?lang=en
+
     :param url: User behavior will trigger the client to request this URL.
     :return: actions content
     """
@@ -82,7 +85,8 @@ def make_url_action(label, url, i18n_labels=None):
 def make_normal_action(atype, label, i18n_labels=None):
     """
     Create camera, camera roll, location action.
-    [reference](https://developers.worksmobile.com/jp/document/1005050?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/1005050?lang=en
+
     :param atype: action's type
     :return: None
     """
@@ -106,7 +110,8 @@ def make_quick_reply_item(action,
                           i18n_image_resource_ids=None):
     """
     Create quick reply message item.
-    [reference](https://developers.worksmobile.com/jp/document/100500807?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/100500807?lang=en
+
     :param action: The user clicks the quick reply button to trigger this action.
     :return: quick reply content.
     """
@@ -126,7 +131,8 @@ def make_quick_reply_item(action,
 def make_quick_reply(replay_items):
     """
     Create quick reply message.
-    [reference](https://developers.worksmobile.com/jp/document/100500807?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/100500807?lang=en
+
     :param replay_items: Array of return object of make_quick_reply_item function.
     :return: quick reply content.
     """
@@ -136,7 +142,8 @@ def make_quick_reply(replay_items):
 def make_text(text, i18n_texts=None):
     """
     make text.
-    [reference](https://developers.worksmobile.com/jp/document/100500801?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/100500801?lang=en
+
     :return: text content.
     """
     if i18n_texts is not None:
@@ -172,7 +179,7 @@ def make_image_carousel_column(image_url=None,
 def make_image_carousel(columns):
     """
     Image Carousel:
-    [reference](https://developers.worksmobile.com/jp/document/100500809?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/100500809?lang=en
 
     Request URL
     https://apis.worksmobile.com/r/{API ID}/message/v1/bot/{botNo}/message/push
@@ -201,11 +208,11 @@ def make_area(bound, action):
 def make_add_rich_menu(name, size, areas):
     """
     add rich menu content:
-    [reference](https://developers.worksmobile.com/jp/document/1005040?lang=en)
-        You can create a rich menu for the message bot by following these steps:
-        Image uploads: using the "Upload Content" API
-        Rich menu generation: using the "Register Message Rich Menu" API
-        Rich Menu Image Settings: Use the "Message Rich Menu Image Settings" API
+    reference:https://developers.worksmobile.com/jp/document/1005040?lang=en
+    You can create a rich menu for the message bot by following these steps:
+    1. Image uploads: using the "Upload Content" API
+    2. Rich menu generation: using the "Register Message Rich Menu" API
+    3. Rich Menu Image Settings: Use the "Message Rich Menu Image Settings" API
     """
 
     return {"name": name, "size": size, "areas": areas}
@@ -218,7 +225,7 @@ def make_i18n_content_texts(language, content_text):
 def make_button(text, actions, content_texts=None):
     """
     create button message content
-    [reference](https://developers.worksmobile.com/jp/document/100500804?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/100500804?lang=en
     """
     if content_texts is not None:
         return {"type": "button_template", "contentText": text,

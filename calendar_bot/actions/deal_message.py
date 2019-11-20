@@ -27,6 +27,7 @@ def deal_user_message(account_id, current_date, create_time, message):
     Process messages entered by users,
     Different scenarios need different processing functions.
     Please see the internal implementation of the handler.
+
     :param account_id: user account id.
     :param current_date: current date by local time.
     :param create_time: Time when the user requests to arrive at the BOT server.
@@ -83,6 +84,7 @@ def deal_user_message(account_id, current_date, create_time, message):
 def deal_message(account_id, current_date, create_time, message):
     """
     Process messages manually entered by the user.
+
     :param account_id: user account id.
     :param current_date: current date by local time.
     :param create_time: Time the request arrived at the server.

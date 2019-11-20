@@ -34,7 +34,7 @@ def create_headers():
 def make_icalendar_data(uid, summary, current, end, begin, account_id, create_flag=False):
     """
     Generate iCalendar data format message body.
-    [reference](https://developers.worksmobile.com/jp/document/1007011?lang=en)
+    reference:https://developers.worksmobile.com/jp/document/1007011?lang=en
     """
 
     cal = Calendar()
@@ -77,7 +77,8 @@ def make_icalendar_data(uid, summary, current, end, begin, account_id, create_fl
 def create_calendar():
     """
     create calender.
-    [reference](https://developers.worksmobile.com/kr/document/100702701?lang=ko)
+    reference:https://developers.worksmobile.com/kr/document/100702701?lang=ko
+
     :return: calendar id.
     """
     body = {
@@ -114,7 +115,8 @@ def create_calendar():
 def create_schedule(current, end, begin, account_id):
     """
     create schedule.
-    [reference](https://developers.worksmobile.com/kr/document/100702703?lang=ko)
+    reference:https://developers.worksmobile.com/kr/document/100702703?lang=ko
+
     :return: schedule id.
     """
 
@@ -167,7 +169,8 @@ def create_schedule(current, end, begin, account_id):
 def modify_schedule(calendar_uid, current, end, begin, account_id):
     """
     modify schedule.
-    [reference](https://developers.worksmobile.com/kr/document/100702704?lang=ko)
+    reference:https://developers.worksmobile.com/kr/document/100702704?lang=ko
+
     :return: schedule id.
     """
 
@@ -210,6 +213,7 @@ def init_calendar():
     init calendar.
     The calendar initialization function is called to generate
     the calendar id when the system starts.
+
     :return: calendar id
     """
     calendar_id = create_calendar()

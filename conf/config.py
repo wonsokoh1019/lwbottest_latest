@@ -4,7 +4,7 @@ import os
 
 # account
 ADMIN_ACCOUNT = "admin@xxx.com"
-DOMAIN_ID = 18xx4
+DOMAIN_ID = 0
 
 # api
 API_ID = "kr1EHxxxxfJVz"

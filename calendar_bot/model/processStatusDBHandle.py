@@ -20,6 +20,7 @@ LOGGER = logging.getLogger("calendar_bot")
 def insert_replace_status_by_user_date(account, date, status, process=None):
     """
     insert or update user's status.
+
     :param account: user account
     :param date: current date by local time.
     :param status: user text input status.
@@ -51,6 +52,7 @@ def insert_replace_status_by_user_date(account, date, status, process=None):
 def set_status_by_user_date(account, date, status=None, process=None):
     """
     update user's status.
+
     :param account: user account
     :param date: current date by local time.
     :param status: user text input status.
@@ -76,6 +78,7 @@ def set_status_by_user_date(account, date, status=None, process=None):
 def get_status_by_user(account, date):
     """
     select user's status.
+
     :param account: user account
     :param date: current date by local time.
     :return: no
@@ -100,6 +103,7 @@ def get_status_by_user(account, date):
 def delete_status_by_user_date(account, date):
     """
     delete user's status.
+
     :param account: user account
     :param date: current date by local time.
     :return: no
@@ -118,6 +122,7 @@ def delete_status_by_user_date(account, date):
 def clean_status_by_user(account, date):
     """
     delete a item.
+
     :param account: user account
     :param date: current date by local time.
     :return: no
