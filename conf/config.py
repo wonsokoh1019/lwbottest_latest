@@ -10,7 +10,6 @@ DOMAIN_ID = 0
 API_ID = "kr1EHxxxxfJVz"
 SERVER_CONSUMER_KEY = "To8SnC7sxxxxxjqXZhO"
 
-TOKEN = None
 SERVER_ID = "96460cc1e778402xxxxxfe35fa97ce76"
 SECRET_KEY_NAME = "private_201xxxxx164308.key"
 
