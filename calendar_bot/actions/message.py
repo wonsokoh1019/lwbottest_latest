@@ -27,6 +27,7 @@ class TimeStruct:
         """
         Convert timestamp time to datetime time in a specific time zone.
         And assign it to the corresponding member variable.
+
         :param sign_time: A user time of timestamp value.
         """
 
@@ -53,7 +54,8 @@ def create_button_actions(direct_sign_callback, manual_sign_callback):
     """
     Create the message body of the button template of two buttons.
     Check also: calendar_bot/model/data.py
-    [reference](https://developers.worksmobile.com/jp/document/100500804?lang=en)
+    reference: https://developers.worksmobile.com/jp/document/100500804?lang=en
+
     :param direct_sign_callback: callback string for the first button.
     :param manual_sign_callback: callback string for the seconds button.
     """
@@ -67,7 +69,8 @@ def create_quick_replay_items(confirm_callback, previous_callback):
     """
     Building a quick reply floating window for messages.
     Check also: calendar_bot/model/data.py
-    [reference](https://developers.worksmobile.com/jp/document/100500807?lang=en)
+    reference: https://developers.worksmobile.com/jp/document/100500807?lang=en
+
     :param confirm_callback: callback string for the first button.
     :param previous_callback: callback string for the seconds button.
     :return:
@@ -86,6 +89,7 @@ def create_quick_replay_items(confirm_callback, previous_callback):
 def prompt_input():
     """
     Format to remind users to enter time.
+
     :return: text type message
     """
     return make_text(
@@ -98,6 +102,7 @@ def prompt_input():
 def number_message():
     """
     Non digital message entered.
+
     :return: text type message
     """
     text1 = make_text("You have created your leave time "
@@ -111,6 +116,7 @@ def number_message():
 def error_message():
     """
     Wrong data entered
+
     :return: text type message
     """
     text1 = make_text("Sorry, but unable to "
@@ -125,6 +131,7 @@ def error_message():
 def invalid_message():
     """
     Invalid input data reminder.
+
     :return: text type message
     """
     return make_text("I didn't understand the text. "
@@ -136,6 +143,7 @@ def invalid_message():
 def reminder_message(process):
     """
     Illegal request reminder.
+
     :param process: Current user's progress
     :return: text type message
     """

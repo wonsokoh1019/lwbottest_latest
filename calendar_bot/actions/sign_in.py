@@ -20,6 +20,7 @@ LOGGER = logging.getLogger("calendar_bot")
 def sign_in_message():
     """
     generate check-in message
+
     :return: button type message content
     """
 
@@ -33,9 +34,10 @@ def sign_in_message():
 def sign_in_content(account_id, current_date):
     """
     Update user status and generate check-in message.
+
     :param account_id: user account id
     :param current_date: current date by local time.
-    :return: button type message content
+    :retrurn: button type message content
     """
 
     content = get_status_by_user(account_id, current_date)
@@ -56,6 +58,7 @@ def sign_in_content(account_id, current_date):
 def sign_in(account_id, current_date, _, __):
     """
     Handle the user's check-in.
+
     :param account_id: user account id.
     :param current_date: current date by local time.
     :param _: no use

@@ -19,6 +19,7 @@ LOGGER = logging.getLogger("calendar_bot")
 def set_schedule_by_user(schedule_id, account, date,  begin, end):
     """
     insert schedule
+
     :param schedule_id: schedule_id
     :param account: user account
     :param date: current date by local time.
@@ -41,6 +42,7 @@ def set_schedule_by_user(schedule_id, account, date,  begin, end):
 def get_schedule_by_user(account, date):
     """
     get schedule
+
     :param account: user account
     :param date: current date by local time.
     :return: schedule id, begin time
@@ -64,6 +66,7 @@ def get_schedule_by_user(account, date):
 def modify_schedule_by_user(schedule_id, end):
     """
     update schedule's end time
+
     :param schedule_id: schedule_id
     :param end: schedule end time.
     :return: no
@@ -81,6 +84,7 @@ def modify_schedule_by_user(schedule_id, end):
 def clean_schedule_by_user(account, date):
     """
     delete a schedule
+
     :param account: user account
     :param date: current date by local time.
     :return: no

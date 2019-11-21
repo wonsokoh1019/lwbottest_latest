@@ -31,6 +31,7 @@ cmd_message = ["start", "clean"]
 def is_message_time(message):
     """
     Checks if the message should include time information.
+
     :param message:  User's callback message.
     :return: time of user sign in/out.
     """
@@ -67,7 +68,7 @@ class CheckAndHandleActions:
         """
         Verify the body parameter and execute handler.
         Please refer to the reference link of the function.
-        [reference](https://developers.worksmobile.com/jp/document/100500901?lang=en)
+        reference: https://developers.worksmobile.com/jp/document/100500901?lang=en
         """
 
         if body is None or "source" not in body or "accountId" \

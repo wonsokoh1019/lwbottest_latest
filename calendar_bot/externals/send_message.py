@@ -22,7 +22,7 @@ LOGGER = logging.getLogger("calendar_bot")
 def push_message(account_id, content, header=None):
     """
     Send message to user. the package is the following JSON structure.
-    [reference](https://developers.worksmobile.com/jp/document/1005008?lang=en)
+    reference: https://developers.worksmobile.com/jp/document/1005008?lang=en
 
     :param account_id: user account id
     :param content: message content
@@ -57,6 +57,7 @@ def push_message(account_id, content, header=None):
 def push_messages(account_id, contents):
     """
     Send multiple messages to users
+
     :param account_id: user account id
     :param contents: message content list
     """

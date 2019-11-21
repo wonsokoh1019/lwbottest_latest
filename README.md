@@ -22,3 +22,12 @@
 
 6. simple running
    python main.py --port=8080 --daemonize True
+
+# document
+```
+cd doc/
+sphinx-apidoc ../calendar_bot/ -o . -f
+make markdown
+ls _build/markdown/
+sphinx-serve
+```

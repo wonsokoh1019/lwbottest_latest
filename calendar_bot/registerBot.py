@@ -1,5 +1,5 @@
-#!/bin/env python
 # -*- coding: utf-8 -*-
+
 """
 Initialize bot no.
 """
@@ -38,7 +38,7 @@ def headers():
 def register_bot(photo_address):
     """
     Register a message bot.
-    [reference](https://developers.worksmobile.com/jp/document/1005002?lang=en)
+    reference: https://developers.worksmobile.com/jp/document/1005002?lang=en
 
     :param photo_address: Access address of user's Avatar,
         If you need to change the user image,
@@ -72,7 +72,8 @@ def register_bot(photo_address):
 def register_bot_domain(bot_no):
     """
     Register a message bot domain.
-    [reference](https://developers.worksmobile.com/jp/document/1005004?lang=en)
+    reference: https://developers.worksmobile.com/jp/document/1005004?lang=en
+
     :param bot_no: bot no
     """
     url = "https://" + DEVELOP_API_DOMAIN + "/r/" + API_ID + "/message/v1/bot/" \

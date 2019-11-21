@@ -20,6 +20,7 @@ LOGGER = logging.getLogger("calendar_bot")
 def deal_sign_in_message(sign_time, manual_flag):
     """
     Generate a message returned to the user when checking in.
+
     :param sign_time: The user's check-in time is a timestamp.
     :param manual_flag: Boolean value. True is manually enters time.
     :return: message content is a json.
@@ -68,6 +69,7 @@ def deal_sign_in(account_id, current_date, sign_time, manual_flag=False):
 def direct_sign_in(account_id, current_date, sign_time, _):
     """
     Handle the user's direct check-in.
+
     :param account_id: user account id.
     :param current_date: current date by local time.
     :param sign_time: Time when the user clicks to check-in.

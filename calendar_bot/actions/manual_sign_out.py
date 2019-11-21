@@ -21,6 +21,7 @@ LOGGER = logging.getLogger("calendar_bot")
 def manual_sign_out_message():
     """
     generate manual check-out message
+
     :return: message content list
     """
     text1 = make_text("Please manually enter the clock-out time.")
@@ -34,6 +35,7 @@ def manual_sign_out_message():
 def manual_sign_out_content(account_id, current_date):
     """
     Update user status and generate manual check-out message.
+
     :param account_id: user account id
     :param current_date: current date by local time.
     :return: message content list
@@ -53,6 +55,7 @@ def manual_sign_out_content(account_id, current_date):
 def manual_sign_out(account_id, current_date, _, __):
     """
     Handle the user's manual check-out.
+
     :param account_id: user account id.
     :param current_date: current date by local time.
     :param _: no use

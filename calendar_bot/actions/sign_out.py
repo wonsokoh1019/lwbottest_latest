@@ -20,6 +20,7 @@ LOGGER = logging.getLogger("calendar_bot")
 def sign_out_message():
     """
     generate check-out message
+
     :return: button type message content
     """
     actions = create_button_actions("direct_sign_out", "manual_sign_out")
@@ -31,6 +32,7 @@ def sign_out_message():
 def sign_out_content(account_id, current_date):
     """
     Update user status and generate check-out message.
+
     :param account_id: user account id
     :param current_date: current date by local time.
     :return: button type message content
@@ -54,6 +56,7 @@ def sign_out_content(account_id, current_date):
 def sign_out(account_id, current_date, _, __):
     """
     Handle the user's check-out.
+
     :param account_id: user account id.
     :param current_date: current date by local time.
     :param _: no use
