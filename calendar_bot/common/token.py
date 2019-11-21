@@ -23,7 +23,7 @@ def create_tmp_token(key_path, server_id):
     Focus on the "Server Token (ID Registration Style)" section of
     the following documents.
 
-    reference:https://developers.worksmobile.com/jp/document/1002002?lang=en
+    reference: https://developers.worksmobile.com/jp/document/1002002?lang=en
     """
 
     with open(key_path, "rb") as _file:
@@ -42,7 +42,7 @@ def generate_token():
     Focus on the "Server Token (ID Registration Style)" section of
     the following documents.
 
-    reference:https://developers.worksmobile.com/jp/document/1002002?lang=en
+    reference: https://developers.worksmobile.com/jp/document/1002002?lang=en
     """
 
     tmp_token = create_tmp_token(PRIVATE_KEY_PATH, HEROKU_SERVER_ID)

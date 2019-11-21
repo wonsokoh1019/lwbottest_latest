@@ -19,10 +19,10 @@ LOGGER = logging.getLogger("calendar_bot")
 def get_external_key_from_remote():
     """
     Get external key of account.
-    reference:https://developers.worksmobile.com/kr/document/1006004/v1?lang=en
+    reference: https://developers.worksmobile.com/kr/document/1006004/v1?lang=en
     If you fail to get external key,
     log in to the development console to check your configuration.
-    reference:https://auth.worksmobile.com/login/login?
+    reference: https://auth.worksmobile.com/login/login?
     accessUrl=https%3A%2F%2Fdevelopers.worksmobile.com
     %3A443%2Fconsole%2Fopenapi%2Fmain)
 

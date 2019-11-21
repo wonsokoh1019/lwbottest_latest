@@ -54,6 +54,22 @@ calendar\_bot.contextlog module
    :undoc-members:
    :show-inheritance:
 
+calendar\_bot.initDB module
+---------------------------
+
+.. automodule:: calendar_bot.initDB
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+calendar\_bot.registerBot module
+--------------------------------
+
+.. automodule:: calendar_bot.registerBot
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 calendar\_bot.router module
 ---------------------------
 

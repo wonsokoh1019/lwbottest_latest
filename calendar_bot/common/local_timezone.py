@@ -21,7 +21,7 @@ LOGGER = logging.getLogger("calendar_bot")
 def get_time_zone():
     """
     Get time zone according to administrator account.
-    reference:https://developers.worksmobile.com/kr/document/100300528?lang=en
+    reference: https://developers.worksmobile.com/kr/document/100300528?lang=en
     """
     external_key = load_external_key()
     time_zone_url = API_BO["TZone"]["time_zone_url"]
@@ -68,7 +68,7 @@ def load_time_zone():
 def local_date_time(time=None):
     """
     Time to switch UTC time to a specific time zone.
-    reference:https://docs.python.org/3/library/datetime.html
+    reference: https://docs.python.org/3/library/datetime.html
 
     :param time: Time to switch time zones
     :return: local time.

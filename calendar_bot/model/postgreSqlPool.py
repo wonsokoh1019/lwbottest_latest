@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Connection pool for database
-[reference](https://cito.github.io/DBUtils/UsersGuide.html#pooleddb)
+reference: https://cito.github.io/DBUtils/UsersGuide.html#pooleddb
 """
 
 import psycopg2
