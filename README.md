@@ -25,7 +25,7 @@
 
 # document
 ```
-cd docs/
+cd doc/
 sphinx-apidoc ../calendar_bot/ -o . -f
 make markdown
 ls _build/markdown/
