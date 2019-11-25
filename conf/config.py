@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 import os
 
+# TimeZone
+TZone = "Asia/Tokyo"
+
 # account
 ADMIN_ACCOUNT = "admin@xxx.com"
 DOMAIN_ID = 0

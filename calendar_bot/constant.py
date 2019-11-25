@@ -70,14 +70,9 @@ API_BO = {
 
             "TZone":
             {
-                "external_key_url": "https://" + DEVELOP_API_DOMAIN + "/"
+                "contacts_url": "https://" + DEVELOP_API_DOMAIN + "/"
                                     + API_ID
-                                    + "/contact/getDomainContact/v1?"
-                                      "account=" + ADMIN_ACCOUNT,
-                "time_zone_url": "https://" + DEVELOP_API_DOMAIN + "/r/"
-                                 + API_ID
-                                 + "/organization/v2/domains/DOMAIN_ID"
-                                   "/users/EXTERNAL_KEY/g11ns"
+                                    + "/contact/getDomainContact/v1"
             },
             "auth_url": "https://" + AUTH_DOMAIN + "/b/" + API_ID
                         + "/server/token?grant_type=urn%3Aietf%3Aparams%3Aoauth"

@@ -17,8 +17,8 @@ from tornado.web import HTTPError
 from datetime import datetime, timezone
 from icalendar import Calendar, Event, Timezone, TimezoneStandard
 from calendar_bot.common.utils import auth_get, auth_post, auth_put
-from calendar_bot.common.local_timezone import load_time_zone
-from calendar_bot.common.local_external_key import load_external_key
+from conf.config import TZone
+from calendar_bot.common.contacts import load_external_key
 from calendar_bot.constant import API_BO, OPEN_API, ADMIN_ACCOUNT, DOMAIN_ID
 from calendar_bot.common.global_data import get_value
 
@@ -41,10 +41,9 @@ def make_icalendar_data(uid, summary, current, end, begin, account_id, create_fl
     cal.add('PRODID', 'Works sample bot Calendar')
     cal.add('VERSION', '2.0')
 
-    tz = load_time_zone()
     standard = TimezoneStandard()
     standard.add('DTSTART', datetime(1970, 1, 1, 0, 0, 0,
-                                     tzinfo=pytz.timezone(tz)))
+                                     tzinfo=pytz.timezone(TZone)))
     standard.add('TZOFFSETFROM', current.utcoffset())
     standard.add('TZOFFSETTO', current.utcoffset())
     standard.add('TZNAME', current.tzname())
@@ -112,7 +111,7 @@ def create_calendar():
     return tmp_req["returnValue"]
 
 
-def create_schedule(current, end, begin, account_id):
+def create_schedule(current, end, begin, account_id, title):
     """
     create schedule.
     reference: https://developers.worksmobile.com/kr/document/100702703?lang=ko
@@ -121,7 +120,7 @@ def create_schedule(current, end, begin, account_id):
     """
 
     uid = str(uuid.uuid4()) + account_id
-    schedule_data = make_icalendar_data(uid, "Clock-in time", current,
+    schedule_data = make_icalendar_data(uid, title, current,
                                         end, begin, account_id, True)
     body = {
         "ical": schedule_data
@@ -166,7 +165,7 @@ def create_schedule(current, end, begin, account_id):
     return schedule_uid
 
 
-def modify_schedule(calendar_uid, current, end, begin, account_id):
+def modify_schedule(calendar_uid, current, end, begin, account_id, title):
     """
     modify schedule.
     reference: https://developers.worksmobile.com/kr/document/100702704?lang=ko
@@ -174,7 +173,7 @@ def modify_schedule(calendar_uid, current, end, begin, account_id):
     :return: schedule id.
     """
 
-    calendar_data = make_icalendar_data(calendar_uid, "Working hours",
+    calendar_data = make_icalendar_data(calendar_uid, title,
                                         current, end, begin, account_id)
     body = {
         "ical": calendar_data

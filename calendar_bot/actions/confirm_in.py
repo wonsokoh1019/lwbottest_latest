@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 from tornado.web import HTTPError
 from calendar_bot.common import global_data
 from calendar_bot.common.local_timezone import local_date_time
-from calendar_bot.model.data import i18n_text, make_text
+from calendar_bot.model.data import make_text
 from calendar_bot.externals.calendar_req import create_schedule
 from calendar_bot.externals.send_message import push_message
 from calendar_bot.actions.message import invalid_message, prompt_input
@@ -23,6 +23,7 @@ from calendar_bot.model.processStatusDBHandle import get_status_by_user, \
     insert_replace_status_by_user_date
 from calendar_bot.model.calendarDBHandle import set_schedule_by_user, \
     get_schedule_by_user
+from calendar_bot.common.contacts import get_user_info_by_account
 
 LOGGER = logging.getLogger("calendar_bot")
 
@@ -53,7 +54,11 @@ def deal_confirm_in(account_id, create_time, callback):
     end_time = begin_time + timedelta(minutes=1)
     cur_time = local_date_time(create_time)
 
-    schedule_uid = create_schedule(cur_time, end_time, begin_time, account_id)
+    title = "[{account}]'s clock-in time on {date}".\
+        format(account=account_id,
+               date=datetime.strftime(begin_time, '%A, %B %d'))
+    schedule_uid = create_schedule(cur_time, end_time, begin_time,
+                                   account_id, title)
 
     set_schedule_by_user(schedule_uid, account_id, current_date,
                          user_time, my_end_time)

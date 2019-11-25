@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import sys
 sys.path.append('./')
-from scripts.initDB import init_db
-from scripts.registerBot import init_bot
+from calendar_bot.initDB import init_db
+from calendar_bot.registerBot import init_bot
 
 
 def main():
