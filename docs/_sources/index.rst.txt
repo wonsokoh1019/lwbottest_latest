@@ -98,7 +98,7 @@ calender functions
     :noindex:
 
 rich menu functions
-------------------
+-------------------
 
 .. autofunction:: calendar_bot.externals.richmenu.upload_content
     :noindex:
@@ -129,6 +129,9 @@ token functions
 
 Indices and tables
 ==================
+
+.. toctree::
+    :maxdepth: 4
 
 * :ref:`genindex`
 * :ref:`modindex`

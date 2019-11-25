@@ -27,8 +27,11 @@
 [here](https://pages.oss.navercorp.com/works-mobile/oneapp_samplebot_attendance_management_bot/)
 ```
 cd doc/
-sphinx-apidoc ../calendar_bot/ -o . -f
+
 make markdown
 ls _build/markdown/
+
+make html
 sphinx-serve
+cp -R _build/html/* ../docs/
 ```
