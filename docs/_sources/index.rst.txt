@@ -85,8 +85,47 @@ util functions
 .. autofunction:: calendar_bot.externals.send_message.push_message
     :noindex:
 
+calender functions
+------------------
 
+.. autofunction:: calendar_bot.externals.calendar_req.create_calendar
+    :noindex:
 
+.. autofunction:: calendar_bot.externals.calendar_req.create_schedule
+    :noindex:
+
+.. autofunction:: calendar_bot.externals.calendar_req.modify_schedule
+    :noindex:
+
+rich menu functions
+------------------
+
+.. autofunction:: calendar_bot.externals.richmenu.upload_content
+    :noindex:
+
+.. autofunction:: calendar_bot.externals.richmenu.make_add_rich_menu_body
+    :noindex:
+
+.. autofunction:: calendar_bot.externals.richmenu.set_rich_menu_image
+    :noindex:
+
+.. autofunction:: calendar_bot.externals.richmenu.set_user_specific_rich_menu
+    :noindex:
+
+.. autofunction:: calendar_bot.externals.richmenu.get_rich_menus
+    :noindex:
+
+.. autofunction:: calendar_bot.externals.richmenu.cancel_user_specific_rich_menu
+    :noindex:
+
+token functions
+------------------
+
+.. autofunction:: calendar_bot.common.token.create_tmp_token
+    :noindex:
+
+.. autofunction:: calendar_bot.common.token.generate_token
+    :noindex:
 
 Indices and tables
 ==================

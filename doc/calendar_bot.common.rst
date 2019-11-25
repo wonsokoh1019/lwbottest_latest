@@ -4,18 +4,18 @@ calendar\_bot.common package
 Submodules
 ----------
 
-calendar\_bot.common.global\_data module
-----------------------------------------
+calendar\_bot.common.contacts module
+------------------------------------
 
-.. automodule:: calendar_bot.common.global_data
+.. automodule:: calendar_bot.common.contacts
    :members:
    :undoc-members:
    :show-inheritance:
 
-calendar\_bot.common.local\_external\_key module
-------------------------------------------------
+calendar\_bot.common.global\_data module
+----------------------------------------
 
-.. automodule:: calendar_bot.common.local_external_key
+.. automodule:: calendar_bot.common.global_data
    :members:
    :undoc-members:
    :show-inheritance:

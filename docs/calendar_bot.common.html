@@ -35,6 +35,38 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-calendar_bot.common.contacts">
+<span id="calendar-bot-common-contacts-module"></span><h2>calendar_bot.common.contacts module<a class="headerlink" href="#module-calendar_bot.common.contacts" title="Permalink to this headline">¶</a></h2>
+<p>get a user info by account id.</p>
+<dl class="function">
+<dt id="calendar_bot.common.contacts.get_user_info_by_account">
+<code class="sig-prename descclassname">calendar_bot.common.contacts.</code><code class="sig-name descname">get_user_info_by_account</code><span class="sig-paren">(</span><em class="sig-param">account_id</em><span class="sig-paren">)</span><a class="headerlink" href="#calendar_bot.common.contacts.get_user_info_by_account" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get user info of account.
+reference: <a class="reference external" href="https://developers.worksmobile.com/jp/document/1006004/v1?lang=en">https://developers.worksmobile.com/jp/document/1006004/v1?lang=en</a>
+If you fail to get external key,
+log in to the development console to check your configuration.
+reference: <a class="reference external" href="https://auth.worksmobile.com/login/login">https://auth.worksmobile.com/login/login</a>?
+accessUrl=https%3A%2F%2Fdevelopers.worksmobile.com
+%3A443%2Fconsole%2Fopenapi%2Fmain)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>external key</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="calendar_bot.common.contacts.load_external_key">
+<code class="sig-prename descclassname">calendar_bot.common.contacts.</code><code class="sig-name descname">load_external_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calendar_bot.common.contacts.load_external_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>load external key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>admin account’s external key</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 <div class="section" id="module-calendar_bot.common.global_data">
 <span id="calendar-bot-common-global-data-module"></span><h2>calendar_bot.common.global_data module<a class="headerlink" href="#module-calendar_bot.common.global_data" title="Permalink to this headline">¶</a></h2>
 <p>This is a global variable cache.</p>
@@ -73,48 +105,9 @@
 </dd></dl>
 
 </div>
-<div class="section" id="module-calendar_bot.common.local_external_key">
-<span id="calendar-bot-common-local-external-key-module"></span><h2>calendar_bot.common.local_external_key module<a class="headerlink" href="#module-calendar_bot.common.local_external_key" title="Permalink to this headline">¶</a></h2>
-<p>get a account external key.</p>
-<dl class="function">
-<dt id="calendar_bot.common.local_external_key.get_external_key_from_remote">
-<code class="sig-prename descclassname">calendar_bot.common.local_external_key.</code><code class="sig-name descname">get_external_key_from_remote</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calendar_bot.common.local_external_key.get_external_key_from_remote" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get external key of account.
-reference: <a class="reference external" href="https://developers.worksmobile.com/kr/document/1006004/v1?lang=en">https://developers.worksmobile.com/kr/document/1006004/v1?lang=en</a>
-If you fail to get external key,
-log in to the development console to check your configuration.
-reference: <a class="reference external" href="https://auth.worksmobile.com/login/login">https://auth.worksmobile.com/login/login</a>?
-accessUrl=https%3A%2F%2Fdevelopers.worksmobile.com
-%3A443%2Fconsole%2Fopenapi%2Fmain)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>external key</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="calendar_bot.common.local_external_key.load_external_key">
-<code class="sig-prename descclassname">calendar_bot.common.local_external_key.</code><code class="sig-name descname">load_external_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calendar_bot.common.local_external_key.load_external_key" title="Permalink to this definition">¶</a></dt>
-<dd><p>load external key.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>admin account’s external key</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
 <div class="section" id="module-calendar_bot.common.local_timezone">
 <span id="calendar-bot-common-local-timezone-module"></span><h2>calendar_bot.common.local_timezone module<a class="headerlink" href="#module-calendar_bot.common.local_timezone" title="Permalink to this headline">¶</a></h2>
 <p>deal time zone</p>
-<dl class="function">
-<dt id="calendar_bot.common.local_timezone.get_time_zone">
-<code class="sig-prename descclassname">calendar_bot.common.local_timezone.</code><code class="sig-name descname">get_time_zone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#calendar_bot.common.local_timezone.get_time_zone" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get time zone according to administrator account.
-reference: <a class="reference external" href="https://developers.worksmobile.com/kr/document/100300528?lang=en">https://developers.worksmobile.com/kr/document/100300528?lang=en</a></p>
-</dd></dl>
-
 <dl class="function">
 <dt id="calendar_bot.common.local_timezone.local_date_time">
 <code class="sig-prename descclassname">calendar_bot.common.local_timezone.</code><code class="sig-name descname">local_date_time</code><span class="sig-paren">(</span><em class="sig-param">time=None</em><span class="sig-paren">)</span><a class="headerlink" href="#calendar_bot.common.local_timezone.local_date_time" title="Permalink to this definition">¶</a></dt>
