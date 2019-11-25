@@ -76,7 +76,7 @@ def make_icalendar_data(uid, summary, current, end, begin, account_id, create_fl
 def create_calendar():
     """
     create calender.
-    reference: https://developers.worksmobile.com/kr/document/100702701?lang=ko
+    reference: https://developers.worksmobile.com/jp/document/100702701?lang=en
 
     :return: calendar id.
     """
@@ -114,7 +114,7 @@ def create_calendar():
 def create_schedule(current, end, begin, account_id, title):
     """
     create schedule.
-    reference: https://developers.worksmobile.com/kr/document/100702703?lang=ko
+    reference: https://developers.worksmobile.com/jp/document/100702703?lang=en
 
     :return: schedule id.
     """
@@ -168,7 +168,7 @@ def create_schedule(current, end, begin, account_id, title):
 def modify_schedule(calendar_uid, current, end, begin, account_id, title):
     """
     modify schedule.
-    reference: https://developers.worksmobile.com/kr/document/100702704?lang=ko
+    reference: https://developers.worksmobile.com/jp/document/100702704?lang=en
 
     :return: schedule id.
     """
