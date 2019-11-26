@@ -54,7 +54,9 @@ def create_button_actions(direct_sign_callback, manual_sign_callback):
     """
     Create the message body of the button template of two buttons.
     Check also: calendar_bot/model/data.py
-    reference: https://developers.worksmobile.com/jp/document/100500804?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100500804?lang=en
 
     :param direct_sign_callback: callback string for the first button.
     :param manual_sign_callback: callback string for the seconds button.
@@ -69,7 +71,9 @@ def create_quick_replay_items(confirm_callback, previous_callback):
     """
     Building a quick reply floating window for messages.
     Check also: calendar_bot/model/data.py
-    reference: https://developers.worksmobile.com/jp/document/100500807?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100500807?lang=en
 
     :param confirm_callback: callback string for the first button.
     :param previous_callback: callback string for the seconds button.

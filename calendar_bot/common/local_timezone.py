@@ -13,7 +13,9 @@ import pytz
 def local_date_time(time=None):
     """
     Time to switch UTC time to a specific time zone.
-    reference: https://docs.python.org/3/library/datetime.html
+
+        reference
+        - https://docs.python.org/3/library/datetime.html
 
     :param time: Time to switch time zones
     :return: local time.
