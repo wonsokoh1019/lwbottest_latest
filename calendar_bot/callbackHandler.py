@@ -19,7 +19,9 @@ class CallbackHandler(tornado.web.RequestHandler):
     Process business requests of users.
 
     tornado.web.RequestHandler base class for HTTP request handlers.
-    reference: https://www.tornadoweb.org/en/stable/web.html
+
+        reference
+        - https://www.tornadoweb.org/en/stable/web.html
     """
 
     @tornado.gen.coroutine

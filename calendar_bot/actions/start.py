@@ -23,7 +23,9 @@ def image_introduce():
     """
     This function constructs three image carousels for self introduction.
     Check also: calendar_bot/model/data.py
-    reference: https://developers.worksmobile.com/jp/document/100500809?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100500809?lang=en
 
     :return: image carousels type message content.
     """
@@ -66,7 +68,9 @@ def sign(account_id):
     """
     Set up rich menu for chat with users.
     Check also: calendar_bot/model/data.py
-    reference: https://developers.worksmobile.com/jp/document/1005040?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/1005040?lang=en
 
     :param account_id: user account id
     """

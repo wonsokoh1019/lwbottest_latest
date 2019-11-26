@@ -24,7 +24,9 @@ LOGGER = logging.getLogger("calendar_bot")
 def upload_content(file_path):
     """
     Upload rich menu background picture.
-    reference: https://developers.worksmobile.com/jp/document/1005025?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/1005025?lang=en
 
     :param file_path: resource local path
     :return: resource id
@@ -56,7 +58,9 @@ def upload_content(file_path):
 def make_add_rich_menu_body(rich_menu_name):
     """
     add rich menu body
-    reference: https://developers.worksmobile.com/jp/document/100504001?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100504001?lang=en
 
     :param rich_menu_name: rich menu name
     :return: rich menu id
@@ -111,7 +115,9 @@ def make_add_rich_menu_body(rich_menu_name):
 def set_rich_menu_image(resource_id, rich_menu_id):
     """
     Set a rich menu image.
-    reference: https://developers.worksmobile.com/jp/document/100504002?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100504002?lang=en
 
     :param resource_id: resource id
     :param rich_menu_id: rich menu id
@@ -139,7 +145,9 @@ def set_rich_menu_image(resource_id, rich_menu_id):
 def set_user_specific_rich_menu(rich_menu_id, account_id):
     """
     Set a user-specific rich menu.
-    reference: https://developers.worksmobile.com/jp/document/100504010?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100504010?lang=en
 
     :param rich_menu_id: rich menu id
     :param account_id: user account id
@@ -163,7 +171,9 @@ def set_user_specific_rich_menu(rich_menu_id, account_id):
 def get_rich_menus():
     """
     Get rich menus
-    reference: https://developers.worksmobile.com/jp/document/100504004?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100504004?lang=en
 
     :return: rich menu list
     """
@@ -192,7 +202,9 @@ def get_rich_menus():
 def cancel_user_specific_rich_menu(account_id):
     """
     Cancel a user-specific rich menu
-    reference: https://developers.worksmobile.com/jp/document/100504012?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100504012?lang=en
 
     :param account_id: user account id
     """
@@ -213,7 +225,9 @@ def cancel_user_specific_rich_menu(account_id):
 def init_rich_menu():
     """
     init rich menu.
-    reference: https://developers.worksmobile.com/jp/document/1005040?lang=en
+
+        reference
+        - https://developers.worksmobile.com/jp/document/1005040?lang=en
 
     :return: rich menu id
     """
