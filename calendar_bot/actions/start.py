@@ -23,7 +23,7 @@ def image_introduce():
     """
     This function constructs three image carousels for self introduction.
     Check also: calendar_bot/model/data.py
-    reference: https://developers.worksmobile.com/kr/document/100500809?lang=en
+    reference: https://developers.worksmobile.com/jp/document/100500809?lang=en
 
     :return: image carousels type message content.
     """
