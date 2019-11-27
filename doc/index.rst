@@ -26,28 +26,28 @@ Initialize environment
 Initialize database
 -------------------
 
-.. autofunction:: calendar_bot.initDB.init_db
+.. autofunction:: attendance_management_bot.initDB.init_db
     :noindex:
 
-.. autofunction:: calendar_bot.initDB.create_calendar_table
+.. autofunction:: attendance_management_bot.initDB.create_calendar_table
     :noindex:
 
-.. autofunction:: calendar_bot.initDB.create_init_status_table
+.. autofunction:: attendance_management_bot.initDB.create_init_status_table
     :noindex:
 
-.. autofunction:: calendar_bot.initDB.create_process_status_table
+.. autofunction:: attendance_management_bot.initDB.create_process_status_table
     :noindex:
 
 Register bot
 ------------
 
-.. autofunction:: calendar_bot.registerBot.init_bot
+.. autofunction:: attendance_management_bot.registerBot.init_bot
     :noindex:
 
-.. autofunction:: calendar_bot.registerBot.register_bot
+.. autofunction:: attendance_management_bot.registerBot.register_bot
     :noindex:
 
-.. autofunction:: calendar_bot.registerBot.register_bot_domain
+.. autofunction:: attendance_management_bot.registerBot.register_bot_domain
     :noindex:
 
 Run bot
@@ -56,75 +56,75 @@ Run bot
 .. literalinclude:: ../main.py
     :caption: main.py
 
-.. autofunction:: calendar_bot.calendar_bot.start_calendar_bot
+.. autofunction:: attendance_management_bot.attendance_management_bot.start_attendance_management_bot
     :noindex:
 
-.. autofunction:: calendar_bot.router.getRouter
+.. autofunction:: attendance_management_bot.router.getRouter
     :noindex:
 
-.. autoclass:: calendar_bot.callbackHandler.CallbackHandler
+.. autoclass:: attendance_management_bot.callbackHandler.CallbackHandler
     :members:
     :noindex:
 
-.. autoclass:: calendar_bot.check_and_handle_actions.CheckAndHandleActions
+.. autoclass:: attendance_management_bot.check_and_handle_actions.CheckAndHandleActions
     :members:
     :noindex:
 
 util functions
 --------------
 
-.. autofunction:: calendar_bot.model.data.make_text
+.. autofunction:: attendance_management_bot.model.data.make_text
     :noindex:
 
-.. autofunction:: calendar_bot.model.data.make_quick_reply
+.. autofunction:: attendance_management_bot.model.data.make_quick_reply
     :noindex:
 
-.. autofunction:: calendar_bot.model.data.make_image_carousel
+.. autofunction:: attendance_management_bot.model.data.make_image_carousel
     :noindex:
 
-.. autofunction:: calendar_bot.externals.send_message.push_message
+.. autofunction:: attendance_management_bot.externals.send_message.push_message
     :noindex:
 
 calender functions
 ------------------
 
-.. autofunction:: calendar_bot.externals.calendar_req.create_calendar
+.. autofunction:: attendance_management_bot.externals.calendar_req.create_calendar
     :noindex:
 
-.. autofunction:: calendar_bot.externals.calendar_req.create_schedule
+.. autofunction:: attendance_management_bot.externals.calendar_req.create_schedule
     :noindex:
 
-.. autofunction:: calendar_bot.externals.calendar_req.modify_schedule
+.. autofunction:: attendance_management_bot.externals.calendar_req.modify_schedule
     :noindex:
 
 rich menu functions
 -------------------
 
-.. autofunction:: calendar_bot.externals.richmenu.upload_content
+.. autofunction:: attendance_management_bot.externals.richmenu.upload_content
     :noindex:
 
-.. autofunction:: calendar_bot.externals.richmenu.make_add_rich_menu_body
+.. autofunction:: attendance_management_bot.externals.richmenu.make_add_rich_menu_body
     :noindex:
 
-.. autofunction:: calendar_bot.externals.richmenu.set_rich_menu_image
+.. autofunction:: attendance_management_bot.externals.richmenu.set_rich_menu_image
     :noindex:
 
-.. autofunction:: calendar_bot.externals.richmenu.set_user_specific_rich_menu
+.. autofunction:: attendance_management_bot.externals.richmenu.set_user_specific_rich_menu
     :noindex:
 
-.. autofunction:: calendar_bot.externals.richmenu.get_rich_menus
+.. autofunction:: attendance_management_bot.externals.richmenu.get_rich_menus
     :noindex:
 
-.. autofunction:: calendar_bot.externals.richmenu.cancel_user_specific_rich_menu
+.. autofunction:: attendance_management_bot.externals.richmenu.cancel_user_specific_rich_menu
     :noindex:
 
 token functions
 ------------------
 
-.. autofunction:: calendar_bot.common.token.create_tmp_token
+.. autofunction:: attendance_management_bot.common.token.create_tmp_token
     :noindex:
 
-.. autofunction:: calendar_bot.common.token.generate_token
+.. autofunction:: attendance_management_bot.common.token.generate_token
     :noindex:
 
 Indices and tables

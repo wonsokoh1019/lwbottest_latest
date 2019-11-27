@@ -4,13 +4,13 @@
 # from gevent import monkey
 # monkey.patch_all()
 """
-main function for calendar_bot
+main function for attendance_management_bot
 """
 import signal
 from daemonize import Daemonize
 from tornado.options import define, options
-from calendar_bot.calendar_bot import *
-from calendar_bot.settings import *
+from attendance_management_bot.attendance_management_bot import *
+from attendance_management_bot.settings import *
 
 
 define("daemonize", default=False, help="daemon mode")
@@ -28,8 +28,9 @@ if __name__ == "__main__":
     signal.signal(signal.SIGHUP, sig_handler)
 
     if options.daemonize:
-        daemon = Daemonize(app="calendar_bot", action=start_calendar_bot,
+        daemon = Daemonize(app="attendance_management_bot",
+                           action=start_attendance_management_bot,
                            pid=options.pidfile)
         daemon.start()
     else:
-        start_calendar_bot()
+        start_attendance_management_bot()
