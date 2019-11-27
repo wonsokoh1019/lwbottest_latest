@@ -1,6 +1,6 @@
 loaders:
   - type: python
-    modules: [calendar_bot]
+    modules: [attendance_management_bot]
     search_path: [.]
 processors:
   - type: pydocmd

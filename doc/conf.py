@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'calendar_bot'
+project = 'attendance_management_bot'
 copyright = '2019, worksmobile'
 author = 'worksmobile'
 
@@ -35,7 +35,7 @@ extensions = [
 
 # Document Python Code
 autoapi_type = 'python'
-autoapi_dirs = ['../calendar_bot']
+autoapi_dirs = ['../attendance_management_bot']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
