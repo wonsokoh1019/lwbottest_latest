@@ -63,7 +63,6 @@ def make_icalendar_data(uid, summary, current, end, begin,
         event.add('CREATED', current)
 
     event.add('DESCRIPTION', account_id)
-    event.add('ATTENDEE', account_id)
     event.add('SUMMARY', summary)
     event.add('DTSTART', begin)
     event.add('DTEND', end)

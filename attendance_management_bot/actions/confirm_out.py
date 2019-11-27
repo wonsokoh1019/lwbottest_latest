@@ -66,7 +66,7 @@ def deal_confirm_out(account_id, create_time, callback):
     cur_time = local_date_time(create_time)
     begin_time = local_date_time(begin_time_st)
 
-    title = "[{account}]'s working hours on {date}".\
+    title = "{account}'s working hours on {date}".\
         format(account=get_user_info_by_account(account_id),
                date=datetime.strftime(end_time, '%A, %B %d'))
     modify_schedule(schedule_id, cur_time, end_time, begin_time,

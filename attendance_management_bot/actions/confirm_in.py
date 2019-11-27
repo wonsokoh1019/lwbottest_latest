@@ -53,7 +53,7 @@ def deal_confirm_in(account_id, create_time, callback):
 
     end_time = begin_time + timedelta(minutes=1)
     cur_time = local_date_time(create_time)
-    title = "[{account}]'s clock-in time on {date}".\
+    title = "{account}'s clock-in time on {date}".\
         format(account=get_user_info_by_account(account_id),
                date=datetime.strftime(begin_time, '%A, %B %d'))
     schedule_uid = create_schedule(cur_time, end_time, begin_time,
