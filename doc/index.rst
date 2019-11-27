@@ -2,9 +2,12 @@
 DOCUMENT
 ********
 
-heroku는 배포 후 Procfile 파일에서 정의된 작업을 자동으로 수행한다. 해당 봇의 Procfile은 환경 초기화하고 `main.py` 를 수행해서 데몬을  실행한다.
+heroku는 배포 후 Procfile 파일에서 정의된 작업을 자동으로 수행한다. 근태관리 봇의 Procfile은 환경을 초기화하고 `main.py` 를 수행해서 데몬을 실행한다.
 
-그 외 해당 봇에서 API 사용하는 함수를 소개한다. 예를 들어 `attendance_management_bot.externals.calendar_req.create_calendar` 의 실제 소스코드는 `attendance_management_bot/externals/calendar_req.py` 의 `create_calendar` 함수에서 확인할 수 있다.
+그 외 근태관리 봇에서 API를 사용하는 함수를 소개한다.
+
+    예시
+    - `attendance_management_bot.externals.calendar_req.create_calendar` 의 실제 소스코드는 `attendance_management_bot/externals/calendar_req.py` 의 `create_calendar` 함수에서 확인할 수 있다.
 
 개발 언어 및 환경
 =================
