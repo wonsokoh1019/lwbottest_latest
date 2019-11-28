@@ -1,10 +1,27 @@
+********
+DOCUMENT
+********
+
+heroku는 배포 후 Procfile 파일에서 정의된 작업을 자동으로 수행한다. 근태관리 봇의 Procfile은 환경을 초기화하고 `main.py` 를 수행해서 데몬을 실행한다.
+
+그 외 근태관리 봇에서 API를 사용하는 함수를 소개한다.
+
+    예시
+    - `attendance_management_bot.externals.calendar_req.create_calendar` 의 실제 소스코드는 `attendance_management_bot/externals/calendar_req.py` 의 `create_calendar` 함수에서 확인할 수 있다.
+
+개발 언어 및 환경
+=================
+
+- Python3
+- Tornado framework
+- Postgres
+
 Procfile
 ========
 
 https://devcenter.heroku.com/articles/procfile:
 
     Heroku apps include a Procfile that specifies the commands that are executed by the app on startup. You can use a Procfile to declare a variety of process types, including:
-    
     - Your app’s web server
     - Multiple types of worker processes
     - A singleton process, such as a clock
@@ -70,8 +87,8 @@ Run bot
     :members:
     :noindex:
 
-util functions
---------------
+Bot API functions
+=================
 
 .. autofunction:: attendance_management_bot.model.data.make_text
     :noindex:
@@ -85,8 +102,8 @@ util functions
 .. autofunction:: attendance_management_bot.externals.send_message.push_message
     :noindex:
 
-calender functions
-------------------
+Calender API functions
+======================
 
 .. autofunction:: attendance_management_bot.externals.calendar_req.create_calendar
     :noindex:
@@ -97,8 +114,8 @@ calender functions
 .. autofunction:: attendance_management_bot.externals.calendar_req.modify_schedule
     :noindex:
 
-rich menu functions
--------------------
+Bot rich menu functions
+=======================
 
 .. autofunction:: attendance_management_bot.externals.richmenu.upload_content
     :noindex:
@@ -118,14 +135,23 @@ rich menu functions
 .. autofunction:: attendance_management_bot.externals.richmenu.cancel_user_specific_rich_menu
     :noindex:
 
-token functions
-------------------
+타임존 설정
+===========
 
-.. autofunction:: attendance_management_bot.common.token.create_tmp_token
-    :noindex:
+근태관리 봇의 타임존은 Asia/Tokyo로 설정되어있다. 변경을 원할 경우 소스 코드에서 원하는 국가/도시의 시간대로 변경 할 수 있다.
 
-.. autofunction:: attendance_management_bot.common.token.generate_token
-    :noindex:
+타임존 설정 소스 코드 위치
+--------------------------
+
+타임존을 설정 할 수 있는 소스 코드는 conf 폴더 내에 config.py 파일에서 #Timezone 항목에 위치한다.
+
+타임존 변경 방법
+----------------
+
+TZone ="{원하는 국가/도시}" 로 변경할 수 있다.
+
+    참고
+    - 국가/도시명에 삽입되는 TZ database name은 해당 url에서 확인 할 수 있다 : https://developers.worksmobile.com/kr/document/1009006/v2?lang=ko
 
 Indices and tables
 ==================
