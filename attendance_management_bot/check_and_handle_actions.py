@@ -23,6 +23,10 @@ from attendance_management_bot.actions.manual_sign_out import manual_sign_out
 from attendance_management_bot.actions.deal_message import deal_message
 from attendance_management_bot.actions.confirm_in import confirm_in
 from attendance_management_bot.actions.confirm_out import confirm_out
+from attendance_management_bot.model.processStatusDBHandle \
+    import clean_status_by_user
+from attendance_management_bot.model.calendarDBHandle \
+    import clean_schedule_by_user
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -103,6 +107,10 @@ class CheckAndHandleActions:
 
         elif self.__content_post_back == "start":
             self.__handle = start
+
+        elif self.__text is not None and self.__text == "clean":
+            clean_status_by_user(self.__account_id, self.__current_date)
+            clean_schedule_by_user(self.__account_id, self.__current_date)
 
         elif self.__post_back == "to_first":
             self.__handle = to_first
