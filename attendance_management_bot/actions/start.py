@@ -30,30 +30,18 @@ def image_introduce():
     :return: image carousels type message content.
     """
 
-    action1 = make_postback_action("a",
-                                   display_text="Timeclock can be recorded "
-                                                "easily just by clicking buttons",
-                                   label="Try it now")
+    action1 = make_postback_action("a", label="Try now")
 
     column1 = make_image_carousel_column(
         image_url=IMAGE_CAROUSEL["resource_url"][0],
         action=action1)
 
-    action2 = make_postback_action("b",
-                                   display_text="Entered attendance records "
-                                                "are automatically entered "
-                                                "in Shared Calendar",
-                                   label="Try it now",)
+    action2 = make_postback_action("b", label="Try now",)
     column2 = make_image_carousel_column(
         image_url=IMAGE_CAROUSEL["resource_url"][1],
         action=action2)
 
-    action3 = make_postback_action("c",
-                                   display_text="Attendance records of all "
-                                                "employees can be checked at a"
-                                                " glance via Attendance "
-                                                "Management Shared Calendar",
-                                   label="Try it now")
+    action3 = make_postback_action("c", label="Try now")
 
     column3 = make_image_carousel_column(
         image_url=IMAGE_CAROUSEL["resource_url"][2],

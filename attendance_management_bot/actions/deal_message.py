@@ -54,12 +54,16 @@ def deal_user_message(account_id, current_date, create_time, message):
         else:
             raise HTTPError(403, "Messages not need to be processed")
 
-    if (status == "wait_in" or status == "wait_out") \
-            and (user_time < 0 or user_time > 2400):
+    if len(message) != 4:
         return error_message()
 
-    tm = date_time.replace(hour=int(user_time / 100),
-                           minute=int(user_time % 100))
+    hour = int(user_time / 100)
+    minute = int(user_time % 100)
+    if (status == "wait_in" or status == "wait_out") \
+            and ((hour < 0 or hour > 23) or (minute < 0 or minute > 59)):
+        return error_message()
+
+    tm = date_time.replace(hour=hour, minute=minute)
     user_time_ticket = int(tm.timestamp())
 
     if status == "wait_in":
@@ -68,10 +72,12 @@ def deal_user_message(account_id, current_date, create_time, message):
         set_status_by_user_date(account_id, current_date, status="in_done")
         return [content]
     if status == "wait_out":
-        content = yield deal_sign_out(account_id,
+        content, status = yield deal_sign_out(account_id,
                                       current_date, user_time_ticket, True)
-        set_status_by_user_date(account_id, current_date, status="out_done")
-        return [content]
+        if status:
+            set_status_by_user_date(account_id, current_date, status="out_done")
+
+        return content
     if process == "sign_in_done" or process == "sign_out_done":
         return [invalid_message()]
 

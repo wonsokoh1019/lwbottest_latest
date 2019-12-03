@@ -28,14 +28,17 @@ from attendance_management_bot.common.contacts import get_user_info_by_account
 LOGGER = logging.getLogger("attendance_management_bot")
 
 
-def confirm_out_message(user_time, hours, min):
+def confirm_out_message(user_time, total_hours, total_minutes):
     user_time = TimeStruct(user_time)
 
+    str_hours = ""
+    if total_hours != 0:
+        str_hours = "{total_hours} hours and ".format(total_hours=total_hours)
     return make_text("Clock-out time has been registered."
                      "The total working hours for {date} "
-                     "is {hours} hours and {minutes} minutes."
+                     "is {total_hours}{total_minutes} minutes."
                      .format(date=user_time.date_time.strftime('%A, %B %d'),
-                             hours=hours, minutes=min))
+                             total_hours=str_hours, total_minutes=total_minutes))
 
 
 @tornado.gen.coroutine
@@ -74,15 +77,10 @@ def deal_confirm_out(account_id, create_time, callback):
 
     modify_schedule_by_user(schedule_id, user_time)
 
-    if user_time < begin_time_st:
-        yield asyncio.sleep(1)
-        set_status_by_user_date(account_id, current_date, status="wait_out")
-        return number_message(), False
-
     hours = int((user_time - begin_time_st)/3600)
     min = int(((user_time - begin_time_st) % 3600)/60)
 
-    return [confirm_out_message(user_time, hours, min)], True
+    return [confirm_out_message(user_time, hours, min)]
 
 
 @tornado.gen.coroutine
@@ -97,10 +95,9 @@ def confirm_out(account_id, current_date, create_time, callback):
     :param callback: User triggered callback.
     :return: None
     """
-    contents, success = yield deal_confirm_out(account_id, create_time, callback)
+    contents = yield deal_confirm_out(account_id, create_time, callback)
 
     yield push_messages(account_id, contents)
 
-    if success:
-        set_status_by_user_date(account_id, current_date,
-                                status="out_done", process="sign_out_done")
+    set_status_by_user_date(account_id, current_date,
+                            status="out_done", process="sign_out_done")

@@ -32,13 +32,12 @@ class CallbackHandler(tornado.web.RequestHandler):
         """
 
         LOGGER.info("request para path:%s", self.request.uri)
+        LOGGER.info("request para body:%s", self.request.body)
         try:
             body = json.loads(self.request.body)
         except json.JSONDecodeError:
             LOGGER.exception('Failed parse json:%s' % self.request.body)
             raise tornado.web.HTTPError(403, "boy is not json.")
-
-        LOGGER.info("request para body:%s", self.request.body)
         checker = CheckAndHandleActions()
         yield checker.execute(body)
 

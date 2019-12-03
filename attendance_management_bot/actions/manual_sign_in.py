@@ -13,7 +13,8 @@ from attendance_management_bot.model.data import make_text
 from attendance_management_bot.externals.send_message import push_messages
 from attendance_management_bot.actions.message import invalid_message, prompt_input
 from attendance_management_bot.model.processStatusDBHandle \
-    import get_status_by_user, insert_replace_status_by_user_date
+    import get_status_by_user, insert_replace_status_by_user_date, \
+    delete_status_by_user_date
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -42,12 +43,18 @@ def manual_sign_in_content(account_id, current_date):
     :return: message content list
     """
 
-    yield asyncio.sleep(1)
-
     content = get_status_by_user(account_id, current_date)
 
-    if content is not None and content[1] is not None:
-        return [invalid_message()]
+    if content is not None:
+        status = content[0]
+        process = content[1]
+        if process is not None:
+            return [invalid_message()]
+
+        if status == "wait_in" or status == "in_done":
+            delete_status_by_user_date(account_id, current_date)
+
+    yield asyncio.sleep(1)
 
     insert_replace_status_by_user_date(account_id, current_date, "wait_in")
 

@@ -48,7 +48,7 @@ def sign_out_content(account_id, current_date):
             set_status_by_user_date(account_id, current_date, status="in_done")
 
     if process is None or process != "sign_in_done":
-        return reminder_message(None)
+        return reminder_message(process)
 
     return sign_out_message()
 

@@ -8,12 +8,15 @@ __all__ = ['deal_sign_out_message', 'deal_sign_out']
 
 import tornado.web
 import logging
+import asyncio
 from attendance_management_bot.model.data import make_text, make_quick_reply
-from attendance_management_bot.externals.send_message import push_message
+from attendance_management_bot.externals.send_message import push_messages
 from attendance_management_bot.actions.message import invalid_message, \
-    TimeStruct, create_quick_replay_items
+    TimeStruct, create_quick_replay_items, number_message
+from attendance_management_bot.model.calendarDBHandle \
+    import get_schedule_by_user
 from attendance_management_bot.model.processStatusDBHandle \
-    import get_status_by_user
+    import get_status_by_user, set_status_by_user_date
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -32,18 +35,14 @@ def deal_sign_out_message(sign_time, manual_flag=False):
 
     user_time = TimeStruct(sign_time)
 
-    text = make_text("Register the current time {date} at {hours}:{min} "
-                     "{interval} as clock-out time?"
-                     .format(date=user_time.date_time.strftime('%m, %d %A'),
-                             hours=user_time.hours, min=user_time.min,
-                             interval=user_time.interval_en))
+    text = make_text("Register the current time {date}"
+                     .format(date=user_time.date_time.strftime('%A, %B %-d '
+                                                               'at %-I:%M %P')))
 
     if manual_flag:
-        text = make_text("Register the entered {date} at {hours}:{min} "
-                         "{interval} as clock-out time?"
-                         .format(date=user_time.date_time.strftime('%m, %d %A'),
-                                 hours=user_time.hours, min=user_time.min,
-                                 interval=user_time.interval_en))
+        text = make_text("Register the entered {date} as clock-out time?"
+                         .format(date=user_time.date_time.strftime('%m, %-d %A '
+                                                                   'at %-I:%M %P')))
 
     reply_items = create_quick_replay_items(
         "confirm_out&time=" + user_time.str_current_time_tick, call_back)
@@ -59,13 +58,24 @@ def deal_sign_out(account_id, current_date, sign_time, manual_flag=False):
     if content is not None:
         status = content[0]
         process = content[1]
-        if status == "out_done":
-            return invalid_message()
 
     if process is None or process != "sign_in_done":
-        return invalid_message()
+        return [invalid_message()], True
 
-    return deal_sign_out_message(sign_time, manual_flag)
+    if status == "wait_out" or status == "out_done":
+        set_status_by_user_date(account_id, current_date, status="in_done")
+        yield asyncio.sleep(1)
+
+    info = get_schedule_by_user(account_id, current_date)
+    if info is None:
+        raise HTTPError(500, "Internal data error")
+    begin_time_st = info[1]
+    user_time = TimeStruct(sign_time)
+    if int(user_time.str_current_time_tick) < begin_time_st:
+        set_status_by_user_date(account_id, current_date, status="wait_out")
+        return number_message(), False
+
+    return [deal_sign_out_message(sign_time, manual_flag)], True
 
 
 @tornado.gen.coroutine
@@ -78,6 +88,6 @@ def direct_sign_out(account_id, current_date, sign_time, _):
     :param sign_time: Time when the user clicks to check-out.
     :param _: no use
     """
-    content = yield deal_sign_out(account_id, current_date, sign_time)
+    content, _ = yield deal_sign_out(account_id, current_date, sign_time)
 
-    yield push_message(account_id, content)
+    yield push_messages(account_id, content)

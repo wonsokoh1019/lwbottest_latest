@@ -27,7 +27,7 @@ def sign_in_message():
 
     actions = create_button_actions("direct_sign_in", "manual_sign_in")
 
-    return make_button("Register current time as clock-in time",
+    return make_button("Please select the clock-in time entry method.",
                        actions)
 
 

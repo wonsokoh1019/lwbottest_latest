@@ -37,13 +37,6 @@ class TimeStruct:
         self.date = str(self.date_time.day)
         self.min = str(self.date_time.minute)
 
-        self.interval_en = "AM"
-
-        self.hours = str(self.date_time.hour)
-        if self.date_time.hour > 12:
-            self.interval_en = "PM"
-            self.hours = str(self.date_time.hour - 12)
-
         self.str_current_time_tick = str(sign_time)
         pos = self.str_current_time_tick.find(".")
         if pos != -1:
@@ -80,7 +73,7 @@ def create_quick_replay_items(confirm_callback, previous_callback):
     :return: quick replay items
     """
     action1 = make_postback_action(confirm_callback,
-                                   label="yes", display_text="yes",)
+                                   label="Yes", display_text="Yes",)
     reply_item1 = make_quick_reply_item(action1)
 
     action2 = make_postback_action(previous_callback,
@@ -109,9 +102,9 @@ def number_message():
 
     :return: text type message
     """
-    text1 = make_text("You have created your leave time "
-                      "earlier than your leave time. "
-                      "Please check your work time and enter again.")
+    text1 = make_text("Clock-out time was recorded as being earlier "
+                      "than the time of clock-in. "
+                      "Please check the clock-out time again and re-enter it. ")
 
     text2 = prompt_input()
     return [text1, text2]
@@ -123,10 +116,9 @@ def error_message():
 
     :return: text type message
     """
-    text1 = make_text("Sorry, but unable to "
-                      "comprehend your composed time. "
-                      "Please check the time entry method again, "
-                      "and enter the time.")
+    text1 = make_text("Sorry, but unable to comprehend your composed time. "
+                     "Please check the time entry method again, "
+                     "and enter the time.")
 
     text2 = prompt_input()
     return [text1, text2]
@@ -138,10 +130,9 @@ def invalid_message():
 
     :return: text type message
     """
-    return make_text("I didn't understand the text. "
-                     "When you go to work or go home, "
-                     "Please select the appropriate "
-                     "\"Record\" button for each.")
+    return make_text("The text could not be understood. "
+                     "Please select the appropriate \"Record\" button on "
+                     "the bottom of the menu when you clock in or clock out.")
 
 
 def reminder_message(process):

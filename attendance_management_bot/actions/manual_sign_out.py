@@ -11,7 +11,8 @@ import asyncio
 import logging
 from attendance_management_bot.model.data import make_text
 from attendance_management_bot.externals.send_message import push_messages
-from attendance_management_bot.actions.message import invalid_message, prompt_input
+from attendance_management_bot.actions.message import invalid_message, \
+    prompt_input
 from attendance_management_bot.model.processStatusDBHandle \
     import get_status_by_user, set_status_by_user_date
 
@@ -40,12 +41,20 @@ def manual_sign_out_content(account_id, current_date):
     :param current_date: current date by local time.
     :return: message content list
     """
-    yield asyncio.sleep(1)
-    content = get_status_by_user(account_id, current_date)
 
-    if content is None or content[1] is None or content[1] != "sign_in_done":
+    content = get_status_by_user(account_id, current_date)
+    process = None
+    if content is not None:
+        status = content[0]
+        process = content[1]
+
+    if process is None or process != "sign_in_done":
         return [invalid_message()]
 
+    if status == "wait_out" or status == "out_done":
+        set_status_by_user_date(account_id, current_date, status="in_done")
+
+    yield asyncio.sleep(1)
     set_status_by_user_date(account_id, current_date, "wait_out")
 
     return manual_sign_out_message()
