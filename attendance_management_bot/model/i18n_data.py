@@ -5,6 +5,7 @@ create i18n message content
 """
 
 import json
+from attendance_management_bot.constant import IMAGE_CAROUSEL
 from attendance_management_bot.model.data import *
 import gettext
 _ = gettext.gettext
@@ -57,4 +58,16 @@ def make_i18n_postback_action(post_back, local, label, fmt_label=None,
 
     return  make_postback_action(post_back, label, i18n_labels,
                                  text, i18n_texts)
+
+
+def make_il8n_image_carousel_column(number, action):
+    i18n_images = []
+    for lang in [('en_US', 'en'), ('ja_JP', 'ja'), ('ko_KR', 'ko')]:
+        i18n_image_item = make_i18n_image_url(lang[0],
+                                              IMAGE_CAROUSEL[lang[1]][number])
+        i18n_images.append(i18n_image_item)
+
+    return make_image_carousel_column(image_url=IMAGE_CAROUSEL['en'][number],
+                                      action=action,
+                                      i18n_image_urls=i18n_images)
 

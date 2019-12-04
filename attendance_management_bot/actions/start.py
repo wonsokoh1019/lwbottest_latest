@@ -8,13 +8,17 @@ __all__ = ['image_introduce', 'sign', 'start']
 
 import tornado.web
 import logging
-from attendance_management_bot.model.data import make_text, \
-    make_postback_action, make_image_carousel_column, make_image_carousel
+from attendance_management_bot.model.data import make_image_carousel
+from attendance_management_bot.model.i18n_data \
+    import make_il8n_image_carousel_column, make_i18n_postback_action, \
+    make_i18n_text
 from attendance_management_bot.constant import RICH_MENUS, IMAGE_CAROUSEL
 from attendance_management_bot.externals.send_message import push_messages
 from attendance_management_bot.common.global_data import get_value
 from attendance_management_bot.externals.richmenu \
     import set_user_specific_rich_menu
+import gettext
+_ = gettext.gettext
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -30,22 +34,16 @@ def image_introduce():
     :return: image carousels type message content.
     """
 
-    action1 = make_postback_action("a", label="Try now")
+    fmt = _("Try now")
+    action1 = make_i18n_postback_action("a", "start", "Try now", fmt)
+    column1 = make_il8n_image_carousel_column(0, action=action1)
 
-    column1 = make_image_carousel_column(
-        image_url=IMAGE_CAROUSEL["resource_url"][0],
-        action=action1)
+    action2 = make_i18n_postback_action("b", "start", "Try now", fmt)
+    column2 = make_il8n_image_carousel_column(1, action=action2)
 
-    action2 = make_postback_action("b", label="Try now",)
-    column2 = make_image_carousel_column(
-        image_url=IMAGE_CAROUSEL["resource_url"][1],
-        action=action2)
+    action3 = make_i18n_postback_action("c", "start", "Try now", fmt)
 
-    action3 = make_postback_action("c", label="Try now")
-
-    column3 = make_image_carousel_column(
-        image_url=IMAGE_CAROUSEL["resource_url"][2],
-        action=action3)
+    column3 = make_il8n_image_carousel_column(2, action=action3)
 
     columns = [column1, column2, column3]
     return make_image_carousel(columns)
@@ -77,9 +75,11 @@ def sign(account_id):
 def start_content(account_id):
     yield sign(account_id)
 
-    content1 = make_text("Hello, I'm an attendance management bot of "
+    fmt = _("Hello, I'm an attendance management bot of LINE WORKS "
+            "that helps your timeclock management and entry.")
+    content1 = make_i18n_text("Hello, I'm an attendance management bot of "
                          "LINE WORKS that helps your timeclock "
-                         "management and entry.")
+                         "management and entry.", "start", fmt)
     content2 = image_introduce()
 
     return [content1, content2]

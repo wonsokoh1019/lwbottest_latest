@@ -97,7 +97,6 @@ def confirm_out(account_id, current_date, create_time, callback):
     """
     contents = yield deal_confirm_out(account_id, create_time, callback)
 
-    yield push_messages(account_id, contents)
-
     set_status_by_user_date(account_id, current_date,
                             status="out_done", process="sign_out_done")
+    yield push_messages(account_id, contents)

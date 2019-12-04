@@ -8,7 +8,8 @@ __all__ = ['make_postback_action', 'make_message_action', 'make_url_action',
            'make_normal_action', 'make_quick_reply_item', 'make_quick_reply',
            'make_text', 'make_add_rich_menu', 'make_button', 
            'make_i18n_content_texts', 'i18n_text', 'make_i18n_label',
-           'i18n_display_text']
+           'i18n_display_text', 'make_image_carousel_column',
+           'make_i18n_image_url']
 
 import json
 
@@ -184,7 +185,7 @@ def make_image_carousel_column(image_url=None,
     if action is not None:
         column_data["action"] = action
     if i18n_image_urls is not None:
-        # [MakeI18nImageUrl, MakeI18nImageUrl]
+        # [make_i18n_image_url, make_i18n_image_url]
         column_data["i18nImageUrls"] = i18n_image_urls
     if i18n_image_resource_ids is not None:
         # [MakeI18nImageResourceId, MakeI18nImageResourceId, ...]

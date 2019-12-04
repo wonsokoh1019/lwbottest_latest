@@ -30,11 +30,23 @@ RICH_MENUS = {
 
 # IMAGE CAROUSEL
 IMAGE_CAROUSEL = {
-                    "resource_url":
+                    "en":
                     [
                         LOCAL_ADDRESS + "static/en/IMG_Carousel_01.png",
                         LOCAL_ADDRESS + "static/en/IMG_Carousel_02.png",
                         LOCAL_ADDRESS + "static/en/IMG_Carousel_03.png"
+                    ],
+                    "ko":
+                    [
+                        LOCAL_ADDRESS + "static/kr/IMG_Carousel_01.png",
+                        LOCAL_ADDRESS + "static/kr/IMG_Carousel_02.png",
+                        LOCAL_ADDRESS + "static/kr/IMG_Carousel_03.png"
+                    ],
+                    "ja":
+                    [
+                        LOCAL_ADDRESS + "static/jp/IMG_Carousel_01.png",
+                        LOCAL_ADDRESS + "static/jp/IMG_Carousel_02.png",
+                        LOCAL_ADDRESS + "static/jp/IMG_Carousel_03.png"
                     ]
                 }
 

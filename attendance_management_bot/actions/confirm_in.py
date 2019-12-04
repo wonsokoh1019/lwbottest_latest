@@ -79,8 +79,8 @@ def confirm_in(account_id, current_date, create_time, callback):
     """
 
     content = yield deal_confirm_in(account_id, create_time, callback)
-    yield push_message(account_id, content)
 
     insert_replace_status_by_user_date(account_id, current_date,
                                        status="in_done",
                                        process="sign_in_done")
+    yield push_message(account_id, content)

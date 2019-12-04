@@ -9,12 +9,14 @@ __all__ = ['manual_sign_out_message', 'manual_sign_out_content', 'manual_sign_ou
 import tornado.web
 import asyncio
 import logging
-from attendance_management_bot.model.data import make_text
+from attendance_management_bot.model.i18n_data import make_i18n_text
 from attendance_management_bot.externals.send_message import push_messages
 from attendance_management_bot.actions.message import invalid_message, \
     prompt_input
 from attendance_management_bot.model.processStatusDBHandle \
     import get_status_by_user, set_status_by_user_date
+import gettext
+_ = gettext.gettext
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -25,7 +27,9 @@ def manual_sign_out_message():
 
     :return: message content list
     """
-    text1 = make_text("Please manually enter the clock-out time.")
+    fmt = _("Please manually enter the clock-out time.")
+    text1 = make_i18n_text("Please manually enter the clock-out time.",
+                      "manual_sign_out", fmt)
 
     text2 = prompt_input()
 
