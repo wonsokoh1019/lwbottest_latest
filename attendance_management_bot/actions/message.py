@@ -10,10 +10,13 @@ __all__ = ['TimeStruct', '__init__', 'create_button_actions',
 
 import time
 import logging
-from attendance_management_bot.model.data import make_message_action, \
-    make_postback_action, make_quick_reply_item, make_text
+from attendance_management_bot.model.data import make_quick_reply_item
+from attendance_management_bot.model.i18n_data import make_i18n_message_action, \
+    make_i18n_postback_action, make_i18n_text
 from attendance_management_bot.constant import API_BO, IMAGE_CAROUSEL, RICH_MENUS
 from attendance_management_bot.common.local_timezone import local_date_time
+import gettext
+_ = gettext.gettext
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -54,8 +57,12 @@ def create_button_actions(direct_sign_callback, manual_sign_callback):
     :param direct_sign_callback: callback string for the first button.
     :param manual_sign_callback: callback string for the seconds button.
     """
-    action1 = make_message_action("Current time", direct_sign_callback)
-    action2 = make_message_action("Manually enter", manual_sign_callback)
+    fmt1 = _("Current time")
+    fmt2 = _("Manually enter")
+    action1 = make_i18n_message_action(direct_sign_callback,
+                                       "message", "Current time", fmt1)
+    action2 = make_i18n_message_action(manual_sign_callback,
+                                       "message", "Manually enter", fmt2)
 
     return [action1, action2]
 
@@ -72,12 +79,14 @@ def create_quick_replay_items(confirm_callback, previous_callback):
     :param previous_callback: callback string for the seconds button.
     :return: quick replay items
     """
-    action1 = make_postback_action(confirm_callback,
-                                   label="Yes", display_text="Yes",)
+    fmt1 = _("Yes")
+    action1 = make_i18n_postback_action(confirm_callback, "message",
+                                        "Yes", fmt1, "Yes", fmt1)
     reply_item1 = make_quick_reply_item(action1)
 
-    action2 = make_postback_action(previous_callback,
-                                   label="No", display_text="No")
+    fmt2 = _("No")
+    action2 = make_i18n_postback_action(previous_callback, "message",
+                                   "No", fmt2, "No", fmt2)
     reply_item2 = make_quick_reply_item(action2)
 
     return [reply_item1, reply_item2]
@@ -89,11 +98,16 @@ def prompt_input():
 
     :return: text type message
     """
-    return make_text(
-        "Please use the military time format "
-        "with a total of 4 numerical digits (hhmm) "
-        "when entering the time."
-        "For example, type 2020 to indicate 8:20 PM. ")
+
+    fmt = _("Please use the military time format with a total of 4 numerical "
+            "digits (hhmm) when entering the time. "
+            "For example, type 2020 to indicate 8:20 PM. ")
+
+    return make_i18n_text("Please use the military time format "
+                          "with a total of 4 numerical digits (hhmm) "
+                          "when entering the time. For example, "
+                          "type 2020 to indicate 8:20 PM. ",
+                          "message", fmt)
 
 
 def number_message():
@@ -102,9 +116,13 @@ def number_message():
 
     :return: text type message
     """
-    text1 = make_text("Clock-out time was recorded as being earlier "
-                      "than the time of clock-in. "
-                      "Please check the clock-out time again and re-enter it. ")
+    fmt = _("Clock-out time was recorded as being earlier than the time of "
+            "clock-in. Please check the clock-out time again and re-enter it. ")
+    text1 = make_i18n_text("Clock-out time was recorded as being earlier "
+                           "than the time of clock-in."
+                           "Please check the clock-out time again "
+                           "and re-enter it. ",
+                           "message", fmt)
 
     text2 = prompt_input()
     return [text1, text2]
@@ -116,9 +134,11 @@ def error_message():
 
     :return: text type message
     """
-    text1 = make_text("Sorry, but unable to comprehend your composed time. "
-                     "Please check the time entry method again, "
-                     "and enter the time.")
+    fmt = _("Sorry, but unable to comprehend your composed time. "
+            "Please check the time entry method again, and enter the time.")
+    text1 = make_i18n_text("Sorry, but unable to comprehend your composed time. "
+                           "Please check the time entry method again, "
+                           "and enter the time.", "message", fmt)
 
     text2 = prompt_input()
     return [text1, text2]
@@ -130,9 +150,14 @@ def invalid_message():
 
     :return: text type message
     """
-    return make_text("The text could not be understood. "
-                     "Please select the appropriate \"Record\" button on "
-                     "the bottom of the menu when you clock in or clock out.")
+    fmt = _("The text could not be understood. "
+            "Please select the appropriate \"Record\" button on "
+            "the bottom of the menu when you clock in or clock out.")
+
+    return make_i18n_text("The text could not be understood. "
+                          "Please select the appropriate \"Record\" button on "
+                          "the bottom of the menu when you clock in or clock out.",
+                          "message", fmt)
 
 
 def reminder_message(process):
@@ -144,16 +169,27 @@ def reminder_message(process):
     """
     text = None
     if process == "sign_in_done":
-        text = make_text("There is already a clock-in time. "
-                         "Please select \"Record\" on the "
-                         "bottom of the menu when you clock out.")
+        fmt = _("There is already a clock-in time. Please select "
+                "\"Record\" on the bottom of the menu when you clock out.")
+        text = make_i18n_text("There is already a clock-in time. "
+                              "Please select \"Record\" on the "
+                              "bottom of the menu when you clock out.",
+                              "message", fmt)
 
     elif process == "sign_out_done":
-        text = make_text("There is already a clock-out time."
-                         "Please select \"Record\" on the bottom "
-                         "of the menu when you clock in.")
+        fmt = _("There is already a clock-out time. "
+                "Please select \"Record\" on the bottom "
+                "of the menu when you clock in.")
+        text = make_i18n_text("There is already a clock-out time. "
+                              "Please select \"Record\" on the bottom "
+                              "of the menu when you clock in.",
+                              "message", fmt)
     elif process is None:
-        text = make_text("Today's clock-in time has not been registered. "
-                         "Please select \"Record clock-in\" on the bottom "
-                         "of the menu, and enter your clock-in time.")
+        fmt = _("Today's clock-in time has not been registered. "
+                "Please select \"Record clock-in\" on the bottom of the menu, "
+                "and enter your clock-in time.")
+        text = make_i18n_text("Today's clock-in time has not been registered. "
+                              "Please select \"Record clock-in\" on the bottom "
+                              "of the menu, and enter your clock-in time.",
+                              "message", fmt)
     return text

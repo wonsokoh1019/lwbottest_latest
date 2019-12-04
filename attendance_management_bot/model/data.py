@@ -6,7 +6,9 @@ create message content
 
 __all__ = ['make_postback_action', 'make_message_action', 'make_url_action',
            'make_normal_action', 'make_quick_reply_item', 'make_quick_reply',
-           'make_text', 'make_add_rich_menu', 'make_button']
+           'make_text', 'make_add_rich_menu', 'make_button', 
+           'make_i18n_content_texts', 'i18n_text', 'make_i18n_label',
+           'i18n_display_text']
 
 import json
 
@@ -18,8 +20,8 @@ def i18n_display_text(language, display_text):
     return {"language": language, "displayText": display_text}
 
 
-def make_postback_action(data, display_text=None, label=None,
-                         i18n_labels=None, i18n_display_texts=None):
+def make_postback_action(data, label=None, i18n_labels=None,
+                         display_text=None, i18n_display_texts=None):
     """
     make post back action.
 
@@ -48,8 +50,8 @@ def i18n_text(language, text):
     return {"language": language, "text": text}
 
 
-def make_message_action(label, post_back,
-                        text=None, i18n_labels=None, i18n_texts=None):
+def make_message_action(post_back, label, i18n_labels=None,
+                        text=None, i18n_texts=None):
     """
     make message action.
 
