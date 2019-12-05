@@ -12,7 +12,8 @@ from attendance_management_bot.model.data import make_image_carousel
 from attendance_management_bot.model.i18n_data \
     import make_il8n_image_carousel_column, make_i18n_postback_action, \
     make_i18n_text
-from attendance_management_bot.constant import RICH_MENUS, IMAGE_CAROUSEL
+from attendance_management_bot.constant import RICH_MENUS, \
+    IMAGE_CAROUSEL, DEFAULT_LANG
 from attendance_management_bot.externals.send_message import push_messages
 from attendance_management_bot.common.global_data import get_value
 from attendance_management_bot.externals.richmenu \
@@ -63,7 +64,7 @@ def sign(account_id):
     if account_id is None:
         LOGGER.error("account_id is None.")
         return False
-    rich_menu_id = get_value("rich_menu", None)
+    rich_menu_id = get_value(DEFAULT_LANG, None)
     if rich_menu_id is None:
         LOGGER.error("get rich_menu_id failed.")
         raise Exception("get rich_menu_id failed.")

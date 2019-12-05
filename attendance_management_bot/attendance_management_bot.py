@@ -22,7 +22,7 @@ from tornado.options import define, options
 from attendance_management_bot.externals.richmenu import init_rich_menu
 from attendance_management_bot.common import global_data
 from attendance_management_bot.externals.calendar_req import init_calendar
-from attendance_management_bot.constant import API_BO
+from attendance_management_bot.constant import API_BO, DEFAULT_LANG, RICH_MENUS
 from attendance_management_bot.model.initStatusDBHandle import insert_init_status, \
     get_init_status
 
@@ -104,15 +104,22 @@ def init_rich_menu_first():
         reference
         - https://developers.worksmobile.com/jp/document/1005040?lang=en
     """
-    rich_menu_id = get_init_status("rich_menu")
+    extra = get_init_status("rich_menu")
 
-    if rich_menu_id is None:
-        rich_menu_id = init_rich_menu()
-        insert_init_status("rich_menu", rich_menu_id)
+    if extra is None:
+        rich_menus = init_rich_menu(DEFAULT_LANG)
+        insert_init_status("rich_menu", json.dumps(rich_menus))
+    else:
+        rich_menus = json.loads(extra)
 
+    if rich_menus is None:
+        raise Exception("init rich menu failed. rich_menus is None")
+
+    rich_menu_id =rich_menus.get(RICH_MENUS[DEFAULT_LANG]["name"], None)
     if rich_menu_id is None:
-        raise Exception("init rich menu failed.")
-    global_data.set_value("rich_menu", rich_menu_id)
+        raise Exception("init rich menu failed. rich_menu_id is None")
+
+    global_data.set_value(DEFAULT_LANG, rich_menu_id)
 
 
 def init_calendar_first():

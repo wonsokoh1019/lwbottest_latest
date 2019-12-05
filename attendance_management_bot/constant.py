@@ -22,10 +22,27 @@ STORAGE_DOMAIN = "storage.worksmobile.com"
 AUTH_DOMAIN = "auth.worksmobile.com"
 DEVELOP_API_DOMAIN = "apis.worksmobile.com"
 
+#default language ['en'|'ko'|'ja']
+DEFAULT_LANG = 'ja'
+
 # RICH_MENUS
 RICH_MENUS = {
-                "name": "attendance_management_bot_rich_menu_en",
-                "path": ABSDIR_OF_PARENT + "/image/en/Rich_Menu.png"
+                'en':
+                    {
+                        "name": "attendance_management_bot_rich_menu_en",
+                        "path": ABSDIR_OF_PARENT + "/image/en/Rich_Menu.png"
+                    },
+                'ko':
+                    {
+                        "name": "attendance_management_bot_rich_menu_kr",
+                        "path": ABSDIR_OF_PARENT + "/image/kr/Rich_Menu.png"
+                    },
+                'ja':
+                    {
+                        "name": "attendance_management_bot_rich_menu_jp",
+                        "path": ABSDIR_OF_PARENT + "/image/jp/Rich_Menu.png"
+                    }
+
              }
 
 # IMAGE CAROUSEL

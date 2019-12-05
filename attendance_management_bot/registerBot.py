@@ -12,6 +12,7 @@ import psycopg2
 import requests
 import datetime
 sys.path.append('./')
+from attendance_management_bot.model.i18n_data import get_i18n_content
 from attendance_management_bot.constant import PRIVATE_KEY_PATH, \
     DEVELOP_API_DOMAIN, API_BO
 from attendance_management_bot.model.initStatusDBHandle \
@@ -19,10 +20,19 @@ from attendance_management_bot.model.initStatusDBHandle \
 from conf.config import API_ID, DOMAIN_ID, ADMIN_ACCOUNT, LOCAL_ADDRESS, \
     SERVER_CONSUMER_KEY
 from attendance_management_bot.common.token import generate_token
+import gettext
+_ = gettext.gettext
 
 CALLBACK_ADDRESS = LOCAL_ADDRESS + "callback"
 PHOTO_URL = LOCAL_ADDRESS + "static/icon.png"
 
+"""
+def make_i18n_name(language, name):
+    return {"language": language, "name": name}
+
+def make_i18n_description(language, description):
+    return {"language": language, "description": description}
+"""
 
 def headers():
     token = generate_token()
@@ -47,11 +57,17 @@ def register_bot(photo_address):
         please replace the corresponding file in the image/, Only PNG file.
     :return: bot no
     """
+
     url = "https://" + DEVELOP_API_DOMAIN + "/r/" + API_ID + "/message/v1/bot"
+    fmt = _("Attendance management bot")
+    a = lambda x, y: {"language": x, "name": y}
+    b = lambda x, y: {"language": x, "description": y}
     data = {
         "name": "Attendance management bot",
+        "i18nNames": get_i18n_content(fmt, "registerBot", a),
         "photoUrl": photo_address,
         "description": "Attendance management bot",
+        "i18nDescriptions": get_i18n_content(fmt, "registerBot", b),
         "managers": [ADMIN_ACCOUNT],
         "submanagers": [],
         "useGroupJoin": False,

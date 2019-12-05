@@ -12,11 +12,14 @@ import io
 import logging
 import json
 from attendance_management_bot.model.data import make_size, make_bound, \
-    make_postback_action, make_add_rich_menu, make_area
+    make_add_rich_menu, make_area
+from attendance_management_bot.model.i18n_data import make_i18n_postback_action
 from attendance_management_bot.common import utils
 from attendance_management_bot.constant import API_BO, OPEN_API, RICH_MENUS
 import tornado.gen
 from attendance_management_bot.common.utils import auth_get, auth_post, auth_del
+import gettext
+_ = gettext.gettext
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -67,20 +70,20 @@ def make_add_rich_menu_body(rich_menu_name):
     """
     size = make_size(2500, 1686)
 
+    fmt0 = _("Record clock-in")
     bound0 = make_bound(0, 0, 1250, 1286)
-    action0 = make_postback_action("sign_in",
-                                   display_text="Record clock-in",
-                                   label="Record clock-in",)
+    action0 = make_i18n_postback_action("sign_in", "richmenu", "Record clock-in",
+                                   fmt0, "Record clock-in", fmt0)
 
+    fmt1 = _("Record clock-out")
     bound1 = make_bound(1250, 0, 1250, 1286)
-    action1 = make_postback_action("sign_out",
-                                   display_text="Record clock-out",
-                                   label="Record clock-out")
+    action1 = make_i18n_postback_action("sign_out", "richmenu", "Record clock-out",
+                                   fmt1, "Record clock-out", fmt1)
 
+    fmt2 = _("Start over")
     bound2 = make_bound(0, 1286, 2500, 400)
-    action2 = make_postback_action("to_first",
-                                   display_text="Start over",
-                                   label="Start over")
+    action2 = make_i18n_postback_action("to_first", "richmenu", "Start over",
+                                   fmt2, "Start over", fmt2)
 
     rich_menu = make_add_rich_menu(
                     rich_menu_name,
@@ -222,7 +225,7 @@ def cancel_user_specific_rich_menu(account_id):
                 url, response.text, response.content)
 
 
-def init_rich_menu():
+def init_rich_menu(local):
     """
     init rich menu.
 
@@ -231,13 +234,21 @@ def init_rich_menu():
 
     :return: rich menu id
     """
+    if local is None or local not in RICH_MENUS:
+        raise Exception("init rich menus failed. default language error.")
+
+    il8n_rich_menu_id = {}
     rich_menus = get_rich_menus()
     if rich_menus is not None:
         for menu in rich_menus:
-            if str(menu["name"]) == RICH_MENUS["name"]:
-                return  menu["richMenuId"]
+            if str(menu["name"]) == RICH_MENUS[local]["name"]:
+                il8n_rich_menu_id[RICH_MENUS[local]["name"]] = \
+                    menu["richMenuId"]
+                return il8n_rich_menu_id
 
-    rich_menu_id = make_add_rich_menu_body(RICH_MENUS["name"])
-    resource_id = upload_content(RICH_MENUS["path"])
+    rich_menu_id = make_add_rich_menu_body(RICH_MENUS[local]["name"])
+    resource_id = upload_content(RICH_MENUS[local]["path"])
     set_rich_menu_image(resource_id, rich_menu_id)
-    return rich_menu_id
+    il8n_rich_menu_id[RICH_MENUS[local]["name"]] = rich_menu_id
+
+    return il8n_rich_menu_id

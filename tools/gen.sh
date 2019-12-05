@@ -23,10 +23,17 @@ ko_locals=$locals"ko/LC_MESSAGES/"
 ja_locals=$locals"ja/LC_MESSAGES/"
 #echo $ja_locals
 
+file_path="attendance_management_bot/actions"
+if [ $# -eq 3 ];
+then
+    file_path=$3
+fi
+
+echo ${pwd_path}"/"${file_path}"/"${filename}
 
 action=$2
 if [ ${action} == "po" ]; then
-    echo `${pwd_path}"/tools/pygettext.py" -o ${locals}/${filename_pot} ${pwd_path}"/attendance_management_bot/actions/${filename}"`
+    echo `${pwd_path}"/tools/pygettext.py" -o ${locals}/${filename_pot} ${pwd_path}"/"${file_path}"/"${filename}`
     echo `cp ${locals}/${filename_pot} ${en_locals}/${filename_po}`
     echo `cp ${locals}/${filename_pot} ${ja_locals}/${filename_po}`
     echo `cp ${locals}/${filename_pot} ${ko_locals}/${filename_po}` 
