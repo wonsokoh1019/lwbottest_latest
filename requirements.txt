@@ -50,7 +50,7 @@ six==1.13.0
 snowballstemmer==2.0.0
 Sphinx==2.2.1
 sphinx-autoapi==1.2.1
-sphinx-markdown-builder==git+https://github.com/ljsking/sphinx-markdown-builder.git
+git+https://github.com/ljsking/sphinx-markdown-builder.git
 sphinx-serve==1.0.1
 sphinxcontrib-applehelp==1.0.1
 sphinxcontrib-devhelp==1.0.1
