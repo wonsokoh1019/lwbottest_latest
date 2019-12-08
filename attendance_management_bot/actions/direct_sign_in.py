@@ -9,12 +9,15 @@ __all__ = ['deal_sign_in_message', 'direct_sign_in']
 import tornado.web
 import asyncio
 import logging
-from attendance_management_bot.model.data import make_text, make_quick_reply
+from attendance_management_bot.model.data import make_quick_reply
+from attendance_management_bot.model.i18n_data import make_i18n_text
 from attendance_management_bot.externals.send_message import push_message
 from attendance_management_bot.actions.message import invalid_message, TimeStruct, \
     create_quick_replay_items
 from attendance_management_bot.model.processStatusDBHandle \
     import get_status_by_user, delete_status_by_user_date
+import gettext
+_ = gettext.gettext
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -33,14 +36,18 @@ def deal_sign_in_message(sign_time, manual_flag):
 
     user_time = TimeStruct(sign_time)
 
-    text = make_text("Register the current time {date}"
-                     .format(date=user_time.date_time.strftime('%A, %B %-d '
-                                                               'at %-I:%M %P')))
+    fmt = _("Register the current time {date} as clock-in time?")
+    fmt1 = _("%A, %B %-d at %-I:%M %P")
+
+    text = make_i18n_text("Register the current time {date} as clock-in time?",
+                          "direct_sign_in", fmt, fmt1=fmt1,
+                          date=user_time.date_time)
 
     if manual_flag:
-        text = make_text("Register the entered {date} as clock-in time?"
-                         .format(date=user_time.date_time.strftime('%m, %-d %A '
-                                                                   'at %-I:%M %P')))
+        fmt = _("Register the entered {date} as clock-in time?")
+        text = make_i18n_text("Register the entered {date} as clock-in time?",
+                              "direct_sign_in", fmt, fmt1=fmt1,
+                              date=user_time.date_time)
 
     reply_items = create_quick_replay_items(
         "confirm_in&time=" + user_time.str_current_time_tick, call_back)
@@ -62,7 +69,6 @@ def deal_sign_in(account_id, current_date, sign_time, manual_flag=False):
 
         if status == "wait_in" or status == "in_done":
             delete_status_by_user_date(account_id, current_date)
-            yield asyncio.sleep(1)
 
     return deal_sign_in_message(sign_time, manual_flag)
 

@@ -15,7 +15,8 @@ from datetime import datetime, timedelta
 from tornado.web import HTTPError
 from attendance_management_bot.common import global_data
 from attendance_management_bot.common.local_timezone import local_date_time
-from attendance_management_bot.model.data import make_text
+from attendance_management_bot.model.i18n_data import \
+    make_i18n_text, get_i18n_content_by_lang
 from attendance_management_bot.externals.calendar_req import create_schedule
 from attendance_management_bot.externals.send_message import push_message
 from attendance_management_bot.actions.message import invalid_message, prompt_input
@@ -24,6 +25,9 @@ from attendance_management_bot.model.processStatusDBHandle import get_status_by_
 from attendance_management_bot.model.calendarDBHandle import set_schedule_by_user, \
     get_schedule_by_user
 from attendance_management_bot.common.contacts import get_user_info_by_account
+from attendance_management_bot.constant import DEFAULT_LANG
+import gettext
+_ = gettext.gettext
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -51,18 +55,25 @@ def deal_confirm_in(account_id, create_time, callback):
     if info is not None:
         raise HTTPError(500, "Internal data error")
 
+
     end_time = begin_time + timedelta(minutes=1)
     cur_time = local_date_time(create_time)
-    title = "{account}'s clock-in time on {date}".\
-        format(account=get_user_info_by_account(account_id),
-               date=datetime.strftime(begin_time, '%A, %B %d'))
+    fmt = _("{account}'s clock-in time on {date}")
+    fmt1= _("%A, %B %d")
+
+    title = get_i18n_content_by_lang(fmt, fmt1, "confirm_in", DEFAULT_LANG,
+                                     account=get_user_info_by_account(
+                                         account_id), date=begin_time)
+
     schedule_uid = create_schedule(cur_time, end_time, begin_time,
                                    account_id, title)
 
     set_schedule_by_user(schedule_uid, account_id, current_date,
                          user_time, my_end_time)
 
-    return make_text("Clock-in time has been registered.")
+    fmt = _("Clock-in time has been registered.")
+    return make_i18n_text("Clock-in time has been registered.", "confirm_in",
+                          fmt)
 
 
 @tornado.gen.coroutine

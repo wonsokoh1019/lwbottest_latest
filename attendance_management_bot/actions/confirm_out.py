@@ -14,7 +14,9 @@ from datetime import datetime
 from tornado.web import HTTPError
 from attendance_management_bot.common import global_data
 from attendance_management_bot.common.local_timezone import local_date_time
-from attendance_management_bot.model.data import make_text
+from attendance_management_bot.model.data import i18n_text, make_text
+from attendance_management_bot.model.i18n_data import \
+    make_i18n_text, get_i18n_content_by_lang, get_i18n_content
 from attendance_management_bot.externals.calendar_req import modify_schedule
 from attendance_management_bot.externals.send_message import push_messages
 from attendance_management_bot.actions.message import invalid_message, prompt_input, \
@@ -24,21 +26,50 @@ from attendance_management_bot.model.processStatusDBHandle import get_status_by_
 from attendance_management_bot.model.calendarDBHandle import get_schedule_by_user, \
     modify_schedule_by_user
 from attendance_management_bot.common.contacts import get_user_info_by_account
+from attendance_management_bot.constant import DEFAULT_LANG
+import gettext
+_ = gettext.gettext
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
 
 def confirm_out_message(user_time, total_hours, total_minutes):
-    user_time = TimeStruct(user_time)
+    date_time = local_date_time(user_time)
 
-    str_hours = ""
+    fmt = _(" ")
+    str_hours = " "
+    hours_content = get_i18n_content(fmt, "confirm_out")
+
     if total_hours != 0:
-        str_hours = "{total_hours} hours and ".format(total_hours=total_hours)
-    return make_text("Clock-out time has been registered."
+        str_hours = "{total_hours} hours and "
+        fmt = _("{total_hours} hours and ")
+        hours_content = get_i18n_content(fmt, "confirm_out")
+        for key in hours_content:
+            hours_content[key] = hours_content[key].format(
+                total_hours=total_hours)
+
+    fmt1 = _(
+        "Clock-out time has been registered. "
+        "The total working hours for {date} is {total_hours}{total_minutes} minutes.")
+    texts = get_i18n_content(fmt1, "confirm_out")
+
+    fmt2 = _("%A, %B %d")
+    dates = get_i18n_content(fmt2, "confirm_out")
+
+    i18n_texts = []
+    for key in texts:
+        value = texts[key].format(date=date_time.strftime(dates[key]),
+                                  total_hours=hours_content[key],
+                                  total_minutes=total_minutes)
+        i18n_texts.append(i18n_text(key, value))
+
+    return make_text("Clock-out time has been registered. "
                      "The total working hours for {date} "
-                     "is {total_hours}{total_minutes} minutes."
-                     .format(date=user_time.date_time.strftime('%A, %B %d'),
-                             total_hours=str_hours, total_minutes=total_minutes))
+                     "is{total_hours}{total_minutes} minutes."
+                     .format(date=date_time.strftime('%A, %B %d'),
+                             total_hours=str_hours,
+                             total_minutes=total_minutes),
+                     i18n_texts=i18n_texts)
 
 
 @tornado.gen.coroutine
@@ -69,9 +100,11 @@ def deal_confirm_out(account_id, create_time, callback):
     cur_time = local_date_time(create_time)
     begin_time = local_date_time(begin_time_st)
 
-    title = "{account}'s working hours on {date}".\
-        format(account=get_user_info_by_account(account_id),
-               date=datetime.strftime(end_time, '%A, %B %d'))
+    fmt = _("{account}'s working hours on {date}")
+    fmt1 = _("%A, %B %d")
+    title = get_i18n_content_by_lang(fmt, fmt1, "confirm_out", DEFAULT_LANG,
+                                     account=get_user_info_by_account(
+                                         account_id), date=end_time)
     modify_schedule(schedule_id, cur_time, end_time, begin_time,
                     account_id, title)
 

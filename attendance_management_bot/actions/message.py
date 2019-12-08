@@ -35,11 +35,6 @@ class TimeStruct:
         """
 
         self.date_time = local_date_time(sign_time)
-
-        self.month = str(self.date_time.month)
-        self.date = str(self.date_time.day)
-        self.min = str(self.date_time.minute)
-
         self.str_current_time_tick = str(sign_time)
         pos = self.str_current_time_tick.find(".")
         if pos != -1:

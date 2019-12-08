@@ -9,7 +9,8 @@ __all__ = ['deal_sign_out_message', 'deal_sign_out']
 import tornado.web
 import logging
 import asyncio
-from attendance_management_bot.model.data import make_text, make_quick_reply
+from attendance_management_bot.model.data import make_quick_reply
+from attendance_management_bot.model.i18n_data import make_i18n_text
 from attendance_management_bot.externals.send_message import push_messages
 from attendance_management_bot.actions.message import invalid_message, \
     TimeStruct, create_quick_replay_items, number_message
@@ -17,6 +18,8 @@ from attendance_management_bot.model.calendarDBHandle \
     import get_schedule_by_user
 from attendance_management_bot.model.processStatusDBHandle \
     import get_status_by_user, set_status_by_user_date
+import gettext
+_ = gettext.gettext
 
 LOGGER = logging.getLogger("attendance_management_bot")
 
@@ -35,14 +38,18 @@ def deal_sign_out_message(sign_time, manual_flag=False):
 
     user_time = TimeStruct(sign_time)
 
-    text = make_text("Register the current time {date}"
-                     .format(date=user_time.date_time.strftime('%A, %B %-d '
-                                                               'at %-I:%M %P')))
+    fmt = _("Register the current time {date} as clock-out time?")
+    fmt1 = _("%A, %B %-d at %-I:%M %P")
+
+    text = make_i18n_text(
+        "Register the current time {date} as clock-out time?",
+        "direct_sign_out", fmt, fmt1=fmt1, date=user_time.date_time)
 
     if manual_flag:
-        text = make_text("Register the entered {date} as clock-out time?"
-                         .format(date=user_time.date_time.strftime('%m, %-d %A '
-                                                                   'at %-I:%M %P')))
+        fmt = _("Register the entered {date} as clock-out time?")
+        text = make_i18n_text("Register the entered {date} as clock-out time?",
+                              "direct_sign_out", fmt, fmt1=fmt1,
+                              date=user_time.date_time)
 
     reply_items = create_quick_replay_items(
         "confirm_out&time=" + user_time.str_current_time_tick, call_back)
@@ -64,7 +71,6 @@ def deal_sign_out(account_id, current_date, sign_time, manual_flag=False):
 
     if status == "wait_out" or status == "out_done":
         set_status_by_user_date(account_id, current_date, status="in_done")
-        yield asyncio.sleep(1)
 
     info = get_schedule_by_user(account_id, current_date)
     if info is None:
