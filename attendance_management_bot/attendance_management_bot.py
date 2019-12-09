@@ -151,9 +151,7 @@ def start_attendance_management_bot():
     If you use the event loop that comes with tornado, many third-party
     packages based on asyncio may not be used, such as aioredis.
 
-    Message bot API overview.
-
-        reference
+        Message bot API overview reference
         - https://developers.worksmobile.com/jp/document/3005001?lang=en
     """
 
