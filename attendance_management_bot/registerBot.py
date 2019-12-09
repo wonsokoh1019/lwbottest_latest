@@ -64,10 +64,10 @@ def register_bot(photo_address):
     b = lambda x, y: {"language": x, "description": y}
     data = {
         "name": "Attendance management bot",
-        "i18nNames": get_i18n_content(fmt, "registerBot", a),
+        "i18nNames": get_i18n_content(fmt, "registerBot", function=a),
         "photoUrl": photo_address,
         "description": "Attendance management bot",
-        "i18nDescriptions": get_i18n_content(fmt, "registerBot", b),
+        "i18nDescriptions": get_i18n_content(fmt, "registerBot", function=b),
         "managers": [ADMIN_ACCOUNT],
         "submanagers": [],
         "useGroupJoin": False,

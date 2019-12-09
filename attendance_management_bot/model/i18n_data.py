@@ -4,6 +4,10 @@
 create i18n message content
 """
 
+__all__ = ['get_i18n_content', 'get_i18n_content_by_lang', 'make_i18n_button',
+           'make_i18n_text', 'make_i18n_message_action',
+           'make_i18n_postback_action', 'make_il8n_image_carousel_column']
+
 import json
 from attendance_management_bot.constant import IMAGE_CAROUSEL
 from attendance_management_bot.model.data import *
@@ -13,6 +17,23 @@ _ = gettext.gettext
 
 
 def get_i18n_content(fmt, local, **kw):
+    """
+    Get multilingual data structure according to format parameter id.
+
+        reference
+        - https://docs.python.org/2/library/gettext.html
+
+    :param fmt: Multilingual key string. like _('This is a translatable string.')
+    :param local: Domain corresponding to "fmt".
+    :param kw: Named variable parameter list.
+        Common parameters:
+            function: A callback function used to encapsulate multiple languages.
+            fmt1: The key string is the multilingual parameter of the substring in the format string. Used to format dates.
+            date: Local time of datetime object.
+    :return:
+        If the parameter contains the package function of the package, An encapsulated multilingual dictionary object will be returned.
+        If the parameter does not contain a package function, this returns a Multilingual list object.
+    """
     ko = gettext.translation(local, 'locales', ['ko'])
     en = gettext.translation(local, 'locales', ['en'])
     ja = gettext.translation(local, 'locales', ['ja'])
@@ -54,8 +75,21 @@ def get_i18n_content(fmt, local, **kw):
     return i18n_content
 
 
-def get_i18n_content_by_lang(fmt, fmt2, local, lang, **kw):
+def get_i18n_content_by_lang(fmt, local, lang, **kw):
+    """
+    Get another language string according to key string.
 
+        reference
+        - https://docs.python.org/2/library/gettext.html
+
+    :param fmt: Multilingual key string. like _('This is a translatable string.')
+    :param local: Domain corresponding to "fmt".
+    :param lang: Language. ['en'|'ko'|'ja']
+    :param kw: Named variable parameter list.
+        fmt1: The key string is the multilingual parameter of the substring in the format string. Used to format dates.
+        date: Local time of datetime object.
+    :return: a string.
+    """
     local_map = {'en': 'en_US', 'ja': 'ja_JP', 'kr': 'ko_KR'}
     local_text = gettext.translation(local, 'locales', [lang])
 
@@ -63,31 +97,62 @@ def get_i18n_content_by_lang(fmt, fmt2, local, lang, **kw):
     if 'date' in kw:
         date = kw['date']
 
-    if date:
+    fmt1 = None
+    if 'fmt1' in kw:
+        fmt1 = kw['fmt1']
+
+    if date is not None and fmt1 is not None:
         locale.setlocale(locale.LC_TIME,
                          "{lang}{code}".format(lang=local_map[lang],
                                                code=".utf8"))
-        kw['date'] = date.strftime(local_text.gettext(fmt2))
+        kw['date'] = date.strftime(local_text.gettext(fmt1))
+
+    del kw['fmt1']
     if len(kw) > 0:
         return local_text.gettext(fmt).format(**kw)
     return local_text.gettext(fmt)
 
 
 def make_i18n_button(text, actions, local, fmt):
+    """
+    Create a multilingual button object.
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100500804?lang=en
+
+        Check also: attendance_management_bot/model/data.py::make_button
+    """
     i18n_texts = get_i18n_content(fmt, local, function=make_i18n_content_texts)
     return make_button(text, actions, content_texts=i18n_texts)
 
 
 def make_i18n_text(text, local, fmt, **kw):
+    """
+    Create a multilingual text object.
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100500801?lang=en
+
+        Check also: attendance_management_bot/model/data.py::make_text
+    """
     i18n_texts = get_i18n_content(fmt, local, function=i18n_text, **kw)
     return make_text(text, i18n_texts=i18n_texts)
 
 
 def make_i18n_message_action(post_back, local, label, fmt_label=None,
                              text=None, fmt_text=None):
+    """
+    Create a multilingual message action object.
+
+        reference
+        - https://developers.worksmobile.com/jp/document/1005050?lang=en
+
+        Check also: attendance_management_bot/model/data.py::make_message_action
+    """
     i18n_labels = None
     if fmt_label is not None:
-        i18n_labels = get_i18n_content(fmt_label, local, function=make_i18n_label)
+        i18n_labels = get_i18n_content(fmt_label, local,
+                                       function=make_i18n_label)
 
     i18n_texts = None
     if fmt_text is not None:
@@ -98,19 +163,37 @@ def make_i18n_message_action(post_back, local, label, fmt_label=None,
 
 def make_i18n_postback_action(post_back, local, label, fmt_label=None,
                               text=None, fmt_text=None):
+    """
+    Create a multilingual postback action object.
+
+        reference
+        - https://developers.worksmobile.com/jp/document/1005050?lang=en
+
+        Check also: attendance_management_bot/model/data.py::make_postback_action
+    """
     i18n_labels = None
     if fmt_label is not None:
-        i18n_labels = get_i18n_content(fmt_label, local, function=make_i18n_label)
+        i18n_labels = get_i18n_content(fmt_label, local,
+                                       function=make_i18n_label)
 
     i18n_texts = None
     if fmt_text is not None:
-        i18n_texts = get_i18n_content(fmt_text, local, function=i18n_display_text)
+        i18n_texts = get_i18n_content(fmt_text, local,
+                                      function=i18n_display_text)
 
     return  make_postback_action(post_back, label, i18n_labels,
                                  text, i18n_texts)
 
 
 def make_il8n_image_carousel_column(number, action):
+    """
+    Create a multilingual image carousel column object.
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100500809?lang=en
+
+        Check also: attendance_management_bot/model/data.py::make_image_carousel_column
+    """
     i18n_images = []
     for lang in [('en_US', 'en'), ('ja_JP', 'ja'), ('ko_KR', 'ko')]:
         i18n_image_item = make_i18n_image_url(lang[0],

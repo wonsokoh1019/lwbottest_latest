@@ -37,7 +37,7 @@ def confirm_out_message(user_time, total_hours, total_minutes):
     date_time = local_date_time(user_time)
 
     fmt = _(" ")
-    str_hours = " "
+    str_hours = ""
     hours_content = get_i18n_content(fmt, "confirm_out")
 
     if total_hours != 0:
@@ -102,7 +102,7 @@ def deal_confirm_out(account_id, create_time, callback):
 
     fmt = _("{account}'s working hours on {date}")
     fmt1 = _("%A, %B %d")
-    title = get_i18n_content_by_lang(fmt, fmt1, "confirm_out", DEFAULT_LANG,
+    title = get_i18n_content_by_lang(fmt, "confirm_out", DEFAULT_LANG, fmt1=fmt1,
                                      account=get_user_info_by_account(
                                          account_id), date=end_time)
     modify_schedule(schedule_id, cur_time, end_time, begin_time,

@@ -177,6 +177,14 @@ def make_image_carousel_column(image_url=None,
                                action=None,
                                i18n_image_urls=None,
                                i18n_image_resource_ids=None):
+    """
+    Create a image carousel column object.
+
+        reference
+        - https://developers.worksmobile.com/jp/document/100500809?lang=en
+
+    :return: carousel column
+    """
     column_data = {}
     if image_url is not None:
         column_data["imageUrl"] = image_url
@@ -185,10 +193,8 @@ def make_image_carousel_column(image_url=None,
     if action is not None:
         column_data["action"] = action
     if i18n_image_urls is not None:
-        # [make_i18n_image_url, make_i18n_image_url]
         column_data["i18nImageUrls"] = i18n_image_urls
     if i18n_image_resource_ids is not None:
-        # [MakeI18nImageResourceId, MakeI18nImageResourceId, ...]
         column_data["i18nImageResourceIds"] = i18n_image_resource_ids
     return column_data
 

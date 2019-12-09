@@ -61,7 +61,7 @@ def deal_confirm_in(account_id, create_time, callback):
     fmt = _("{account}'s clock-in time on {date}")
     fmt1= _("%A, %B %d")
 
-    title = get_i18n_content_by_lang(fmt, fmt1, "confirm_in", DEFAULT_LANG,
+    title = get_i18n_content_by_lang(fmt, "confirm_in", DEFAULT_LANG, fmt1=fmt1,
                                      account=get_user_info_by_account(
                                          account_id), date=begin_time)
 

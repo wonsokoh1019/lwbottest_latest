@@ -135,6 +135,53 @@ Bot rich menu functions
 .. autofunction:: attendance_management_bot.externals.richmenu.cancel_user_specific_rich_menu
     :noindex:
 
+Bot i18n functions
+===================
+
+https://docs.python.org/2/library/gettext.html
+
+    You can use the. /tools/gen.sh tool to generate '. Po', '. Mo' files.
+        execute:
+            $: ./tools/gen.sh [filename] [po|mo] [path]
+            "filename": Python source filename used to generate '.po','.mo'.
+            "po|mo": 'po' means generate '.po' file, 'mo' means generate '.mo' file
+            "path": Relative directory of Python source files. not ending with '/'.
+            You can find the corresponding '.po' file in 'locales/../LC_MESSAGES' according to your source file name.
+        step:
+            1. generate '.po' file.
+                eg:
+                    ./tools/gen.sh test_i18n.py po test
+                check: locales/../LC_MESSAGES/test_i18n.po
+            2. Multilingual string to fill in '.po' file.
+            3. generate '.mo' file
+                eg:
+                    ./tools/gen.sh test_i18n.py mo test
+                check: locales/../LC_MESSAGES/test_i18n.mo
+
+.. autofunction:: test.test_i18n.test_ko
+    :noindex:
+
+.. autofunction:: test.test_i18n.get_data
+    :noindex:
+
+.. autofunction:: attendance_management_bot.model.i18n_data.get_i18n_content_by_lang
+    :noindex:
+
+.. autofunction:: attendance_management_bot.model.i18n_data.get_i18n_content
+    :noindex:
+
+.. autofunction:: attendance_management_bot.model.i18n_data.make_i18n_button
+    :noindex:
+
+.. autofunction:: attendance_management_bot.model.i18n_data.make_i18n_text
+    :noindex:
+
+.. autofunction:: attendance_management_bot.model.i18n_data.make_i18n_message_action
+    :noindex:
+
+.. autofunction:: attendance_management_bot.model.i18n_data.make_il8n_image_carousel_column
+    :noindex:
+
 타임존 설정
 ===========
 

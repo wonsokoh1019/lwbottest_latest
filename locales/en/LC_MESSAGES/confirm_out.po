@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-12-05 14:58+0900\n"
+"POT-Creation-Date: 2019-12-08 12:14+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,22 +21,23 @@ msgid " "
 msgstr ""
 
 #:
-#: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:42
+#: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:45
 msgid "{total_hours} hours and "
 msgstr "{total_hours} hours and "
 
 #:
-#: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:47
+#: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:51
 msgid "Clock-out time has been registered. The total working hours for {date} is {total_hours}{total_minutes} minutes."
 msgstr "Clock-out time has been registered. The total working hours for {date} is {total_hours}{total_minutes} minutes."
 
 #:
-#: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:52
+#: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:56
+#: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:104
 msgid "%A, %B %d"
 msgstr "%A, %B %d"
 
 #:
-#: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:98
+#: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:103
 msgid "{account}'s working hours on {date}"
 msgstr "{account}'s working hours on {date}"
 

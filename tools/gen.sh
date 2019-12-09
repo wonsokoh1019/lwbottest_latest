@@ -4,24 +4,15 @@ filename=$1
 echo ${filename}
 
 filename_pot=${filename/py/pot}
-#echo ${filename_pot}
-
 filename_po=${filename_pot/pot/po}
-#echo ${filename_po}
 filename_mo=${filename_pot/pot/mo}
-#echo ${filename_mo}
 
 pwd_path=`pwd`
-#echo $pwd_path
 locals=$pwd_path"/locales/"
-#echo $locals
 
 en_locals=$locals"en/LC_MESSAGES/"
-#echo $en_locals
 ko_locals=$locals"ko/LC_MESSAGES/"
-#echo $ko_locals
 ja_locals=$locals"ja/LC_MESSAGES/"
-#echo $ja_locals
 
 file_path="attendance_management_bot/actions"
 if [ $# -eq 3 ];
