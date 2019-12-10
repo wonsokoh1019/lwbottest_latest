@@ -22,9 +22,6 @@ STORAGE_DOMAIN = "storage.worksmobile.com"
 AUTH_DOMAIN = "auth.worksmobile.com"
 DEVELOP_API_DOMAIN = "apis.worksmobile.com"
 
-#default language ['en'|'ko'|'ja']
-DEFAULT_LANG = 'ja'
-
 # RICH_MENUS
 RICH_MENUS = {
                 'en':

@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 import os
 
+# default language ['en'|'ko'|'ja']
+DEFAULT_LANG = 'ja'
+
 # TimeZone
 TZone = "Asia/Tokyo"
 

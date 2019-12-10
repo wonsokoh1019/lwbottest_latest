@@ -9,6 +9,7 @@ __all__ = ['confirm_out']
 import tornado.gen
 import asyncio
 import time
+import locale
 import logging
 from datetime import datetime
 from tornado.web import HTTPError
@@ -26,7 +27,7 @@ from attendance_management_bot.model.processStatusDBHandle import get_status_by_
 from attendance_management_bot.model.calendarDBHandle import get_schedule_by_user, \
     modify_schedule_by_user
 from attendance_management_bot.common.contacts import get_user_info_by_account
-from attendance_management_bot.constant import DEFAULT_LANG
+from conf.config import DEFAULT_LANG
 import gettext
 _ = gettext.gettext
 
@@ -58,11 +59,15 @@ def confirm_out_message(user_time, total_hours, total_minutes):
 
     i18n_texts = []
     for key in texts:
+        locale.setlocale(locale.LC_TIME,
+                         "{lang}{code}".format(lang=key, code=".utf8"))
         value = texts[key].format(date=date_time.strftime(dates[key]),
                                   total_hours=hours_content[key],
                                   total_minutes=total_minutes)
         i18n_texts.append(i18n_text(key, value))
 
+    locale.setlocale(locale.LC_TIME,
+                     "{lang}{code}".format(lang="en_US", code=".utf8"))
     return make_text("Clock-out time has been registered. "
                      "The total working hours for {date} "
                      "is{total_hours}{total_minutes} minutes."

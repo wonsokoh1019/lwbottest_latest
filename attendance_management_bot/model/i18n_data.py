@@ -72,6 +72,8 @@ def get_i18n_content(fmt, local, **kw):
             i18n_content[lang[0]] = lang[1].gettext(fmt).format(**kw)
         else:
             i18n_content[lang[0]] = lang[1].gettext(fmt)
+    locale.setlocale(locale.LC_TIME,
+                     "{lang}{code}".format(lang='en_US', code=".utf8"))
     return i18n_content
 
 
@@ -109,8 +111,12 @@ def get_i18n_content_by_lang(fmt, local, lang, **kw):
 
     del kw['fmt1']
     if len(kw) > 0:
-        return local_text.gettext(fmt).format(**kw)
-    return local_text.gettext(fmt)
+        content = local_text.gettext(fmt).format(**kw)
+    else:
+        content = local_text.gettext(fmt)
+    locale.setlocale(locale.LC_TIME,
+                     "{lang}{code}".format(lang='en_US', code=".utf8"))
+    return content
 
 
 def make_i18n_button(text, actions, local, fmt):

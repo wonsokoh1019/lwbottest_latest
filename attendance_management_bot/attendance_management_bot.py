@@ -20,9 +20,10 @@ import tornado.httpserver
 from tornado.httpclient import AsyncHTTPClient
 from tornado.options import define, options
 from attendance_management_bot.externals.richmenu import init_rich_menu
+from conf.config import DEFAULT_LANG
 from attendance_management_bot.common import global_data
 from attendance_management_bot.externals.calendar_req import init_calendar
-from attendance_management_bot.constant import API_BO, DEFAULT_LANG, RICH_MENUS
+from attendance_management_bot.constant import API_BO, RICH_MENUS
 from attendance_management_bot.model.initStatusDBHandle import insert_init_status, \
     get_init_status
 
@@ -151,7 +152,9 @@ def start_attendance_management_bot():
     If you use the event loop that comes with tornado, many third-party
     packages based on asyncio may not be used, such as aioredis.
 
-        Message bot API overview reference
+    Message bot API overview.
+
+        reference
         - https://developers.worksmobile.com/jp/document/3005001?lang=en
     """
 

@@ -28,7 +28,7 @@ msgstr "{total_hours}시간"
 #:
 #: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:51
 msgid "Clock-out time has been registered. The total working hours for {date} is {total_hours}{total_minutes} minutes."
-msgstr "퇴근 시간 등록이 완료되었습니다. {date} 총 근무 시간은 {total_hours} {total_minutes}입니다."
+msgstr "퇴근 시간 등록이 완료되었습니다. {date} 총 근무 시간은 {total_hours} {total_minutes}분입니다."
 
 #:
 #: /home1/irteam/oneapp_samplebot/attendance_management_bot/actions/confirm_out.py:56

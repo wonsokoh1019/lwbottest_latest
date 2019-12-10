@@ -13,7 +13,8 @@ from attendance_management_bot.model.i18n_data \
     import make_il8n_image_carousel_column, make_i18n_postback_action, \
     make_i18n_text
 from attendance_management_bot.constant import RICH_MENUS, \
-    IMAGE_CAROUSEL, DEFAULT_LANG
+    IMAGE_CAROUSEL
+from conf.config import DEFAULT_LANG
 from attendance_management_bot.externals.send_message import push_messages
 from attendance_management_bot.common.global_data import get_value
 from attendance_management_bot.externals.richmenu \
